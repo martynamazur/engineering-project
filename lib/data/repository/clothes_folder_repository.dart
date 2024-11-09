@@ -1,0 +1,124 @@
+import 'package:ootd/main.dart';
+import 'package:ootd/model/closet_folder.dart';
+import 'package:ootd/model/clothing_item.dart';
+
+class ClothesFolderRepository {
+  late final String _userId;
+
+  ClothesFolderRepository() {
+    _initialize();
+  }
+
+  Future<void> _initialize() async {
+    final user = supabase.auth.currentUser;
+    if (user == null) {
+      throw Exception('User not logged in');
+    }
+    _userId = user.id;
+  }
+
+  Future<List<ClosetFolder>> getAllClosetFolder() async {
+    try {
+      final response = await supabase
+          .from('closetfolder')
+          .select('*')
+          .eq('user_id', _userId);
+
+      final closetFolders =
+          response.map((json) => ClosetFolder.fromJson(json)).toList();
+
+      for (int i = 0; i < closetFolders.length; i++) {
+        final folder = closetFolders[i];
+        final clothingItems =
+            await _getClothingItemsForFolder(folder.clothingItemIds);
+        closetFolders[i] = folder.copyWith(clothingItems: clothingItems);
+      }
+
+      return closetFolders;
+    } catch (e) {
+      print('Caught an error: $e');
+      return [];
+    }
+  }
+
+  Future<List<ClothingItem>> _getClothingItemsForFolder(
+      List<int> clothingItemIds) async {
+    try {
+      if (clothingItemIds.isEmpty) return [];
+
+      final response = await supabase
+          .from('clothingitem')
+          .select()
+          .inFilter('clothing_item_id', clothingItemIds);
+
+      final List<dynamic> data = response as List<dynamic>;
+      return data.map((json) => ClothingItem.fromJson(json)).toList();
+    } catch (e) {
+      print('Error: $e');
+      return [];
+    }
+  }
+
+  Future<ClosetFolder> getClosetFolder(int id) async {
+    try {
+      final response = await supabase
+          .from('closetfolder')
+          .select('*')
+          .eq('user_id', _userId)
+          .eq('closet_id', id)
+          .single();
+
+      ClosetFolder closetFolder = ClosetFolder.fromJson(response);
+      final clothingItems =
+          await _getClothingItemsForFolder(closetFolder.clothingItemIds);
+      closetFolder = closetFolder.copyWith(clothingItems: clothingItems);
+
+      print(closetFolder);
+      print('udalo sie ${closetFolder.closetId}');
+      return closetFolder;
+    } catch (e) {
+      print('Caught an error: $e');
+      throw Exception('Failed to fetch the closet folder');
+    }
+  }
+
+  Future<void> deleteFolder(int folderId) async {
+    try {
+      await supabase
+          .from('closetfolder')
+          .delete()
+          .eq('closet_id', folderId)
+          .eq('user_id', _userId);
+    } catch (e) {
+      print('Caught an error: $e');
+      throw Exception('Coundt');
+    }
+  }
+
+  Future<void> changeFolderName(String newFolderName, int folderId) async {
+    try {
+      await supabase
+          .from('closetfolder')
+          .update({'closet_name': newFolderName})
+          .eq('closet_id', folderId)
+          .eq('user_id', _userId);
+    } catch (e) {
+      print('Caught an error: $e');
+      throw Exception('Coundt');
+    }
+  }
+
+  Future<void> createFolder(String folderName) async{
+    try{
+      await supabase.from('closetfolder').insert({
+        'user_id': _userId,
+        'closet_name': folderName,
+        'clothing_item_ids': []
+      });
+
+    }catch (e) {
+      print('Caught an error: $e');
+      throw Exception('Coundt');
+    }
+  }
+}
