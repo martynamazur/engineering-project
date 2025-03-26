@@ -21,7 +21,7 @@ class ClothingItem with _$ClothingItem {
 
     @JsonKey(name: 'item_category') String? itemCategory,
     @JsonKey(name: 'item_category_id') int? itemCategoryId,
-    @JsonKey(name: 'item_season_id') int? itemSeason,
+    @JsonKey(name: 'item_season_id') int? itemSeason,//do usuniecia
     @JsonKey(name: 'seasons') List<Season>? seasons,
 
 

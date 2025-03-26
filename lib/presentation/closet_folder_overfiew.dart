@@ -6,6 +6,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_tags/flutter_tags.dart';
 import 'package:ootd/model/closet_folder.dart';
 import 'package:ootd/navigation/app_router.dart';
+import 'package:ootd/presentation/styles/empty_closet_widget.dart';
+import 'package:ootd/presentation/styles/headline_text.dart';
 import '../domain/state_management/clothes_folder_provider.dart';
 import '../model/clothing_item.dart';
 import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
@@ -29,49 +31,65 @@ class _ClosetFolderOverviewScreenState
     int? selectedValue;
 
     return Scaffold(
+      appBar: AppBar(
+        title: closetFolder.when(
+          data: (folder) =>
+              Text('${folder.closetName} (${folder.totalAmountOfClothes})'),
+          loading: () => const Text('Loading...'),
+          error: (error, stackTrace) => const Text('Error'),
+        ),
+        actions: [
+          IconButton(
+            onPressed: () {
+              // Obsługa filtrowania
+            },
+            icon: Icon(Icons.filter_list_alt),
+          ),
+          IconButton(
+            onPressed: () => context.router.push(PickOwnedClothesRoute(folderId: widget.folderId)),
+            icon: Icon(Icons.add),
+          ),
+          DropdownButton(
+            underline: SizedBox(),
+            icon: Icon(Icons.edit),
+            value: selectedValue,
+            items: [
+              DropdownMenuItem(
+                value: 1,
+                child: Text('Change folder name'),
+              ),
+              DropdownMenuItem(
+                value: 2,
+                child: Text('Delete folder'),
+              ),
+            ],
+            onChanged: (value) {
+              setState(() {
+                selectedValue = value;
+              });
+
+              switch (value) {
+                case 1:
+                  showAlertDialogChangeFolderName();
+                  break;
+                case 2:
+                  showAlertDialog();
+                  break;
+              }
+            },
+          ),
+        ],
+      ),
       body: SafeArea(
         child: closetFolder.when(
           data: (folder) {
-            return SingleChildScrollView(
-              child: Column(
-                children: [
-                  AppBar(
-                    title: Text(
-                        '${folder.closetName}  (${folder.totalAmountOfClothes})'),
-                    actions: [
-                      IconButton(
-                          onPressed: () {}, icon: Icon(Icons.filter_list_alt)),
-                      DropdownButton(
-                          icon: Icon(Icons.edit),
-                          value: selectedValue,
-                          items: [
-                            DropdownMenuItem(value: 1, child: Text('Change folder name')),
-                            DropdownMenuItem(value: 2, child: Text('Delete folder')),
-                          ],
-                          onChanged: (value) {
-                            setState(() {
-                              selectedValue = value;
-                            });
-
-                            switch(value){
-                              case 1:
-                                showAlertDialogChangeFolderName();
-                                break;
-                              case 2:
-                                showAlertDialog();
-                            }
-
-                          })
-                    ],
-                  ),
-                  //_tags(),
-                  _clothesGrid(folder.clothingItems)
-                ],
-              ),
-            );
+            return folder.clothingItems.isNotEmpty
+                ? _clothesList(folder)
+                : _buildEmptyCloset();
           },
           loading: () => const Center(child: CircularProgressIndicator()),
-          error: (error, stackTrace) => Center(child: Text('Error: $error')),
+          error: (error, stackTrace) =>
+              Center(child: Text('Error: $error')),
         ),
       ),
     );
@@ -82,16 +100,15 @@ class _ClosetFolderOverviewScreenState
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: Text('Are you sure ?'),
+          title: Text('Are you sure?'),
           content: Text('This action will be permanent and cannot be undone.'),
           actions: [
             TextButton(
-              onPressed: () async{
+              onPressed: () async {
                 ref.read(deleteFolderProvider(widget.folderId));
-                if(mounted){
+                if (mounted) {
                   context.router.pop();
                 }
-
               },
               child: Text('Delete'),
             ),
@@ -110,10 +127,10 @@ class _ClosetFolderOverviewScreenState
         return AlertDialog(
           title: Text('Change Folder Name'),
           content: Column(
-            mainAxisSize: MainAxisSize.min, // Dostosowuje rozmiar kolumny do zawartości
+            mainAxisSize: MainAxisSize.min,
             children: [
               Text('Please enter the new folder name:'),
-              SizedBox(height: 10), // Dodaje trochę przestrzeni
+              SizedBox(height: 10),
               TextField(
                 controller: _controller,
                 decoration: InputDecoration(hintText: 'Folder Name'),
@@ -130,8 +147,8 @@ class _ClosetFolderOverviewScreenState
             TextButton(
               onPressed: () async {
                 if (_controller.text.isNotEmpty) {
-                  ref.read(changeFolderNameProvider(_controller.text, widget.folderId));
-
+                  ref.read(changeFolderNameProvider(
+                      _controller.text, widget.folderId));
                 }
                 if (mounted) {
                   Navigator.of(context).pop();
@@ -145,38 +162,13 @@ class _ClosetFolderOverviewScreenState
     );
   }
 
-
-  Widget _tags() {
-    final List<String>? tags = [
-      "Tag1",
-      "Tag2",
-      "Tag3",
-      "Tag4",
-      "Tag5",
-      "Tag6"
-    ]; // Example, might be pulled from DataList
-
-    if (tags == null || tags.isEmpty) {
-      return Center(
-        child: Text("Brak tagów do wyświetlenia"),
-      );
-    }
-
-    return Tags(
-      itemCount: tags.length,
-      horizontalScroll: true,
-      itemBuilder: (int index) {
-        final item = tags[index];
-        return ItemTags(
-          index: index,
-          title: item,
-          active: true,
-          pressEnabled: false,
-          textStyle: TextStyle(fontSize: 14),
-          elevation: 5,
-          borderRadius: BorderRadius.circular(8),
-        );
-      },
+  Widget _clothesList(ClosetFolder folder) {
+    return SingleChildScrollView(
+      child: Column(
+        children: [
+          _clothesGrid(folder.clothingItems),
+        ],
+      ),
     );
   }
 
@@ -197,11 +189,14 @@ class _ClosetFolderOverviewScreenState
           itemBuilder: (context, index) {
             final clothingItem = clothingItems[index];
             return AnimationConfiguration.staggeredGrid(
-                position: index,
-                columnCount: 3,
-                child: ScaleAnimation(
-                    child: FadeInAnimation(
-                        child: _buildClothingItemTile(clothingItem, context))));
+              position: index,
+              columnCount: 3,
+              child: ScaleAnimation(
+                child: FadeInAnimation(
+                  child: _buildClothingItemTile(clothingItem, context),
+                ),
+              ),
+            );
           },
         ),
       ),
@@ -212,7 +207,6 @@ class _ClosetFolderOverviewScreenState
       ClothingItem clothingItem, BuildContext context) {
     return GestureDetector(
       onTap: () {
-        //Navigator.pushNamed(context, 'routeName');
         context.router
             .push(ClothingItemOverviewRoute(clothingItem: clothingItem));
       },
@@ -249,4 +243,45 @@ class _ClosetFolderOverviewScreenState
       ),
     );
   }
+
+  Widget _buildEmptyCloset(){
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        GestureDetector(
+          onTap: () => context.router.push(AddClothesRoute()),
+          child: Container(
+            width: 100,
+            height: 100,
+            decoration: BoxDecoration(
+                shape: BoxShape.circle,
+                color: Colors.lightGreenAccent
+            ),
+            child: Icon(Icons.add),
+          ),
+        ),
+        Center(child: Text("Empty closet", style:  headline)),
+      ],
+    );
+  }
+
+  Widget _tags() {
+    final tags = ["Tag1", "Tag2", "Tag3"];
+    return Tags(
+      itemCount: tags.length,
+      horizontalScroll: true,
+      itemBuilder: (int index) {
+        final item = tags[index];
+        return ItemTags(
+          index: index,
+          title: item,
+          active: true,
+          textStyle: TextStyle(fontSize: 14),
+          elevation: 5,
+          borderRadius: BorderRadius.circular(8),
+        );
+      },
+    );
+  }
+
 }

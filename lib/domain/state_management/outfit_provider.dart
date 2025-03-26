@@ -25,3 +25,4 @@ Future<void> saveOutfit(SaveOutfitRef ref, String imageUrl, List<int> clothingIt
 Future<void> deleteOutfit(DeleteOutfitRef ref, int outfitId) async {
   return ref.read(outfitRepositoryProvider).removeOutfit(outfitId);
 }
+

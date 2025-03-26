@@ -1,7 +1,9 @@
 import 'package:auto_route/annotations.dart';
+import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:ootd/navigation/app_router.dart';
 
 import '../../model/setting.dart';
 import '../domain/state_management/user_provider.dart';
@@ -14,22 +16,22 @@ class SettingsScreen extends ConsumerWidget {
     SettingOption(
       title: 'Account Settings',
       icon: Icon(Icons.account_circle),
-      route: '/accountSettings',
+      navigateTo: (context) => context.router.push(AccountSettingsRoute()),
     ),
     SettingOption(
       title: 'Notification Settings',
       icon: Icon(Icons.notifications),
-      route: '/notificationSettings',
+      navigateTo: (context) => context.router.push(AccountSettingsRoute()),
     ),
     SettingOption(
       title: 'Privacy Settings',
       icon: Icon(Icons.privacy_tip),
-      route: '/privacySettings',
+      navigateTo: (context) => context.router.push(AccountSettingsRoute()),
     ),
     SettingOption(
       title: 'Help & Support',
       icon: Icon(Icons.help),
-      route: '/helpSupport',
+      navigateTo: (context) => context.router.push(AccountSettingsRoute()),
     ),
 
   ];
@@ -53,7 +55,8 @@ class SettingsScreen extends ConsumerWidget {
                     trailing: Icon(Icons.arrow_forward_ios_sharp, size: 16.0),
                     title: Text(option.title),
                     onTap: () {
-                      Navigator.pushNamed(context, option.route);
+                      option.navigateTo(context);
+                      //Navigator.pushNamed(context, option.navigateTo);
                     },
                   );
                 },

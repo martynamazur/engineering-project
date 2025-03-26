@@ -304,5 +304,20 @@ class _AddNewClothingItemProviderElement
   ClothingItem get newClothingItem =>
       (origin as AddNewClothingItemProvider).newClothingItem;
 }
+
+String _$countClothesHash() => r'77996419fedccf2f76139d3eae435f35b25d2b2c';
+
+/// See also [countClothes].
+@ProviderFor(countClothes)
+final countClothesProvider = AutoDisposeFutureProvider<int>.internal(
+  countClothes,
+  name: r'countClothesProvider',
+  debugGetCreateSourceHash:
+      const bool.fromEnvironment('dart.vm.product') ? null : _$countClothesHash,
+  dependencies: null,
+  allTransitiveDependencies: null,
+);
+
+typedef CountClothesRef = AutoDisposeFutureProviderRef<int>;
 // ignore_for_file: type=lint
 // ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member

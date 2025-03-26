@@ -22,3 +22,8 @@ Future<void> addNewClothingItem(AddNewClothingItemRef ref, ClothingItem newCloth
   return  ref.read(clothesRepositoryProvider).addClothingItem(newClothingItem);
 
 }
+
+@riverpod
+Future<int> countClothes(CountClothesRef ref) async {
+  return ref.read(clothesRepositoryProvider).countClothes();
+}

@@ -122,7 +122,7 @@ class _AddClothesInformationState extends ConsumerState<AddClothesInformation> {
                 season : season,
                 onTap: () {
                   ref.read(selectedSeasonProvider.notifier).state = season.id;
-                },
+                }, isSelected: false,
 
             );
           },

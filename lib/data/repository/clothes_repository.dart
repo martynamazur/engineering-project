@@ -4,22 +4,36 @@ import '../../model/clothing_item.dart';
 
 class ClothesRepository {
 
+  late final String _userId;
+
+  ClothesRepository() {
+    _initialize();
+  }
+
+  Future<void> _initialize() async {
+    final user = supabase.auth.currentUser;
+    if (user == null) {
+      throw Exception('User not logged in');
+    }
+    _userId = user.id;
+  }
+
   Future<void> addClothingItem(ClothingItem clothingItem) async {
     try{
 
-      final userId = supabase.auth.currentUser?.id; // Get the current user's ID
-      if (userId == null) {
-        throw Exception('User is not authenticated.');
+
+      final response = await supabase.from('clothingitem').insert({
+        'item_photo' : clothingItem.itemPhoto,
+        'item_category_id': clothingItem.itemCategoryId,
+        'seasons' :  clothingItem.seasons?.map((season) => season.toString().split('.').last).toList(),
+      });
+
+      if (response != null) {
+        int clothingItemId = response['clothing_item_id'];
+        print('Dodano ubranie z ID: $clothingItemId');
       }
 
-      // Set the session variable
-      await supabase.rpc('set_current_user_id', params: {'user_id': userId});
-
-      await supabase.from('clothingitem').insert({
-        'item_photo' : clothingItem.itemPhoto,
-        'seasons' :  clothingItem.seasons?.map((season) => season.toString().split('.').last).toList(),
-
-      });
+      //dodaj do tablicy trigger w tym momencie ale nie mam uuid :/ albo z tego poziomu wywoluje funkcje ?
 
     }catch (e) {
       print('Caught an error: $e');
@@ -38,4 +52,29 @@ class ClothesRepository {
       throw Exception('Coundt');
   }
 }
+
+  Future<int> countClothes() async{
+    try{
+
+      final response = await supabase
+          .from('user_clothing_items')
+          .select('clothing_item_ids')
+          .eq('user_id', _userId)
+          .maybeSingle();
+
+      if(response == null){
+        print('Liczba elementów: zero');
+        return 0;
+      }
+
+      final clothingItemIds = response['clothing_item_ids'] as List?;
+      final itemCount = clothingItemIds?.length ?? 0;
+      print('Liczba elementów: $itemCount');
+      return itemCount;
+
+    }catch (e) {
+      print('Caught an error: $e');
+      throw Exception('Theres no clothes ');
+    }
+  }
 }

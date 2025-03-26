@@ -1,15 +1,15 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:ootd/domain/state_management/clothes_provider.dart';
 import 'package:ootd/model/clothing_item.dart';
 import 'package:ootd/navigation/app_router.dart';
 
 import 'package:ootd/domain/state_management/clothes_folder_provider.dart';
 import 'package:ootd/domain/state_management/folder_list_notifier.dart' as folderList;
+import 'package:ootd/presentation/styles/headline_text.dart';
 
 import '../model/closet_folder.dart';
-
-final gridViewTypeProvider = StateProvider<GridViewType>((ref) => GridViewType.large);
 
 enum GridViewType {
   large,
@@ -25,27 +25,26 @@ class HomeScreen extends ConsumerStatefulWidget {
 }
 
 class _HomeScreenState extends ConsumerState<HomeScreen> {
+  GridViewType gridViewType = GridViewType.large;
+
 @override
   Widget build(BuildContext context) {
-    final gridViewType = ref.watch(gridViewTypeProvider);
     final folderListNotifier = ref.watch(folderList.folderListNotifierProvider);
+    final isThereAnyClothes = ref.read(countClothesProvider).value;
 
-    return Scaffold(
+  return Scaffold(
       appBar: AppBar(
         title: const Text('Szafa'),
         actions: [
           IconButton(
             icon: Icon(gridViewType == GridViewType.large ? Icons.grid_view : Icons.view_module),
             onPressed: () {
-              ref.read(gridViewTypeProvider.notifier).state = gridViewType == GridViewType.large
-                  ? GridViewType.small
-                  : GridViewType.large;
+              setState(() {
+                gridViewType = gridViewType == GridViewType.large ? GridViewType.small : GridViewType.large;
+              });
             },
           ),
-          IconButton(onPressed: () {
-            _createNewFolderDialog();
-
-          }, icon: const Icon(Icons.add_box_rounded))
+          IconButton(onPressed: () => _createNewFolderDialog(), icon: const Icon(Icons.add_box_rounded))
         ],
       ),
       body: RefreshIndicator(
@@ -54,7 +53,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
         },
 
         child: folderListNotifier.when(
-          data: (folders) => _buildGridView(gridViewType, folders, ref),
+          data: (folders) => (isThereAnyClothes ?? 0) != 0 ? _buildGridView(gridViewType, folders, ref) : _buildEmptyCloset(),
           error: (error, stackTrace) => Center(child: Text('Error: $error')),
           loading: () => const Center(child: CircularProgressIndicator()),
         ),
@@ -120,8 +119,19 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                     ),
                     itemCount: 6,
                     itemBuilder: (context, index) {
-                      final clothingItem = folder.clothingItems[index];
-                      return _buildListItem(clothingItem);
+
+                      if(folder.clothingItems.isEmpty){
+                        _buildPlaceholder();//iteruje 6 razy wiec nie potrzeba for
+                      }
+
+
+                      if(index < folder.clothingItems.length){
+                        final clothingItem = folder.clothingItems[index];
+                        return _buildListItem(clothingItem);
+                      }else{
+                        return _buildPlaceholder();
+                      }
+
                     },
                     shrinkWrap: true,
                     physics: const NeverScrollableScrollPhysics(),
@@ -269,6 +279,46 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
     );
   }
 
+  Widget _buildEmptyCloset(){
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        GestureDetector(
+          onTap: () =>  context.tabsRouter.setActiveIndex(2),
+          child: Container(
+            width: 100,
+            height: 100,
+            decoration: BoxDecoration(
+                shape: BoxShape.circle,
+                color: Colors.lightGreenAccent
+            ),
+            child: Icon(Icons.add),
+          ),
+        ),
+        Center(child: Text("Empty closet", style:  headline)),
+      ],
+    );
+  }
+
+  Widget _buildPlaceholder(){
+    return Container(
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(8.0),
+        color: Colors.white70,
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withOpacity(0.1),
+            spreadRadius: 2,
+            blurRadius: 5,
+            offset: const Offset(0, 3),
+          ),
+        ],
+      ),
+      child: Icon(Icons.add, color: Colors.lightGreenAccent),
+    );
+
+  }
+
   void _confirmFolderDeletion(int folderId) {
     showDialog(
       context: context,
@@ -350,4 +400,5 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
       },
     );
   }
+
 }

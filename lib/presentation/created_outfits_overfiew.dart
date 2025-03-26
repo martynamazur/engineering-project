@@ -6,7 +6,7 @@ import 'package:ootd/navigation/app_router.dart';
 import '../domain/state_management/outfit_list_notifier.dart';
 import '../domain/state_management/outfit_provider.dart';
 import '../utils/show_confirm_deletion_dialog.dart';
-import 'nowe/outfit_overfiew.dart';
+import 'outfit_overfiew.dart';
 
 
 

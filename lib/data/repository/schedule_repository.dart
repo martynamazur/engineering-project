@@ -62,8 +62,23 @@ class ScheduleRepository {
         params: {'schedule_id': scheduleId, 'user_uuid': _userId});
   }
 
-  Future<void> scheduleOutfit(Schedule schedule) async{
-    await sup
+  void scheduleOutfit(Schedule schedule) async{
 
+    /*
+    p_user_uuid uuid,
+    p_schedule_date date,
+    p_schedule_time text,
+    p_outfit_id integer
+     */
+
+    //add_scheduled_outfit(p_outfit_id, p_schedule_date, p_schedule_time, p_user_uuid))
+    await supabase.rpc(
+        "add_scheduled_outfit",
+        params: {
+          "p_user_uuid" : _userId,
+          "p_schedule_date": schedule.scheduleDate.toString(),
+          "p_schedule_time": schedule.scheduleTime,
+          "p_outfit_id" : schedule.outfitId
+        });
   }
 }

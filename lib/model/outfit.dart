@@ -14,7 +14,7 @@ class Outfit with _$Outfit {
     @JsonKey(name: 'season') required String season,
     @JsonKey(name: 'useditemsids') List<ClothingItem>? clothingItemList,
     @JsonKey(name: 'userTags') List<Tag>? userTags,
-    @JsonKey(name: 'defaultTags') List<Tag>? defaultTags,
+    @JsonKey(name: 'defaultTags') List<int>? defaultTags,
 }) = _Outfit;
 
 

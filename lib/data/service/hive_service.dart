@@ -1,5 +1,6 @@
 
 import 'package:hive/hive.dart';
+import 'package:ootd/model/tag.dart';
 
 import '../../model/season.dart';
 
@@ -19,6 +20,16 @@ class HiveService {
       ];
       await seasonBox.addAll(initialTags);
     }
-
+  }
+  
+  Future<void> initializeDefaultTagBox() async{
+    final tagBox = Hive.box<Tag>('tagBox');
+    if(tagBox.isEmpty){
+      final List<Tag> initialTags = [
+        Tag(tagId: 1, tagName: 'tagName1', tagImagePath: 'tagImagePath'),
+        Tag(tagId: 2, tagName: 'tagName2', tagImagePath: 'tagImagePath'),
+        Tag(tagId: 3, tagName: 'tagName3', tagImagePath: 'tagImagePath')
+      ];
+    }
   }
 }

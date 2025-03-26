@@ -1,10 +1,12 @@
 
+import 'package:auto_route/auto_route.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 //import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 import '../../main.dart';
+import '../../navigation/app_router.dart';
 
 class UserRepository{
 
@@ -41,8 +43,10 @@ class UserRepository{
       final Session? session = response.session;
       final User? user = response.user;
 
+
       if (user != null) {
         await _storage.write(key: 'authToken', value: session?.accessToken);
+        await updateAccountStatus();
         return true;
       } else {
         return false;
@@ -57,8 +61,9 @@ class UserRepository{
   Future<void> signOut(BuildContext context) async{
     supabase.auth.signOut();
     await _storage.write(key: 'authToken', value: '');
-    Navigator.pushNamedAndRemoveUntil(context, '/login', (route) => false);
+    context.router.replaceAll([LoginRoute()]);
 
+    //Navigator.pushNamedAndRemoveUntil(context, '/login', (route) => false);
 
   }
 
@@ -72,6 +77,33 @@ class UserRepository{
       print('Reset password error: $e');
       rethrow;
     }
+  }
+
+  Future<bool> changeEmailAdress(String newEmailAddress) async{
+    try{
+      await supabase.auth.updateUser(UserAttributes(email: newEmailAddress));
+      return true;
+    }catch(e){
+      return false;
+    }
+  }
+
+
+  Future<void> requestAccountDeletion() async {
+    final userId = supabase.auth.currentUser?.id;
+    if (userId == null) return;
+    await supabase.from('users').update({'is_deletable': true}).eq('id', userId);
+
+  }
+  Future<void> updateAccountStatus() async{
+    final userId = supabase.auth.currentUser?.id;
+    if (userId == null) return;
+
+    await supabase.from('users').update({
+      'account_status': 'active',
+      'is_deletable': false,
+      'deletion_requested_at': null,
+    }).eq('id', userId);
   }
 
 

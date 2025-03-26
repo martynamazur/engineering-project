@@ -1,6 +1,9 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:ootd/presentation/nowe/add_outfit_to_planer.dart';
+import 'package:ootd/presentation/account_settings.dart';
+import '../presentation/setting_change_email_adress.dart';
+import '../presentation/setting_change_password.dart';
+import 'package:ootd/presentation/add_outfit_to_planer.dart';
 import 'package:ootd/presentation/settings.dart';
 import 'package:ootd/presentation/splash_screen.dart';
 import 'package:ootd/presentation/closet_folder_overfiew.dart';
@@ -20,13 +23,16 @@ import 'package:ootd/presentation/create_outfit.dart';
 import '../model/clothing_item.dart';
 import '../model/outfit.dart';
 import '../presentation/created_outift_sucesfull.dart';
-import '../presentation/nowe/choose_template.dart';
-import '../presentation/nowe/outfit_overfiew.dart';
-import '../presentation/nowe/add_outfit_to_planer.dart';
-import '../presentation/settings.dart';
+import '../presentation/choose_template.dart';
+import '../presentation/outfit_overfiew.dart';
+import '../presentation/pick_owned_clothes.dart';
 import '../presentation/planer.dart';
-import '../presentation/nowe/edit_outfit_details.dart';
-
+import '../presentation/edit_outfit_details.dart';
+import '../presentation/account_settings.dart';
+import '../presentation/setting_change_email_adress.dart';
+import '../presentation/setting_change_password.dart';
+import '../presentation/setting_delete_account.dart';
+import '../presentation/setting_email_adress_sent_confirmation.dart';
 part 'app_router.gr.dart';
 
 @AutoRouterConfig(replaceInRouteName: 'Screen|Page,Route')
@@ -55,7 +61,14 @@ class AppRouter extends _$AppRouter {
         AutoRoute(page: OutfitOverviewRoute.page),
         AutoRoute(page: ChooseTemplateRoute.page),
         AutoRoute(page: EditOutfitDetailsRoute.page),
-        AutoRoute(page: AddOutfitToCallendarRoute.page)
+        AutoRoute(page: AddOutfitToCalendarRoute.page),
+        AutoRoute(page: PickOwnedClothesRoute.page),
+
+        AutoRoute(page: AccountSettingsRoute.page),
+        AutoRoute(page: SettingChangeEmailAdressRoute.page),
+        AutoRoute(page: SettingChangePasswordRoute.page),
+        AutoRoute(page: EmailAddressSentConfirmationRoute.page),
+        AutoRoute(page: SettingDeleteAccountRoute.page)
     
       ];
 }

@@ -31,8 +31,9 @@ class AddClothesScreen extends ConsumerStatefulWidget {
 }
 
 class _AddClothesState extends ConsumerState<AddClothesScreen> {
-  late final PageController _pageController;
-  late final ImagePicker _picker;
+  late final PageController _pageController =PageController();
+  late final ImagePicker _picker = ImagePicker();
+
   final int _lastPage = 3;
   int _currentPage = 0;
   XFile? _image;
@@ -41,20 +42,6 @@ class _AddClothesState extends ConsumerState<AddClothesScreen> {
   int? _pickedCategory;
   int? pickedSeason;
 
-  @override
-  void initState() {
-    super.initState();
-    _pageController = PageController();
-    _picker = ImagePicker();
-  }
-
-  @override
-  void dispose() {
-    _currentPage = 0;
-    _image = null;
-    _pickedSeasons.clear();
-    super.dispose();
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -96,7 +83,6 @@ class _AddClothesState extends ConsumerState<AddClothesScreen> {
       padding: const EdgeInsets.all(16.0),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
-        //mainAxisAlignment: MainAxisAlignment.center,
         children: [
           Text('Add photo', style: headline32),
           SizedBox(height: 20),
@@ -148,9 +134,8 @@ class _AddClothesState extends ConsumerState<AddClothesScreen> {
     if (image != null) {
       final file = File(image.path);
       final result = await ref.read(removePhotoBackgroundProvider(file).future);
-      setState(() {
-        _image = result != null ? XFile(result.path) : null;
-      });
+      _image = result != null ? XFile(result.path) : null;
+
     }
   }
 
@@ -179,19 +164,19 @@ class _AddClothesState extends ConsumerState<AddClothesScreen> {
                     ),
                     itemBuilder: (context, index) {
                       final category = categories[index];
-                      bool isSelected = _pickedCategory == category.id;
+                      //bool isSelected = _pickedCategory == category.id;
 
                       return SelectableCategoryTile(
                         categoryName: category.categoryName,
                         imagePath: category.imagePath,
-                        isSelected: isSelected,
+                        isSelected: _pickedCategory == category.id,
                         onTap: () {
                           setState(() {
-                            isSelected = !isSelected;
+                            _pickedCategory = _pickedCategory == category.id ? null : category.id; // Toggle selection
+                            print("Category : $_pickedCategory");
                           });
 
-                          _pickedCategory = category.id;
-                          print(_pickedCategory);
+
                         },
                       );
                     },
@@ -282,14 +267,36 @@ class _AddClothesState extends ConsumerState<AddClothesScreen> {
           SizedBox(
               width: double.infinity,
               child: OutlinedButton(
-                  onPressed: () {}, child: Text('Add another one'))),
+                  onPressed: () async{
+                    // jeszcze raz
+                    await saveClothingItemToDatabase();
+                    setState(() {
+                      _image = null;
+                      _pickedCategory = null;
+                      _pickedSeasons.clear();
+                      print("-imahe $_image $_pickedCategory");
+                    });
+                    context.router.dispose();
+                    //_pageController.jumpTo(0);
+
+
+                  }, child: Text('Add another one'))),
           SizedBox(
               width: double.infinity,
               child: OutlinedButton(
-                  onPressed: () {
-                    saveClothingItemToDatabase();
+                  onPressed: () async{
+                    await saveClothingItemToDatabase();
+
+                    setState(() {
+                      _image = null;
+                      _pickedCategory = null;
+                      _pickedSeasons.clear();
+                    });
+                    _pageController.jumpTo(0);
+                    //context.router.dispose();
                     AutoTabsRouter.of(context).setActiveIndex(1);
-                    dispose();
+
+
                   },
                   child: Text('Finish')))
         ],
@@ -300,15 +307,14 @@ class _AddClothesState extends ConsumerState<AddClothesScreen> {
   Future<void> saveClothingItemToDatabase() async {
     final Uint8List? imageData = await _image?.readAsBytes();
 
-    final selectedCategoryId = ref.watch(selectedCategoryProvider);
     final imageUrl = await ref
         .read(supabaseUtilsProvider)
         .uploadImageAndReturnUrl(imageData!);
 
+
     final clothingItem = ClothingItem(
         itemPhoto: imageUrl,
-        itemSeason: 1,
-        itemCategoryId: selectedCategoryId,
+        itemCategoryId: _pickedCategory,
         seasons: _pickedSeasons);
 
     ref.read(clothesRepositoryProvider).addClothingItem(clothingItem);

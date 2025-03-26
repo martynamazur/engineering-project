@@ -2,8 +2,10 @@ import 'package:another_flushbar/flushbar.dart';
 import 'package:auto_route/annotations.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:ootd/navigation/app_router.dart';
 import 'package:ootd/presentation/styles/headline_text.dart';
-
+import 'package:auto_route/auto_route.dart';
+import 'package:ootd/presentation/styles/password_validator.dart';
 import '../domain/state_management/user_provider.dart';
 
 @RoutePage()
@@ -15,29 +17,32 @@ class RegistrationScreen extends ConsumerStatefulWidget {
 }
 
 class RegistrationState extends ConsumerState<RegistrationScreen> {
-  final TextEditingController emailController = TextEditingController();
-  final TextEditingController passwordController = TextEditingController();
-  final TextEditingController nameController = TextEditingController();
+  final TextEditingController _emailController = TextEditingController();
+  final TextEditingController _passwordController = TextEditingController();
+  final TextEditingController _nameController = TextEditingController();
+  final _formKey = GlobalKey<FormState>();
+  bool _checkbox = false;
+  bool _obscureText = true;
+  bool _passwordIconVisibility = true;
 
   @override
   void dispose() {
-    emailController.dispose();
-    passwordController.dispose();
-    nameController.dispose();
+    _emailController.dispose();
+    _passwordController.dispose();
+    _nameController.dispose();
     super.dispose();
   }
 
+  // Each time the page rebuild, variables resets too
   @override
   Widget build(BuildContext context) {
-    final obscureText = "";
-    final checkbox = false;
-
     return Scaffold(
       appBar: AppBar(
         leading: IconButton(
           icon: const Icon(Icons.arrow_back),
           onPressed: () {
-            Navigator.of(context).pop();
+            //Navigator.of(context).pop();
+            context.router.maybePop();
           },
         ),
       ),
@@ -46,113 +51,31 @@ class RegistrationState extends ConsumerState<RegistrationScreen> {
           child: Padding(
             padding:
                 const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
-            child: Column(
-              children: [
-                Text('Create Account', style: headlineMedium),
-                const Text('Fill your information below'),
-                const SizedBox(height: 32.0),
-                TextFormField(
-                  controller: nameController,
-                  decoration: const InputDecoration(
-                    labelText: 'Name',
-                    border: OutlineInputBorder(),
-                  ),
-                ),
-                const SizedBox(height: 24.0),
-                TextFormField(
-                  controller: emailController,
-                  keyboardType: TextInputType.emailAddress,
-                  validator: (value) {
-                    if (value!.isEmpty) {
-                      //ref.read(errorTextEmailProvider.notifier).state = true;
-                    } else {
-                      //ref.read(errorTextEmailProvider.notifier).state = false;
-                    }
-                    return null;
-                  },
-                  decoration: const InputDecoration(
-                    labelText: 'Email',
-                    suffixIcon: Icon(Icons.email, color: Colors.grey),
-                    border: OutlineInputBorder(),
-                  ),
-                ),
-                const SizedBox(height: 24.0),
-                TextFormField(
-                  controller: passwordController,
-                  //obscureText: obscureText,
-                  decoration: InputDecoration(
-                    labelText: 'Password',
-                    suffixIcon: IconButton(
-                      icon: Icon(
-                        Icons.visibility,
-                        color: Colors.grey,
-                      ),
-                      onPressed: () {
-                        //ref.read(obscureTextProvider.notifier).state = !obscureText;
-                      },
+            child: Form(
+              key: _formKey,
+              child: Column(
+                children: [
+                  Text('Create Account', style: headlineMedium),
+                  const Text('Fill your information below'),
+                  const SizedBox(height: 32.0),
+                  _inputName(),
+                  const SizedBox(height: 24.0),
+                  _inputEmail(),
+                  const SizedBox(height: 24.0),
+                  _inputPassword(),
+                  const SizedBox(height: 24.0),
+                  _checkboxTermsConditions(),
+                  const SizedBox(height: 24.0),
+                  OutlinedButton(
+                    onPressed: () async {
+                      _signInValidator();
+                    },
+                    child: const Text(
+                      'Sign up',
                     ),
-                    border: OutlineInputBorder(),
-                  ),
-                ),
-                const SizedBox(height: 24.0),
-                Row(
-                  children: [
-                    SizedBox(
-                      width: 24.0,
-                      height: 24.0,
-                      child: Checkbox(
-                        value: checkbox,
-                        onChanged: (newValue) {
-                          /*
-                          ref.read(checkboxValueProvider.notifier).state =
-                              newValue!;
-
-                           */
-                        },
-                      ),
-                    ),
-                    const SizedBox(width: 8.0),
-                    GestureDetector(
-                      onTap: () {
-                        // redirect to the website
-                      },
-                      child: Text.rich(
-                        TextSpan(
-                          text: 'Agree with ',
-                          children: const [
-                            TextSpan(
-                              text: 'Terms & Condition',
-                              style: TextStyle(
-                                decoration: TextDecoration.underline,
-                                color: Colors.blue,
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                    )
-                  ],
-                ),
-                const SizedBox(height: 24.0),
-                OutlinedButton(
-                  onPressed: () async {
-                    try {
-                      await ref.read(userRepositoryProvider).signUp(
-                            passwordController.text,
-                            emailController.text,
-                            nameController.text,
-                          );
-                      //
-                      Navigator.pushNamed(context, '/registrationSuccessful');
-                    } catch (e) {
-                      showEmailAlreadyExistsMessage(context);
-                    }
-                  },
-                  child: Text(
-                    'Sign in',
-                  ),
-                )
-              ],
+                  )
+                ],
+              ),
             ),
           ),
         ),
@@ -160,9 +83,123 @@ class RegistrationState extends ConsumerState<RegistrationScreen> {
     );
   }
 
-  void loginFailedMessage(BuildContext context) {
-    emailController.clear();
-    passwordController.clear();
+  TextFormField _inputName(){
+    return TextFormField(
+      controller: _nameController,
+      decoration: const InputDecoration(
+        labelText: 'Name',
+        border: OutlineInputBorder(),
+      ),
+    );
+  }
+
+  TextFormField _inputEmail(){
+    return TextFormField(
+      controller: _emailController,
+      keyboardType: TextInputType.emailAddress,
+      validator: (value) {
+        if (value!.isEmpty) {
+          loginFailedMessage();
+          return 'Email cannot be empty';
+        }
+        return null;
+      },
+      decoration: const InputDecoration(
+        labelText: 'Email',
+        suffixIcon: Icon(Icons.email, color: Colors.grey),
+        border: OutlineInputBorder(),
+      ),
+    );
+  }
+
+  TextFormField _inputPassword(){
+    return TextFormField(
+      controller: _passwordController,
+      obscureText: _obscureText,
+      validator: (value){
+        if(value!.isEmpty){
+          loginFailedMessage();
+          return 'Password cannot be empty';
+        }
+        return null;
+      },
+      decoration: InputDecoration(
+        labelText: 'Password',
+        suffixIcon: IconButton(
+          icon: Icon(
+            _passwordIconVisibility ? Icons.visibility : Icons.visibility_off,
+            color: Colors.grey,
+          ),
+          onPressed: () {
+            _passwordIconVisibility= !_passwordIconVisibility;
+            setState(() {
+              _obscureText = !_obscureText;
+            });
+          },
+        ),
+        border: OutlineInputBorder(),
+      ),
+    );
+  }
+
+  Row _checkboxTermsConditions(){
+    return Row(
+      children: [
+        SizedBox(
+          width: 24.0,
+          height: 24.0,
+          child: Checkbox(
+            value: _checkbox,
+            onChanged: (newValue) {
+              setState(() {
+                _checkbox = newValue!;
+              });
+            },
+          ),
+        ),
+        const SizedBox(width: 8.0),
+        GestureDetector(
+          onTap: () {
+            // redirect to the website
+          },
+          child: const Text.rich(
+            TextSpan(
+              text: 'Agree with ',
+              children: [
+                TextSpan(
+                  text: 'Terms & Condition',
+                  style: TextStyle(
+                    decoration: TextDecoration.underline,
+                    color: Colors.blue,
+                  ),
+                ),
+              ],
+            ),
+          ),
+        )
+      ],
+    );
+  }
+
+  void _signInValidator() async{
+    if(_formKey.currentState?.validate() ?? false){
+      try {
+        await ref.read(userRepositoryProvider).signUp(
+          _passwordController.text,
+          _emailController.text,
+          _nameController.text,
+        );
+
+        if (context.mounted)  context.router.push(RegistrationSuccessfulRoute());
+      } catch (e) {
+        showEmailAlreadyExistsMessage();
+      }
+    }
+  }
+
+  void loginFailedMessage() {
+    _emailController.clear();
+    _passwordController.clear();
     Flushbar(
       title: 'Login failed',
       message: 'Invalid email or password',
@@ -172,9 +209,9 @@ class RegistrationState extends ConsumerState<RegistrationScreen> {
     ).show(context);
   }
 
-  void showEmailAlreadyExistsMessage(BuildContext context) {
-    emailController.clear();
-    passwordController.clear();
+  void showEmailAlreadyExistsMessage() {
+    _emailController.clear();
+    _passwordController.clear();
     Flushbar(
       title: 'Sign Up Failed',
       message:

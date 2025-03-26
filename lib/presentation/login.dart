@@ -26,10 +26,6 @@ class _LoginState extends ConsumerState<LoginScreen> {
   final _formKey = GlobalKey<FormState>();
   final _passwordValidator = PasswordValidator();
 
-  @override
-  void initState() {
-    super.initState();
-  }
 
   @override
   void dispose() {
@@ -48,12 +44,16 @@ class _LoginState extends ConsumerState<LoginScreen> {
         padding: const EdgeInsets.all(16.0),
         child: Form(
           key: _formKey,
-          child: Column(children: [
-            _inputEmail(),
-            _inputPassword(),
-            _resetPassword(),
-            _registration(),
-            _signInButton()
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              _inputEmail(),
+              SizedBox(height: 16.0),
+              _inputPassword(),
+              SizedBox(height: 16.0),
+              _resetPassword(),
+              _registration(),
+              _signInButton()
           ]),
         ),
       ),
@@ -93,8 +93,7 @@ class _LoginState extends ConsumerState<LoginScreen> {
   Widget _resetPassword() {
     return GestureDetector(
       onTap: () {
-        //Navigator.pushNamed(context, '/resetPassword');
-        //context.router.replace(const ClosetFolderOverviewRoute());
+        context.router.push(ResetPasswordRoute());
       },
       child: Text('Password reset'),
     );
@@ -104,8 +103,6 @@ class _LoginState extends ConsumerState<LoginScreen> {
     return GestureDetector(
       onTap: () {
         context.router.push(RegistrationRoute());
-        //Navigator.pushNamed(context, '/registration');
-        //context.router.replace(const RegistrationRoute());
       },
       child: const Text.rich(
         TextSpan(
@@ -143,14 +140,14 @@ class _LoginState extends ConsumerState<LoginScreen> {
       if (response) {
         context.router.replace(const HomeRoute());
       } else {
-        loginFailedMessage(context);
+        loginFailedMessage();
       }
     } else {
-      loginFailedMessage(context);
+      loginFailedMessage();
     }
   }
 
-  void loginFailedMessage(BuildContext context) {
+  void loginFailedMessage() {
     _emailController.clear();
     _passwordController.clear();
     Flushbar(

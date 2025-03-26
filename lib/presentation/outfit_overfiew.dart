@@ -8,7 +8,7 @@ import 'package:ootd/model/clothing_item.dart';
 import 'package:ootd/model/tag.dart';
 import 'package:ootd/navigation/app_router.dart';
 
-import '../../utils/show_confirm_deletion_dialog.dart';
+import '../utils/show_confirm_deletion_dialog.dart';
 
 @RoutePage()
 class OutfitOverviewScreen extends ConsumerStatefulWidget {
@@ -86,7 +86,7 @@ class _OutfitOverviewScreenState extends ConsumerState<OutfitOverviewScreen> {
             ),
             const SizedBox(height: 16),
             _buildTagsSection('User Tags', widget.outfit.userTags),
-            _buildTagsSection('Default Tags', widget.outfit.defaultTags),
+            //_buildTagsSection('Default Tags', widget.outfit.defaultTags),
           ],
         ),
       ),

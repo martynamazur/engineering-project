@@ -623,5 +623,168 @@ class _CreateNewFolderProviderElement
   @override
   String get folderName => (origin as CreateNewFolderProvider).folderName;
 }
+
+String _$addClothesToFolderHash() =>
+    r'a3d9f175c2b715b7df35199475edebca4b5de28e';
+
+/// See also [addClothesToFolder].
+@ProviderFor(addClothesToFolder)
+const addClothesToFolderProvider = AddClothesToFolderFamily();
+
+/// See also [addClothesToFolder].
+class AddClothesToFolderFamily extends Family<AsyncValue<void>> {
+  /// See also [addClothesToFolder].
+  const AddClothesToFolderFamily();
+
+  /// See also [addClothesToFolder].
+  AddClothesToFolderProvider call(
+    List<int> clothesId,
+    int folderId,
+  ) {
+    return AddClothesToFolderProvider(
+      clothesId,
+      folderId,
+    );
+  }
+
+  @override
+  AddClothesToFolderProvider getProviderOverride(
+    covariant AddClothesToFolderProvider provider,
+  ) {
+    return call(
+      provider.clothesId,
+      provider.folderId,
+    );
+  }
+
+  static const Iterable<ProviderOrFamily>? _dependencies = null;
+
+  @override
+  Iterable<ProviderOrFamily>? get dependencies => _dependencies;
+
+  static const Iterable<ProviderOrFamily>? _allTransitiveDependencies = null;
+
+  @override
+  Iterable<ProviderOrFamily>? get allTransitiveDependencies =>
+      _allTransitiveDependencies;
+
+  @override
+  String? get name => r'addClothesToFolderProvider';
+}
+
+/// See also [addClothesToFolder].
+class AddClothesToFolderProvider extends AutoDisposeFutureProvider<void> {
+  /// See also [addClothesToFolder].
+  AddClothesToFolderProvider(
+    List<int> clothesId,
+    int folderId,
+  ) : this._internal(
+          (ref) => addClothesToFolder(
+            ref as AddClothesToFolderRef,
+            clothesId,
+            folderId,
+          ),
+          from: addClothesToFolderProvider,
+          name: r'addClothesToFolderProvider',
+          debugGetCreateSourceHash:
+              const bool.fromEnvironment('dart.vm.product')
+                  ? null
+                  : _$addClothesToFolderHash,
+          dependencies: AddClothesToFolderFamily._dependencies,
+          allTransitiveDependencies:
+              AddClothesToFolderFamily._allTransitiveDependencies,
+          clothesId: clothesId,
+          folderId: folderId,
+        );
+
+  AddClothesToFolderProvider._internal(
+    super._createNotifier, {
+    required super.name,
+    required super.dependencies,
+    required super.allTransitiveDependencies,
+    required super.debugGetCreateSourceHash,
+    required super.from,
+    required this.clothesId,
+    required this.folderId,
+  }) : super.internal();
+
+  final List<int> clothesId;
+  final int folderId;
+
+  @override
+  Override overrideWith(
+    FutureOr<void> Function(AddClothesToFolderRef provider) create,
+  ) {
+    return ProviderOverride(
+      origin: this,
+      override: AddClothesToFolderProvider._internal(
+        (ref) => create(ref as AddClothesToFolderRef),
+        from: from,
+        name: null,
+        dependencies: null,
+        allTransitiveDependencies: null,
+        debugGetCreateSourceHash: null,
+        clothesId: clothesId,
+        folderId: folderId,
+      ),
+    );
+  }
+
+  @override
+  AutoDisposeFutureProviderElement<void> createElement() {
+    return _AddClothesToFolderProviderElement(this);
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return other is AddClothesToFolderProvider &&
+        other.clothesId == clothesId &&
+        other.folderId == folderId;
+  }
+
+  @override
+  int get hashCode {
+    var hash = _SystemHash.combine(0, runtimeType.hashCode);
+    hash = _SystemHash.combine(hash, clothesId.hashCode);
+    hash = _SystemHash.combine(hash, folderId.hashCode);
+
+    return _SystemHash.finish(hash);
+  }
+}
+
+mixin AddClothesToFolderRef on AutoDisposeFutureProviderRef<void> {
+  /// The parameter `clothesId` of this provider.
+  List<int> get clothesId;
+
+  /// The parameter `folderId` of this provider.
+  int get folderId;
+}
+
+class _AddClothesToFolderProviderElement
+    extends AutoDisposeFutureProviderElement<void> with AddClothesToFolderRef {
+  _AddClothesToFolderProviderElement(super.provider);
+
+  @override
+  List<int> get clothesId => (origin as AddClothesToFolderProvider).clothesId;
+  @override
+  int get folderId => (origin as AddClothesToFolderProvider).folderId;
+}
+
+String _$getAllClothesHash() => r'f6367fa614b88c321588a5574118730d45eee32c';
+
+/// See also [getAllClothes].
+@ProviderFor(getAllClothes)
+final getAllClothesProvider =
+    AutoDisposeFutureProvider<List<ClothingItem>>.internal(
+  getAllClothes,
+  name: r'getAllClothesProvider',
+  debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
+      ? null
+      : _$getAllClothesHash,
+  dependencies: null,
+  allTransitiveDependencies: null,
+);
+
+typedef GetAllClothesRef = AutoDisposeFutureProviderRef<List<ClothingItem>>;
 // ignore_for_file: type=lint
 // ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member

@@ -32,7 +32,7 @@ mixin _$ClothingItem {
   @JsonKey(name: 'item_category_id')
   int? get itemCategoryId => throw _privateConstructorUsedError;
   @JsonKey(name: 'item_season_id')
-  int? get itemSeason => throw _privateConstructorUsedError;
+  int? get itemSeason => throw _privateConstructorUsedError; //do usuniecia
   @JsonKey(name: 'seasons')
   List<Season>? get seasons => throw _privateConstructorUsedError;
 
@@ -217,7 +217,9 @@ class _$ClothingItemImpl with DiagnosticableTreeMixin implements _ClothingItem {
   @override
   @JsonKey(name: 'item_season_id')
   final int? itemSeason;
+//do usuniecia
   final List<Season>? _seasons;
+//do usuniecia
   @override
   @JsonKey(name: 'seasons')
   List<Season>? get seasons {
@@ -325,7 +327,7 @@ abstract class _ClothingItem implements ClothingItem {
   @override
   @JsonKey(name: 'item_season_id')
   int? get itemSeason;
-  @override
+  @override //do usuniecia
   @JsonKey(name: 'seasons')
   List<Season>? get seasons;
   @override

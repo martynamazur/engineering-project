@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:auto_route/annotations.dart';
-
+import 'package:ootd/navigation/app_router.dart';
+import 'package:ootd/presentation/add_clothes.dart';
+import 'package:auto_route/auto_route.dart';
 @RoutePage()
 class RegistrationSuccessfulScreen extends StatelessWidget {
   const RegistrationSuccessfulScreen({super.key});
@@ -36,7 +38,7 @@ class RegistrationSuccessfulScreen extends StatelessWidget {
               const SizedBox(height: 32),
               ElevatedButton(
                 onPressed: () {
-                  Navigator.pushNamed(context, '/login');
+                  context.router.replaceAll([LoginRoute()]);
                 },
                 child: const Text('Go to Login'),
                 style: ElevatedButton.styleFrom(

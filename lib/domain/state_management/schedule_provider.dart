@@ -25,3 +25,8 @@ Future<List<Schedule>> getScheduleForWeek(GetScheduleForWeekRef ref) async {
 Future<void> removeFromSchedule(RemoveFromScheduleRef ref, int scheduleId) async {
   return ref.read(scheduleRepositoryProvider).removeFromSchedule(scheduleId);
 }
+
+@riverpod
+void scheduleOutfit(ScheduleOutfitRef ref, Schedule schedule) async {
+return ref.read(scheduleRepositoryProvider).scheduleOutfit(schedule);
+}

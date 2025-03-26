@@ -17,7 +17,7 @@ _$OutfitImpl _$$OutfitImplFromJson(Map<String, dynamic> json) => _$OutfitImpl(
           ?.map((e) => Tag.fromJson(e as Map<String, dynamic>))
           .toList(),
       defaultTags: (json['defaultTags'] as List<dynamic>?)
-          ?.map((e) => Tag.fromJson(e as Map<String, dynamic>))
+          ?.map((e) => (e as num).toInt())
           .toList(),
     );
 

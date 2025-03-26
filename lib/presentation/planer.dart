@@ -9,8 +9,12 @@ import 'package:ootd/navigation/app_router.dart';
 
 import '../model/schedule.dart';
 
+enum WeekDay { Monday, Tuesday, Wednesday, Thursday, Friday, Saturday, Sunday }
+
 @RoutePage()
 class PlannerScreen extends StatefulWidget {
+  const PlannerScreen({super.key});
+
   @override
   _PlannerScreenState createState() => _PlannerScreenState();
 }
@@ -36,12 +40,12 @@ class _PlannerScreenState extends State<PlannerScreen>
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Maj 2024'),
+        title: Center(child: Text(DateFormat('MMMM').format(DateTime.now()))),
         bottom: TabBar(
           controller: _tabController,
           tabs: [
-            Tab(text: "Miesięczny"),
-            Tab(text: "Tygodniowy"),
+            Tab(text: "Monthly"),
+            Tab(text: "Weekly"),
           ],
         ),
       ),
@@ -56,23 +60,102 @@ class _PlannerScreenState extends State<PlannerScreen>
   }
 }
 
-class MonthlyView extends StatelessWidget {
+class MonthlyView extends ConsumerWidget {
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final schedule = ref.watch(getScheduleForWeekProvider);
+    final now = DateTime.now();
+    final daysInMonth =
+        DateTime(now.year, now.month + 1, 0).day; // Liczba dni w miesiącu
+
+    // Utworzenie mapy dni i zaplanowanych strojów (będziemy używać mapy, aby powiązać daty z zaplanowanymi strojami)
+    Map<DateTime, List<Schedule>> schedulesByDay = {};
+
+    schedule.when(
+      data: (data) {
+        for (var scheduleItem in data) {
+          // Dodaj zaplanowany strój do odpowiedniego dnia
+          DateTime date = DateTime(scheduleItem.scheduleDate.year,
+              scheduleItem.scheduleDate.month, scheduleItem.scheduleDate.day);
+          schedulesByDay.putIfAbsent(date, () => []).add(scheduleItem);
+        }
+      },
+      loading: () => null,
+      error: (err, stack) => null,
+    );
+
     return GridView.builder(
       gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-        crossAxisCount: 7, // 7 kolumn dla dni tygodnia
+        crossAxisCount: 5,
         mainAxisSpacing: 4.0,
         crossAxisSpacing: 4.0,
       ),
-      itemCount: 31, // liczba dni w miesiącu
+      itemCount: daysInMonth,
       itemBuilder: (context, index) {
-        return Container(
-          alignment: Alignment.center,
-          decoration: BoxDecoration(
-            border: Border.all(color: Colors.black),
+        final day = index + 1;
+        final date = DateTime(now.year, now.month, day);
+        final schedulesForDay = schedulesByDay[date] ?? [];
+
+        return GestureDetector(
+          onTap: () {
+            schedulesForDay.isEmpty
+                ? context.router.push(
+                    AddOutfitToCalendarRoute(selectedDate: date.toString()))
+                : _dialogAddNewEntry(context, date);
+          },
+          child: Container(
+            alignment: Alignment.center,
+            decoration: BoxDecoration(
+              border: Border.all(color: Colors.black),
+              color: schedulesForDay.isNotEmpty
+                  ? Colors.green[100]
+                  : Colors.white, // Kolor w tle  gdy są zaplanowane stroje
+            ),
+            height: 150,
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Text('$day', style: TextStyle(fontWeight: FontWeight.bold)),
+                if (schedulesForDay.isNotEmpty)
+                  Expanded(
+                    child: SizedBox(
+                      height:
+                          60, // Wysokość dla miniaturek (ustawiamy większą wysokość dla kilku miniaturek)
+                      child: ListView.builder(
+                        scrollDirection: Axis.horizontal,
+                        itemCount: schedulesForDay.length,
+                        itemBuilder: (context, scheduleIndex) {
+                          final schedule = schedulesForDay[scheduleIndex];
+                          return Container(
+                            margin: EdgeInsets.symmetric(horizontal: 4.0),
+                            width: 40,
+                            height: 40,
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(8.0),
+                              boxShadow: [
+                                BoxShadow(
+                                  color: Colors.black.withOpacity(0.1),
+                                  spreadRadius: 2,
+                                  blurRadius: 5,
+                                  offset: const Offset(0, 3),
+                                ),
+                              ],
+                            ),
+                            child: ClipRRect(
+                              borderRadius: BorderRadius.circular(8.0),
+                              child: Image.network(
+                                schedule.imageUrl, // Miniaturka ubrania
+                                fit: BoxFit.cover,
+                              ),
+                            ),
+                          );
+                        },
+                      ),
+                    ),
+                  ),
+              ],
+            ),
           ),
-          child: Text('${index + 1}'),
         );
       },
     );
@@ -80,43 +163,34 @@ class MonthlyView extends StatelessWidget {
 }
 
 class WeeklyView extends ConsumerWidget {
-  final List<String> daysOfWeek = [
-    'Monday',
-    'Tuesday',
-    'Wednesday',
-    'Thursday',
-    'Friday',
-    'Saturday',
-    'Sunday'
-  ];
-
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final schedule = ref.watch(getScheduleForWeekProvider);
-
+    print(schedule.value);
+    List<DateTime> scheduleFullDate = getDatesForCurrentWeek();
     return schedule.when(
       data: (data) {
+        print("co tu $data");
         // Utworzenie mapy dni tygodnia i przypisanie zaplanowanych strojów
-        final scheduleByDay = <String, List<Schedule>>{};
+        final scheduleByDay = <WeekDay, List<Schedule>>{};
         for (var scheduleItem in data) {
-          String dayKey = DateFormat('EEEE').format(scheduleItem.scheduleDate);
+          WeekDay dayKey = WeekDay.values[
+              scheduleItem.scheduleDate.weekday - 1]; // Przekształcenie do enum
           scheduleByDay.putIfAbsent(dayKey, () => []).add(scheduleItem);
         }
 
-
         return ListView.builder(
-
-          itemCount: daysOfWeek.length,
+          itemCount: WeekDay.values.length,
           itemBuilder: (context, index) {
-            String currentDay = daysOfWeek[index];
-            List<Schedule>? schedulesForDay = scheduleByDay[currentDay] ?? []; // Pobierz stroje dla danego dnias
+            WeekDay currentDay = WeekDay.values[index];
+            List<Schedule>? schedulesForDay = scheduleByDay[currentDay] ??
+                []; // Pobierz stroje dla danego dnias
             print("zaplanowane,$schedulesForDay");
 
             return Padding(
               padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 16),
               child: Container(
                 height: 100,
-
                 decoration: BoxDecoration(
                   color: Colors.white,
                   borderRadius: BorderRadius.circular(8.0),
@@ -130,7 +204,7 @@ class WeeklyView extends ConsumerWidget {
                   ],
                 ),
                 child: ListTile(
-                  title: Text("${currentDay} "),
+                  title: Text("${currentDay.toString().split('.').last} "),
                   trailing: Row(
                     mainAxisSize: MainAxisSize.min,
                     children: [
@@ -164,11 +238,10 @@ class WeeklyView extends ConsumerWidget {
                             );
                           }).toList(),
                         ),
-                      _imagePlaceholder(context),
+                      _imagePlaceholder(context, scheduleFullDate[index]),
                       SizedBox(width: 10),
                     ],
                   ),
-
                 ),
               ),
             );
@@ -191,7 +264,10 @@ class WeeklyView extends ConsumerWidget {
     );
   }
 
-  Widget _imagePlaceholder(BuildContext context) {
+  Widget _imagePlaceholder(
+    BuildContext context,
+    DateTime scheduleFullDate,
+  ) {
     return Container(
       width: 50,
       height: 50,
@@ -199,10 +275,52 @@ class WeeklyView extends ConsumerWidget {
       child: IconButton(
         icon: Icon(Icons.add),
         onPressed: () {
-          context.router.push(AddOutfitToCallendarRoute());
-
+          context.router.push(AddOutfitToCalendarRoute(
+              selectedDate: scheduleFullDate.toString()));
         },
       ),
     );
   }
+
+  List<DateTime> getDatesForCurrentWeek() {
+    final now = DateTime.now();
+    final today = DateTime(now.year, now.month, now.day);
+
+    // Znajdź pierwszy dzień tygodnia (poniedziałek)
+    final startOfWeek = today.subtract(Duration(days: today.weekday - 1));
+
+    // Utwórz listę dat od poniedziałku do niedzieli
+    return List.generate(7, (index) => startOfWeek.add(Duration(days: index)));
+  }
+}
+
+void _dialogAddNewEntry(BuildContext context, DateTime date) {
+  showDialog(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          title: Text(''),
+          content: Expanded(
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                OutlinedButton(
+                    onPressed: () {
+                      context.router.push(AddOutfitToCalendarRoute(
+                          selectedDate: date.toString()));
+                    },
+                    child: Text("Add another"))
+              ],
+            ),
+          ),
+          actions: <Widget>[
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+              child: Text("Close"),
+            ),
+          ],
+        );
+      });
 }

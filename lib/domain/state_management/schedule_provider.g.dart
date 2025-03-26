@@ -338,5 +338,133 @@ class _RemoveFromScheduleProviderElement
   @override
   int get scheduleId => (origin as RemoveFromScheduleProvider).scheduleId;
 }
+
+String _$scheduleOutfitHash() => r'cb44f89dc72338d0b5122cb5a1d3b1f69e6ec24c';
+
+/// See also [scheduleOutfit].
+@ProviderFor(scheduleOutfit)
+const scheduleOutfitProvider = ScheduleOutfitFamily();
+
+/// See also [scheduleOutfit].
+class ScheduleOutfitFamily extends Family<void> {
+  /// See also [scheduleOutfit].
+  const ScheduleOutfitFamily();
+
+  /// See also [scheduleOutfit].
+  ScheduleOutfitProvider call(
+    Schedule schedule,
+  ) {
+    return ScheduleOutfitProvider(
+      schedule,
+    );
+  }
+
+  @override
+  ScheduleOutfitProvider getProviderOverride(
+    covariant ScheduleOutfitProvider provider,
+  ) {
+    return call(
+      provider.schedule,
+    );
+  }
+
+  static const Iterable<ProviderOrFamily>? _dependencies = null;
+
+  @override
+  Iterable<ProviderOrFamily>? get dependencies => _dependencies;
+
+  static const Iterable<ProviderOrFamily>? _allTransitiveDependencies = null;
+
+  @override
+  Iterable<ProviderOrFamily>? get allTransitiveDependencies =>
+      _allTransitiveDependencies;
+
+  @override
+  String? get name => r'scheduleOutfitProvider';
+}
+
+/// See also [scheduleOutfit].
+class ScheduleOutfitProvider extends AutoDisposeProvider<void> {
+  /// See also [scheduleOutfit].
+  ScheduleOutfitProvider(
+    Schedule schedule,
+  ) : this._internal(
+          (ref) => scheduleOutfit(
+            ref as ScheduleOutfitRef,
+            schedule,
+          ),
+          from: scheduleOutfitProvider,
+          name: r'scheduleOutfitProvider',
+          debugGetCreateSourceHash:
+              const bool.fromEnvironment('dart.vm.product')
+                  ? null
+                  : _$scheduleOutfitHash,
+          dependencies: ScheduleOutfitFamily._dependencies,
+          allTransitiveDependencies:
+              ScheduleOutfitFamily._allTransitiveDependencies,
+          schedule: schedule,
+        );
+
+  ScheduleOutfitProvider._internal(
+    super._createNotifier, {
+    required super.name,
+    required super.dependencies,
+    required super.allTransitiveDependencies,
+    required super.debugGetCreateSourceHash,
+    required super.from,
+    required this.schedule,
+  }) : super.internal();
+
+  final Schedule schedule;
+
+  @override
+  Override overrideWith(
+    void Function(ScheduleOutfitRef provider) create,
+  ) {
+    return ProviderOverride(
+      origin: this,
+      override: ScheduleOutfitProvider._internal(
+        (ref) => create(ref as ScheduleOutfitRef),
+        from: from,
+        name: null,
+        dependencies: null,
+        allTransitiveDependencies: null,
+        debugGetCreateSourceHash: null,
+        schedule: schedule,
+      ),
+    );
+  }
+
+  @override
+  AutoDisposeProviderElement<void> createElement() {
+    return _ScheduleOutfitProviderElement(this);
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return other is ScheduleOutfitProvider && other.schedule == schedule;
+  }
+
+  @override
+  int get hashCode {
+    var hash = _SystemHash.combine(0, runtimeType.hashCode);
+    hash = _SystemHash.combine(hash, schedule.hashCode);
+
+    return _SystemHash.finish(hash);
+  }
+}
+
+mixin ScheduleOutfitRef on AutoDisposeProviderRef<void> {
+  /// The parameter `schedule` of this provider.
+  Schedule get schedule;
+}
+
+class _ScheduleOutfitProviderElement extends AutoDisposeProviderElement<void>
+    with ScheduleOutfitRef {
+  _ScheduleOutfitProviderElement(super.provider);
+
+  @override
+  Schedule get schedule => (origin as ScheduleOutfitProvider).schedule;
+}
 // ignore_for_file: type=lint
 // ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member

@@ -6,8 +6,8 @@ part 'folder_list_notifier.g.dart';
 
 @riverpod
 class FolderListNotifier extends _$FolderListNotifier {
-
   List<ClosetFolder> _originalList = [];
+
   @override
   FutureOr<List<ClosetFolder>> build() async {
     final folderList = await ref.read(getClosetFolderProvider.future);
@@ -51,7 +51,6 @@ class FolderListNotifier extends _$FolderListNotifier {
     state = const AsyncValue.loading();
     await _fetchFolders();
   }
-
 
 
 }

@@ -4,10 +4,11 @@ class SettingOption{
 
   final String title;
   final Icon icon;
-  final String route;
+  final void Function(BuildContext) navigateTo;
 
-  SettingOption({required this.title, required this.icon, required this.route});
 
-  SettingOption.name(this.title, this.icon,this.route);
+  SettingOption({required this.title, required this.icon, required this.navigateTo});
+
+  SettingOption.name(this.title, this.icon,this.navigateTo);
 
 }

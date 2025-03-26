@@ -50,6 +50,8 @@ dependencies:
   flutter_expandable_fab: ^2.3.0
   screenshot: ^3.0.0
   share_plus: ^4.1.0
+  simple_chips_input: ^1.2.0
+  filter_list: ^1.0.3
 
 
 
@@ -68,15 +70,22 @@ dev_dependencies:
 
 
 
+
 flutter_native_splash:
+  android: true
+  ios: true
+  web: false
   color: "#ffffff"
   image: assets/brand_logo.png
-  android: true
+  android_12:
+    image: assets/brand_logo.png
+    color: "#ffffff"
 
 flutter_launcher_icons:
-  color: "#ffffff"
+  image_path_android: "assets/brand_logo.png"
   android: true
-  image_path:  "assets/brand_logo.png"
+
+
 
 flutter:
   uses-material-design: true
@@ -90,3 +99,4 @@ flutter:
     - assets/brand_logo.png
     - assets/category_icon/category_icon_test.png
     - assets/tag_icon/work.png
+

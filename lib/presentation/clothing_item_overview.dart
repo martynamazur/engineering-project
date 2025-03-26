@@ -42,6 +42,7 @@ class _ClothingItemOverviewScreenState extends ConsumerState<ClothingItemOvervie
                     break;
                   case 2:
                     showAlertDialog();
+                    context.router.back();
                 }
 
               })

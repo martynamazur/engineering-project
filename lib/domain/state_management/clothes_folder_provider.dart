@@ -24,7 +24,7 @@ Future<List<ClosetFolder>> getClosetFolder(GetClosetFolderRef ref) async {
   return ref.read(clothesFolderRepositoryProvider).getAllClosetFolder();
 }
 
-
+// podmienic na notfier
 @riverpod
 Future<ClosetFolder> getFolder(GetFolderRef ref, int id) async {
   return ref.read(clothesFolderRepositoryProvider).getClosetFolder(id);
@@ -55,4 +55,14 @@ Future<void> changeFolderName(ChangeFolderNameRef ref,String newFolderName, int 
 @riverpod
 Future<void> createNewFolder(CreateNewFolderRef ref, String folderName) async {
   return ref.read(clothesFolderRepositoryProvider).createFolder(folderName);
+}
+
+@riverpod
+Future<void> addClothesToFolder(AddClothesToFolderRef ref, List<int> clothesId, int folderId) async {
+  return ref.read(clothesFolderRepositoryProvider).addClothesToFolder(clothesId, folderId);
+}
+
+@riverpod
+Future<List<ClothingItem>> getAllClothes(GetAllClothesRef ref) async {
+  return ref.read(clothesFolderRepositoryProvider).getAllOwnedClothes();
 }
