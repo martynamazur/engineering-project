@@ -191,8 +191,8 @@ class _CreateOutfitScreenState extends ConsumerState<CreateOutfitScreen> {
 
         final List<int> clothingItemIds = selectedClothingItems.values.toList();
         final response = await ref.read(supabaseUtilsProvider).uploadImageAndReturnUrl(image);
-        final result = await ref.watch(saveOutfitProvider(response,clothingItemIds));
-
+        final result = ref.watch(saveOutfitProvider(response,clothingItemIds));
+        print('Obiekt $result');
 
         context.router.push(CreatedOutiftSucesfullRoute());
 

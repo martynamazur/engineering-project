@@ -70,6 +70,7 @@ class _ClothingItemOverviewScreenState extends ConsumerState<ClothingItemOvervie
             TextButton(
               onPressed: () async{
                 ref.read(deleteClothingItemProvider(widget.clothingItem.clothingItemId!));
+
                 if(mounted){
                   context.router.pop();
                 }

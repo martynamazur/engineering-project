@@ -12,9 +12,9 @@ class Outfit with _$Outfit {
     @JsonKey(name: 'id') required int id,
     @JsonKey(name: 'image_url') required String imageUrl,
     @JsonKey(name: 'season') required String season,
-    @JsonKey(name: 'useditemsids') List<ClothingItem>? clothingItemList,
-    @JsonKey(name: 'userTags') List<Tag>? userTags,
-    @JsonKey(name: 'defaultTags') List<int>? defaultTags,
+    @JsonKey(name: 'useditemsids') List<int>? clothingItemList,
+    @JsonKey(name: 'user_tags') List<String>? userTags,
+    @JsonKey(name: 'default_tags_id') List<int>? defaultTags,
 }) = _Outfit;
 
 

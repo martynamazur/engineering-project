@@ -1,124 +1,176 @@
 import 'package:auto_route/annotations.dart';
+import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:ootd/domain/state_management/outfit_list_notifier.dart';
+import 'package:ootd/domain/state_management/outfit_provider.dart';
 import 'package:ootd/model/outfit.dart';
+import 'package:ootd/model/season.dart';
+import 'package:ootd/navigation/app_router.dart';
 import 'package:ootd/presentation/styles/season_dropdown.dart';
 import 'package:screenshot/screenshot.dart';
+import 'package:textfield_tags/textfield_tags.dart';
 
 import '../domain/state_management/clothes_category_provider.dart';
 import '../domain/state_management/season_provider.dart';
 import 'package:filter_list/filter_list.dart';
+
 @RoutePage()
 class EditOutfitDetailsScreen extends ConsumerStatefulWidget {
   final Outfit outfit;
 
-
   EditOutfitDetailsScreen(this.outfit, {super.key});
 
   @override
-  ConsumerState<EditOutfitDetailsScreen> createState() => _EditOutfitDetailsState();
+  ConsumerState<EditOutfitDetailsScreen> createState() =>
+      _EditOutfitDetailsState();
 }
 
 class _EditOutfitDetailsState extends ConsumerState<EditOutfitDetailsScreen> {
-  String? _selectedSeason;
+  late String _selectedSeason;
+  List<String> _newTags = ['grzesiu']; //nowe ktore dodaje
+  List<String> _allTags = [];
+  //lista aby wyswietlic wszystkie aktualne tagi stare+nowe
 
   @override
   void initState() {
     super.initState();
-    //_selectedSeason = widget.outfit.season;
-    //_selectedSeason = 'winter';
-    print("jakie $_selectedSeason");
+    _selectedSeason = widget.outfit.season;
+    print(widget.outfit.userTags);
+    _allTags = widget.outfit.userTags!;
+
   }
-@override
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
+      bottomNavigationBar: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: SizedBox(
+          width: double.infinity,
+          child: OutlinedButton(
+            onPressed: () async{
+              // zapis db jako update bo mam i tak tablice poprzednia z obiektu outfit
+              //cofniecie sie do ekranu porpzedniego
+              //odswiezenie sekcji Tagi
+              //odswiezenie sekcji Season
+
+              if(_newTags.isNotEmpty) ref.read(editOutfitInformationTagsProvider([..._newTags,..._allTags], widget.outfit.id));
+              if(_selectedSeason != widget.outfit.season) ref.read(editOutfitInformationSeasonProvider(_selectedSeason, widget.outfit.id));
+              ref.invalidate(getOutfitProvider(widget.outfit.id));//to pobierze od nowa cala liste strojów
+              //problem bo przekazuje obiekt bez pobierania danych ponownie wiec po odswiezeniu nic sie nie dzieje
+
+              print('tags: $_newTags, season: $_selectedSeason');
+              if(mounted)context.router.maybePop();
+
+            },
+            child: Text('Save'),
+          ),
+        ),
+      ),
+      appBar: AppBar(
+        title: Text('Edit information'),
+      ),
       body: SafeArea(
           child: SingleChildScrollView(
-            child: Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Column(
-                children: [
-                  _buildSeasonSection(),
-                  //_buildTagSection()
-
-                ],),
-            ),
-          )),
+        child: Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: Column(
+            mainAxisSize: MainAxisSize.max,
+            children: [_buildSeasonSection(), _buildTagSection()],
+          ),
+        ),
+      )),
     );
   }
-  Widget _buildSeasonSection(){
 
+  Widget _buildSeasonSection() {
     final seasonList = ref.watch(seasonRepositoryProvider).getSeason();
     return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text('Season'),
-        DropdownButton<String>(
-          value: _selectedSeason,
-          hint: Text('Select a season'),
-          items: seasonList.map((season) {
-            return DropdownMenuItem<String>(
-              value: season.seasonName,
-              child: Row(
-                children: [
-                  Image.asset(season.seasonImagePath, width: 12, height: 12),
-                  SizedBox(width: 10),
-                  Text(season.seasonName),
-                ],
-              ),
-            );
-          }).toList(),
-          onChanged: (String? newValue) {
-            setState(() {
-              _selectedSeason = newValue!;
-            });
-          },
-        )
+        Text('Season',
+            style: TextStyle(fontWeight: FontWeight.bold, fontSize: 32.0)),
+        GridView.builder(
+            shrinkWrap: true,
+            itemCount: seasonList.length,
+            physics: NeverScrollableScrollPhysics(),
+            gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+              crossAxisCount: 2,
+            ),
+            itemBuilder: (context, index) {
+              final season = seasonList[index];
+              return CheckboxListTile(
+                  title: Text(season.seasonName),
+                  value: _selectedSeason == season.seasonName,
+                  onChanged: (value) {
+                    setState(() {
+                      if (_selectedSeason != season.seasonName) {
+                        _selectedSeason = season.seasonName;
+                      }
+                    });
+                  });
+            }),
       ],
     );
   }
-/*
-  Widget _buildTagSection(){
-   return Column(
-       children: [
-         IconButton(onPressed: (){
-           openTagSelectionDialog(context);
-         }, icon: Icon(Icons.add))
 
-       ]);
+  Widget _buildTagSection() {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+      Text('Tags',
+          style: TextStyle(fontWeight: FontWeight.bold, fontSize: 32.0)),
+      Wrap(
+        spacing: 8.0,
+        runSpacing: 4.0,
+        children: [..._newTags,..._allTags].map((tag) => Chip(label: Text(tag))).toList(),
+      ),
+      IconButton(
+          onPressed: () => _addNewTagDialog(),
+          icon: Icon(Icons.add))
+    ]);
   }
 
-  Future<void> openTagSelectionDialog(BuildContext context) async {
 
-    print("Id ootd ${widget.outfit.id}");
-    print(widget.outfit.defaultTags?.length);
-    /*
-    swtorz w hive liste z tagami domyslnymi potem je zmapuj ?
-     */
-    //List<String> selectedTags = widget.outfit.defaultTags!.map((tag)=> tag.tagName).toList();
-    //List<String> tagList = widget.outfit.defaultTags!.map((tag)=> tag.tagName).toList();
-
-    await FilterListDialog.display<String>(
-      context,
-      listData: tagList,
-      selectedListData: selectedTags,
-      height: 400,
-      headlineText: "Wybierz tagi",
-      choiceChipLabel: (item) => item ?? '',
-      validateSelectedItem: (list, value) => list!.contains(value),
-      onItemSearch: (tag, query) {
-        return tag.toLowerCase().contains(query.toLowerCase());
-      },
-      onApplyButtonClick: (selectedItems) {
-        if (selectedItems != null) {
-          setState(() {
-            selectedTags = List<String>.from(selectedItems);
-          });
-        }
-        Navigator.pop(context);
+  void _addNewTagDialog() {
+    String newTag = '';
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const Text('Dodaj nowy tag'),
+          content: TextField(
+            autofocus: true,
+            decoration: const InputDecoration(hintText: 'Wpisz nowy tag'),
+            onChanged: (value) {
+              newTag = value.trim();
+            },
+          ),
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+              child: const Text('Anuluj'),
+            ),
+            ElevatedButton(
+              onPressed: () {
+                if (newTag.isNotEmpty && !_newTags.contains(newTag)) {
+                  setState(() {
+                    _newTags.add(newTag);
+                  });
+                }
+                Navigator.of(context).pop();
+              },
+              child: const Text('Dodaj'),
+            ),
+          ],
+        );
       },
     );
   }
 
- */
+
 }

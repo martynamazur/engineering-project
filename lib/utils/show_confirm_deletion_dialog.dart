@@ -9,7 +9,7 @@ void showConfirmDeletionDialog({
   required BuildContext context,
   required WidgetRef ref,
   required int outfitId,
-}) {
+}) async {
   showDialog(
     context: context,
     builder: (BuildContext context) {
@@ -31,6 +31,8 @@ void showConfirmDeletionDialog({
                   ref.read(deleteOutfitProvider(outfitId));
                   ref.read(outfitListNotifierProvider.notifier).removeOutfit(outfitId);
                   context.router.maybePop();
+
+
                 },
                 child: Row(
                   children: const [

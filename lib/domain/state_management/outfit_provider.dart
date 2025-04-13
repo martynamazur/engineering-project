@@ -26,3 +26,17 @@ Future<void> deleteOutfit(DeleteOutfitRef ref, int outfitId) async {
   return ref.read(outfitRepositoryProvider).removeOutfit(outfitId);
 }
 
+@riverpod
+Future<void> editOutfitInformationTags(EditOutfitInformationTagsRef ref, List<String> updatedTags, int outfitId) async {
+  return ref.read(outfitRepositoryProvider).editOutfitInformationTags(updatedTags,outfitId);
+}
+
+@riverpod
+Future<void> editOutfitInformationSeason(EditOutfitInformationSeasonRef ref, String season, int outfitId) async {
+  return ref.read(outfitRepositoryProvider).editOutfitInformationSeason(season,outfitId);
+}
+
+@riverpod
+Future<Outfit> getOutfit(GetOutfitRef ref, outfitId) async {
+  return ref.read(outfitRepositoryProvider).getOutfit(outfitId);
+}

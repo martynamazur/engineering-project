@@ -496,14 +496,14 @@ class _ChangeFolderNameProviderElement
   int get folderId => (origin as ChangeFolderNameProvider).folderId;
 }
 
-String _$createNewFolderHash() => r'b8e4856b7f5029a4c84963b6331e5431e3b3a46d';
+String _$createNewFolderHash() => r'b8f52226b3d38e8ec8b5f6a5ad9406d7e8f8d7ff';
 
 /// See also [createNewFolder].
 @ProviderFor(createNewFolder)
 const createNewFolderProvider = CreateNewFolderFamily();
 
 /// See also [createNewFolder].
-class CreateNewFolderFamily extends Family<AsyncValue<void>> {
+class CreateNewFolderFamily extends Family<AsyncValue<ClosetFolder>> {
   /// See also [createNewFolder].
   const CreateNewFolderFamily();
 
@@ -541,7 +541,7 @@ class CreateNewFolderFamily extends Family<AsyncValue<void>> {
 }
 
 /// See also [createNewFolder].
-class CreateNewFolderProvider extends AutoDisposeFutureProvider<void> {
+class CreateNewFolderProvider extends AutoDisposeFutureProvider<ClosetFolder> {
   /// See also [createNewFolder].
   CreateNewFolderProvider(
     String folderName,
@@ -576,7 +576,7 @@ class CreateNewFolderProvider extends AutoDisposeFutureProvider<void> {
 
   @override
   Override overrideWith(
-    FutureOr<void> Function(CreateNewFolderRef provider) create,
+    FutureOr<ClosetFolder> Function(CreateNewFolderRef provider) create,
   ) {
     return ProviderOverride(
       origin: this,
@@ -593,7 +593,7 @@ class CreateNewFolderProvider extends AutoDisposeFutureProvider<void> {
   }
 
   @override
-  AutoDisposeFutureProviderElement<void> createElement() {
+  AutoDisposeFutureProviderElement<ClosetFolder> createElement() {
     return _CreateNewFolderProviderElement(this);
   }
 
@@ -611,13 +611,14 @@ class CreateNewFolderProvider extends AutoDisposeFutureProvider<void> {
   }
 }
 
-mixin CreateNewFolderRef on AutoDisposeFutureProviderRef<void> {
+mixin CreateNewFolderRef on AutoDisposeFutureProviderRef<ClosetFolder> {
   /// The parameter `folderName` of this provider.
   String get folderName;
 }
 
 class _CreateNewFolderProviderElement
-    extends AutoDisposeFutureProviderElement<void> with CreateNewFolderRef {
+    extends AutoDisposeFutureProviderElement<ClosetFolder>
+    with CreateNewFolderRef {
   _CreateNewFolderProviderElement(super.provider);
 
   @override
@@ -786,5 +787,154 @@ final getAllClothesProvider =
 );
 
 typedef GetAllClothesRef = AutoDisposeFutureProviderRef<List<ClothingItem>>;
+String _$removeClothingItemFromFolderHash() =>
+    r'e1cb3499aab43df2f9359c313a2895b7fdf892c3';
+
+/// See also [removeClothingItemFromFolder].
+@ProviderFor(removeClothingItemFromFolder)
+const removeClothingItemFromFolderProvider =
+    RemoveClothingItemFromFolderFamily();
+
+/// See also [removeClothingItemFromFolder].
+class RemoveClothingItemFromFolderFamily extends Family<AsyncValue<void>> {
+  /// See also [removeClothingItemFromFolder].
+  const RemoveClothingItemFromFolderFamily();
+
+  /// See also [removeClothingItemFromFolder].
+  RemoveClothingItemFromFolderProvider call(
+    int folderId,
+    int clothingItemId,
+  ) {
+    return RemoveClothingItemFromFolderProvider(
+      folderId,
+      clothingItemId,
+    );
+  }
+
+  @override
+  RemoveClothingItemFromFolderProvider getProviderOverride(
+    covariant RemoveClothingItemFromFolderProvider provider,
+  ) {
+    return call(
+      provider.folderId,
+      provider.clothingItemId,
+    );
+  }
+
+  static const Iterable<ProviderOrFamily>? _dependencies = null;
+
+  @override
+  Iterable<ProviderOrFamily>? get dependencies => _dependencies;
+
+  static const Iterable<ProviderOrFamily>? _allTransitiveDependencies = null;
+
+  @override
+  Iterable<ProviderOrFamily>? get allTransitiveDependencies =>
+      _allTransitiveDependencies;
+
+  @override
+  String? get name => r'removeClothingItemFromFolderProvider';
+}
+
+/// See also [removeClothingItemFromFolder].
+class RemoveClothingItemFromFolderProvider
+    extends AutoDisposeFutureProvider<void> {
+  /// See also [removeClothingItemFromFolder].
+  RemoveClothingItemFromFolderProvider(
+    int folderId,
+    int clothingItemId,
+  ) : this._internal(
+          (ref) => removeClothingItemFromFolder(
+            ref as RemoveClothingItemFromFolderRef,
+            folderId,
+            clothingItemId,
+          ),
+          from: removeClothingItemFromFolderProvider,
+          name: r'removeClothingItemFromFolderProvider',
+          debugGetCreateSourceHash:
+              const bool.fromEnvironment('dart.vm.product')
+                  ? null
+                  : _$removeClothingItemFromFolderHash,
+          dependencies: RemoveClothingItemFromFolderFamily._dependencies,
+          allTransitiveDependencies:
+              RemoveClothingItemFromFolderFamily._allTransitiveDependencies,
+          folderId: folderId,
+          clothingItemId: clothingItemId,
+        );
+
+  RemoveClothingItemFromFolderProvider._internal(
+    super._createNotifier, {
+    required super.name,
+    required super.dependencies,
+    required super.allTransitiveDependencies,
+    required super.debugGetCreateSourceHash,
+    required super.from,
+    required this.folderId,
+    required this.clothingItemId,
+  }) : super.internal();
+
+  final int folderId;
+  final int clothingItemId;
+
+  @override
+  Override overrideWith(
+    FutureOr<void> Function(RemoveClothingItemFromFolderRef provider) create,
+  ) {
+    return ProviderOverride(
+      origin: this,
+      override: RemoveClothingItemFromFolderProvider._internal(
+        (ref) => create(ref as RemoveClothingItemFromFolderRef),
+        from: from,
+        name: null,
+        dependencies: null,
+        allTransitiveDependencies: null,
+        debugGetCreateSourceHash: null,
+        folderId: folderId,
+        clothingItemId: clothingItemId,
+      ),
+    );
+  }
+
+  @override
+  AutoDisposeFutureProviderElement<void> createElement() {
+    return _RemoveClothingItemFromFolderProviderElement(this);
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return other is RemoveClothingItemFromFolderProvider &&
+        other.folderId == folderId &&
+        other.clothingItemId == clothingItemId;
+  }
+
+  @override
+  int get hashCode {
+    var hash = _SystemHash.combine(0, runtimeType.hashCode);
+    hash = _SystemHash.combine(hash, folderId.hashCode);
+    hash = _SystemHash.combine(hash, clothingItemId.hashCode);
+
+    return _SystemHash.finish(hash);
+  }
+}
+
+mixin RemoveClothingItemFromFolderRef on AutoDisposeFutureProviderRef<void> {
+  /// The parameter `folderId` of this provider.
+  int get folderId;
+
+  /// The parameter `clothingItemId` of this provider.
+  int get clothingItemId;
+}
+
+class _RemoveClothingItemFromFolderProviderElement
+    extends AutoDisposeFutureProviderElement<void>
+    with RemoveClothingItemFromFolderRef {
+  _RemoveClothingItemFromFolderProviderElement(super.provider);
+
+  @override
+  int get folderId => (origin as RemoveClothingItemFromFolderProvider).folderId;
+  @override
+  int get clothingItemId =>
+      (origin as RemoveClothingItemFromFolderProvider).clothingItemId;
+}
 // ignore_for_file: type=lint
 // ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member

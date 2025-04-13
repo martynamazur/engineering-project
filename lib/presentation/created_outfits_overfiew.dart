@@ -23,6 +23,7 @@ class _CreatedOutfitsScreenState extends ConsumerState<CreatedOutfitsScreen> {
   @override
   Widget build(BuildContext context) {
     final outfitState = ref.watch(outfitListNotifierProvider);
+    print('ootd $outfitState');
 
     return Scaffold(
       appBar: AppBar(
@@ -45,6 +46,7 @@ class _CreatedOutfitsScreenState extends ConsumerState<CreatedOutfitsScreen> {
       body: SafeArea(
         child: outfitState.when(
           data: (data) {
+            print("data tak $data");
             if (data.isEmpty) {
               return Center(
                 child: Text(
@@ -66,7 +68,7 @@ class _CreatedOutfitsScreenState extends ConsumerState<CreatedOutfitsScreen> {
                   final outfit = data[index];
                   return GestureDetector(
                     onTap: () {
-                      context.router.push(OutfitOverviewRoute(outfit: outfit));
+                      context.router.push(OutfitOverviewRoute(outfitId: outfit.id));
                     },
                     onLongPress: () => showConfirmDeletionDialog(context: context, ref: ref, outfitId: outfit.id),
                     child: Container(
@@ -101,5 +103,7 @@ class _CreatedOutfitsScreenState extends ConsumerState<CreatedOutfitsScreen> {
       ),
     );
   }
+
+
 
 }

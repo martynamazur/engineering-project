@@ -52,6 +52,11 @@ dependencies:
   share_plus: ^4.1.0
   simple_chips_input: ^1.2.0
   filter_list: ^1.0.3
+  lottie: ^3.2.0
+  smooth_sheets: ^0.10.2
+  textfield_tags: ^3.0.1
+
+
 
 
 
@@ -99,4 +104,5 @@ flutter:
     - assets/brand_logo.png
     - assets/category_icon/category_icon_test.png
     - assets/tag_icon/work.png
+    - assets/animations/check_success.json
 

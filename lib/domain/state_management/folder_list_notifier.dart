@@ -1,10 +1,12 @@
 import 'package:ootd/domain/state_management/clothes_folder_provider.dart';
 import 'package:ootd/model/closet_folder.dart';
+import 'package:ootd/model/clothing_item.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'folder_list_notifier.g.dart';
 
-@riverpod
+@Riverpod(keepAlive: true)
+//@riverpod
 class FolderListNotifier extends _$FolderListNotifier {
   List<ClosetFolder> _originalList = [];
 
@@ -15,12 +17,35 @@ class FolderListNotifier extends _$FolderListNotifier {
     return _originalList;
   }
 
+  Future<void> addFolder(ClosetFolder newFolder) async {
+    _originalList = [..._originalList, newFolder];
+    state = AsyncData(_originalList);
+  }
+
+
   //on home screen
   Future<void> removeFolder(int folderId) async{
     _originalList = _originalList.where((folder) => folder.closetId != folderId).toList();
     state = AsyncData(_originalList);
     ref.read(deleteFolderProvider(folderId));//z db
   }
+
+  Future<void> removeClothingItemFromFolder(int folderId, int clothingItemId)async {
+    // 2. Zaktualizuj lokalną listę
+    final index = _originalList.indexWhere((folder) => folder.closetId == folderId);
+    if (index != -1) {
+      final folder = _originalList[index];
+
+      // Usuń itemId z lokalnej listy
+      final updatedIds = List<int>.from(folder.clothingItemIds)..remove(clothingItemId);
+
+      // Stwórz nowy folder z aktualizowaną listą
+      final updatedFolder = folder.copyWith(clothingItemIds: updatedIds);
+
+      // Zaktualizuj oryginalną listę i stan
+      _originalList[index] = updatedFolder;
+      state = AsyncData(_originalList);
+  }}
 
   Future<void> updateFolderName(int folderId, String newName) async {
     // Znajdź index folderu, który chcesz zaktualizować
@@ -47,10 +72,17 @@ class FolderListNotifier extends _$FolderListNotifier {
   }
 
 
+
   Future<void> refreshFolders() async {
     state = const AsyncValue.loading();
     await _fetchFolders();
   }
 
 
-}
+  }
+
+
+
+
+
+

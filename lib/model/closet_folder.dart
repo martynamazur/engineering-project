@@ -16,8 +16,6 @@ class ClosetFolder with _$ClosetFolder {
     @JsonKey(name: 'total_amount_of_clothes') required int totalAmountOfClothes,
     @JsonKey(name: 'clothing_item_ids') required List<int> clothingItemIds,
     @Default([]) List<ClothingItem> clothingItems
-
-    ,
   }) = _ClosetFolder;
 
 

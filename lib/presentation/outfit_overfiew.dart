@@ -8,13 +8,16 @@ import 'package:ootd/model/clothing_item.dart';
 import 'package:ootd/model/tag.dart';
 import 'package:ootd/navigation/app_router.dart';
 
+import '../domain/state_management/outfit_list_notifier.dart';
+import '../domain/state_management/outfit_provider.dart';
 import '../utils/show_confirm_deletion_dialog.dart';
+import 'package:smooth_sheets/smooth_sheets.dart';
 
 @RoutePage()
 class OutfitOverviewScreen extends ConsumerStatefulWidget {
-  final Outfit outfit;
+  final int outfitId;
 
-  const OutfitOverviewScreen({Key? key, required this.outfit})
+  const OutfitOverviewScreen({Key? key, required this.outfitId})
       : super(key: key);
 
   @override
@@ -26,6 +29,7 @@ class _OutfitOverviewScreenState extends ConsumerState<OutfitOverviewScreen> {
   @override
   Widget build(BuildContext context) {
     int? selectedValue;
+    final outfit = ref.watch(getOutfitProvider(widget.outfitId));
 
     return Scaffold(
       appBar: AppBar(
@@ -34,13 +38,12 @@ class _OutfitOverviewScreenState extends ConsumerState<OutfitOverviewScreen> {
           CircleAvatar(
             backgroundColor: Colors.white70,
             child: IconButton(
-                onPressed: () {
-                  ShareContentManager(widget.outfit.imageUrl).onSharePhotoLink(context);
-                },
-                icon: Icon(Icons.share),
-                ),
+              onPressed: () {
+                ShareContentManager(outfit.value!.imageUrl).onSharePhotoLink(context);
+              },
+              icon: Icon(Icons.share),
+            ),
           ),
-          //SizedBox(width: 6.0),
           DropdownButton(
               icon: Icon(Icons.edit),
               value: selectedValue,
@@ -57,46 +60,42 @@ class _OutfitOverviewScreenState extends ConsumerState<OutfitOverviewScreen> {
 
                 switch (value) {
                   case 1:
-                    context.router.push(EditOutfitDetailsRoute(outfit: widget.outfit));
+                    context.router.push(EditOutfitDetailsRoute(outfit: outfit.value!));
                     break;
                   case 2:
-                    showConfirmDeletionDialog(
-                        context: context, ref: ref, outfitId: widget.outfit.id);
+                    _showConfirmDeletionDialog(outfitId: widget.outfitId);
                 }
               })
         ],
       ),
-      body: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Center(
-              child: Image.network(
-                widget.outfit.imageUrl,
-                height: 450,
-                width: double.infinity,
-                fit: BoxFit.cover,
-              ),
+      body: outfit.when(
+        data: (data) {
+          return SingleChildScrollView(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Image.network(data.imageUrl),
+                Text('Season: ${data.season}',style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),),
+                _buildTagsSection('Tags', data.userTags),
+                // Add more fields from your `Outfit` class
+              ],
             ),
-            const SizedBox(height: 16),
-            Text(
-              'Season: ${widget.outfit.season}',
-              style: Theme.of(context).textTheme.titleLarge,
-            ),
-            const SizedBox(height: 16),
-            _buildTagsSection('User Tags', widget.outfit.userTags),
-            //_buildTagsSection('Default Tags', widget.outfit.defaultTags),
-          ],
-        ),
+          );
+        },
+        loading: () => Center(child: CircularProgressIndicator()),
+        error: (error, stackTrace) => Center(child: Text('Error: $error')),
       ),
     );
   }
 
-  //dodac pozniej
-  Widget _buildTagsSection(String title, List<Tag>? tags) {
+  Widget _buildTagsSection(String title, List<String>? tags) {
     if (tags == null || tags.isEmpty) {
-      return Text('$title: No tags available.');
+      return Row(
+        children: [
+          Text('$title: No tags available.'),
+          OutlinedButton(onPressed: (){}, child: Text('Add a new tag'))
+        ],
+      );
     }
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -111,11 +110,58 @@ class _OutfitOverviewScreenState extends ConsumerState<OutfitOverviewScreen> {
           spacing: 8,
           children: tags.map((tag) {
             return Chip(
-              label: Text(tag.tagName),
+              label: Text(tag),
             );
           }).toList(),
         ),
       ],
     );
   }
+
+  void _showConfirmDeletionDialog({required int outfitId}) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const Text('Do you want to delete?'),
+          content: const Text('This action will be permanent and cannot be undone.'),
+          actions: [
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
+              children: [
+                TextButton(
+                  onPressed: () {
+                    context.router.maybePop();
+                  },
+                  child: const Text('Cancel'),
+                ),
+                TextButton(
+                  onPressed: () async {
+                    Navigator.of(context).pop();
+                    ref.read(deleteOutfitProvider(outfitId));
+                    ref.read(outfitListNotifierProvider.notifier).removeOutfit(outfitId);
+
+                    if (mounted) {
+                      context.router.maybePop();
+                    }
+                  },
+                  child: Row(
+                    children: const [
+                      Icon(Icons.restore_from_trash),
+                      Text('Delete'),
+                    ],
+                  ),
+                ),
+              ],
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+
+
+
 }
+

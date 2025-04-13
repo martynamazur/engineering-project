@@ -14,6 +14,7 @@ import 'package:ootd/presentation/styles/selectable_category_tile.dart';
 import 'package:ootd/presentation/styles/selectable_season_tile.dart';
 
 import '../domain/state_management/clothes_category_provider.dart';
+import '../domain/state_management/clothes_folder_provider.dart';
 import '../domain/state_management/clothes_provider.dart';
 import '../domain/state_management/remove_bg_provider.dart';
 import '../domain/state_management/season_provider.dart';
@@ -134,7 +135,11 @@ class _AddClothesState extends ConsumerState<AddClothesScreen> {
     if (image != null) {
       final file = File(image.path);
       final result = await ref.read(removePhotoBackgroundProvider(file).future);
-      _image = result != null ? XFile(result.path) : null;
+
+      setState(() {
+        _image = result != null ? XFile(result.path) : null;
+      });
+
 
     }
   }
@@ -154,6 +159,7 @@ class _AddClothesState extends ConsumerState<AddClothesScreen> {
               categoryList.when(
                 data: (categories) {
                   return GridView.builder(
+                    physics: NeverScrollableScrollPhysics(),
                     shrinkWrap: true,
                     itemCount: categories.length,
                     gridDelegate:
@@ -270,6 +276,7 @@ class _AddClothesState extends ConsumerState<AddClothesScreen> {
                   onPressed: () async{
                     // jeszcze raz
                     await saveClothingItemToDatabase();
+                    /*
                     setState(() {
                       _image = null;
                       _pickedCategory = null;
@@ -279,6 +286,8 @@ class _AddClothesState extends ConsumerState<AddClothesScreen> {
                     context.router.dispose();
                     //_pageController.jumpTo(0);
 
+                     */
+
 
                   }, child: Text('Add another one'))),
           SizedBox(
@@ -286,7 +295,8 @@ class _AddClothesState extends ConsumerState<AddClothesScreen> {
               child: OutlinedButton(
                   onPressed: () async{
                     await saveClothingItemToDatabase();
-
+                    AutoTabsRouter.of(context).setActiveIndex(1);
+                    /*
                     setState(() {
                       _image = null;
                       _pickedCategory = null;
@@ -294,7 +304,9 @@ class _AddClothesState extends ConsumerState<AddClothesScreen> {
                     });
                     _pageController.jumpTo(0);
                     //context.router.dispose();
-                    AutoTabsRouter.of(context).setActiveIndex(1);
+
+
+                     */
 
 
                   },
@@ -317,7 +329,9 @@ class _AddClothesState extends ConsumerState<AddClothesScreen> {
         itemCategoryId: _pickedCategory,
         seasons: _pickedSeasons);
 
-    ref.read(clothesRepositoryProvider).addClothingItem(clothingItem);
+    await ref.read(clothesRepositoryProvider).addClothingItem(clothingItem);
+    ref.refresh(folderListNotifierProvider);
+
   }
 
   Widget _navigation() {

@@ -11,12 +11,12 @@ _$OutfitImpl _$$OutfitImplFromJson(Map<String, dynamic> json) => _$OutfitImpl(
       imageUrl: json['image_url'] as String,
       season: json['season'] as String,
       clothingItemList: (json['useditemsids'] as List<dynamic>?)
-          ?.map((e) => ClothingItem.fromJson(e as Map<String, dynamic>))
+          ?.map((e) => (e as num).toInt())
           .toList(),
-      userTags: (json['userTags'] as List<dynamic>?)
-          ?.map((e) => Tag.fromJson(e as Map<String, dynamic>))
+      userTags: (json['user_tags'] as List<dynamic>?)
+          ?.map((e) => e as String)
           .toList(),
-      defaultTags: (json['defaultTags'] as List<dynamic>?)
+      defaultTags: (json['default_tags_id'] as List<dynamic>?)
           ?.map((e) => (e as num).toInt())
           .toList(),
     );
@@ -27,6 +27,6 @@ Map<String, dynamic> _$$OutfitImplToJson(_$OutfitImpl instance) =>
       'image_url': instance.imageUrl,
       'season': instance.season,
       'useditemsids': instance.clothingItemList,
-      'userTags': instance.userTags,
-      'defaultTags': instance.defaultTags,
+      'user_tags': instance.userTags,
+      'default_tags_id': instance.defaultTags,
     };

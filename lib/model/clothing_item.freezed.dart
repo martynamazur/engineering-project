@@ -22,7 +22,7 @@ ClothingItem _$ClothingItemFromJson(Map<String, dynamic> json) {
 mixin _$ClothingItem {
   @JsonKey(name: 'clothing_item_id')
   int? get clothingItemId =>
-      throw _privateConstructorUsedError; //@JsonKey(name: 'item_name') required String itemName,
+      throw _privateConstructorUsedError; //@JsonKey(name: 'item_name') required String itemName,//nie potzrebne
   @JsonKey(name: 'item_photo')
   String get itemPhoto => throw _privateConstructorUsedError;
   @JsonKey(name: 'item_type')
@@ -201,7 +201,7 @@ class _$ClothingItemImpl with DiagnosticableTreeMixin implements _ClothingItem {
   @override
   @JsonKey(name: 'clothing_item_id')
   final int? clothingItemId;
-//@JsonKey(name: 'item_name') required String itemName,
+//@JsonKey(name: 'item_name') required String itemName,//nie potzrebne
   @override
   @JsonKey(name: 'item_photo')
   final String itemPhoto;
@@ -312,7 +312,7 @@ abstract class _ClothingItem implements ClothingItem {
   @override
   @JsonKey(name: 'clothing_item_id')
   int? get clothingItemId;
-  @override //@JsonKey(name: 'item_name') required String itemName,
+  @override //@JsonKey(name: 'item_name') required String itemName,//nie potzrebne
   @JsonKey(name: 'item_photo')
   String get itemPhoto;
   @override

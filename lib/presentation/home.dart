@@ -52,8 +52,9 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
           ref.refresh(folderList.folderListNotifierProvider);
         },
 
+
         child: folderListNotifier.when(
-          data: (folders) => (isThereAnyClothes ?? 0) != 0 ? _buildGridView(gridViewType, folders, ref) : _buildEmptyCloset(),
+          data: (folders) => isThereAnyClothes != 0 ? _buildGridView(gridViewType, folders, ref) : _buildEmptyCloset(),
           error: (error, stackTrace) => Center(child: Text('Error: $error')),
           loading: () => const Center(child: CircularProgressIndicator()),
         ),
@@ -90,6 +91,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
         },
         onLongPress: () {
           _confirmFolderDeletion(folder.closetId);
+          ref.read(deleteClothingItemProvider(folder.closetId));
         },
         child: Column(
           children: [
@@ -265,15 +267,13 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
       ),
       child: ClipRRect(
         borderRadius: BorderRadius.circular(8.0),
-        child: Expanded(
-            child: Image.network(
-              clothingItem.itemPhoto,
-              fit: BoxFit.cover,
-              errorBuilder: (context, error, stackTrace) {
-                return const Center(child: Text('Image not available'));
-              },
-            ),
-          ),
+        child: Image.network(
+          clothingItem.itemPhoto,
+          fit: BoxFit.cover,
+          errorBuilder: (context, error, stackTrace) {
+            return const Center(child: Text('Image not available'));
+          },
+        ),
 
       ),
     );
@@ -386,8 +386,8 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
             TextButton(
               onPressed: () async {
                 if (_controller.text.isNotEmpty) {
-                  ref.read(createNewFolderProvider(_controller.text));
-                  ref.invalidate(folderList.folderListNotifierProvider);
+                  final newFolder = await ref.read(createNewFolderProvider(_controller.text).future);
+                  await ref.read(folderList.folderListNotifierProvider.notifier).addFolder(newFolder);
                 }
                 if (mounted) {
                   Navigator.of(context).pop();

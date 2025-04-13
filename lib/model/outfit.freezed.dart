@@ -27,11 +27,10 @@ mixin _$Outfit {
   @JsonKey(name: 'season')
   String get season => throw _privateConstructorUsedError;
   @JsonKey(name: 'useditemsids')
-  List<ClothingItem>? get clothingItemList =>
-      throw _privateConstructorUsedError;
-  @JsonKey(name: 'userTags')
-  List<Tag>? get userTags => throw _privateConstructorUsedError;
-  @JsonKey(name: 'defaultTags')
+  List<int>? get clothingItemList => throw _privateConstructorUsedError;
+  @JsonKey(name: 'user_tags')
+  List<String>? get userTags => throw _privateConstructorUsedError;
+  @JsonKey(name: 'default_tags_id')
   List<int>? get defaultTags => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
@@ -48,9 +47,9 @@ abstract class $OutfitCopyWith<$Res> {
       {@JsonKey(name: 'id') int id,
       @JsonKey(name: 'image_url') String imageUrl,
       @JsonKey(name: 'season') String season,
-      @JsonKey(name: 'useditemsids') List<ClothingItem>? clothingItemList,
-      @JsonKey(name: 'userTags') List<Tag>? userTags,
-      @JsonKey(name: 'defaultTags') List<int>? defaultTags});
+      @JsonKey(name: 'useditemsids') List<int>? clothingItemList,
+      @JsonKey(name: 'user_tags') List<String>? userTags,
+      @JsonKey(name: 'default_tags_id') List<int>? defaultTags});
 }
 
 /// @nodoc
@@ -89,11 +88,11 @@ class _$OutfitCopyWithImpl<$Res, $Val extends Outfit>
       clothingItemList: freezed == clothingItemList
           ? _value.clothingItemList
           : clothingItemList // ignore: cast_nullable_to_non_nullable
-              as List<ClothingItem>?,
+              as List<int>?,
       userTags: freezed == userTags
           ? _value.userTags
           : userTags // ignore: cast_nullable_to_non_nullable
-              as List<Tag>?,
+              as List<String>?,
       defaultTags: freezed == defaultTags
           ? _value.defaultTags
           : defaultTags // ignore: cast_nullable_to_non_nullable
@@ -113,9 +112,9 @@ abstract class _$$OutfitImplCopyWith<$Res> implements $OutfitCopyWith<$Res> {
       {@JsonKey(name: 'id') int id,
       @JsonKey(name: 'image_url') String imageUrl,
       @JsonKey(name: 'season') String season,
-      @JsonKey(name: 'useditemsids') List<ClothingItem>? clothingItemList,
-      @JsonKey(name: 'userTags') List<Tag>? userTags,
-      @JsonKey(name: 'defaultTags') List<int>? defaultTags});
+      @JsonKey(name: 'useditemsids') List<int>? clothingItemList,
+      @JsonKey(name: 'user_tags') List<String>? userTags,
+      @JsonKey(name: 'default_tags_id') List<int>? defaultTags});
 }
 
 /// @nodoc
@@ -152,11 +151,11 @@ class __$$OutfitImplCopyWithImpl<$Res>
       clothingItemList: freezed == clothingItemList
           ? _value._clothingItemList
           : clothingItemList // ignore: cast_nullable_to_non_nullable
-              as List<ClothingItem>?,
+              as List<int>?,
       userTags: freezed == userTags
           ? _value._userTags
           : userTags // ignore: cast_nullable_to_non_nullable
-              as List<Tag>?,
+              as List<String>?,
       defaultTags: freezed == defaultTags
           ? _value._defaultTags
           : defaultTags // ignore: cast_nullable_to_non_nullable
@@ -172,9 +171,9 @@ class _$OutfitImpl with DiagnosticableTreeMixin implements _Outfit {
       {@JsonKey(name: 'id') required this.id,
       @JsonKey(name: 'image_url') required this.imageUrl,
       @JsonKey(name: 'season') required this.season,
-      @JsonKey(name: 'useditemsids') final List<ClothingItem>? clothingItemList,
-      @JsonKey(name: 'userTags') final List<Tag>? userTags,
-      @JsonKey(name: 'defaultTags') final List<int>? defaultTags})
+      @JsonKey(name: 'useditemsids') final List<int>? clothingItemList,
+      @JsonKey(name: 'user_tags') final List<String>? userTags,
+      @JsonKey(name: 'default_tags_id') final List<int>? defaultTags})
       : _clothingItemList = clothingItemList,
         _userTags = userTags,
         _defaultTags = defaultTags;
@@ -191,10 +190,10 @@ class _$OutfitImpl with DiagnosticableTreeMixin implements _Outfit {
   @override
   @JsonKey(name: 'season')
   final String season;
-  final List<ClothingItem>? _clothingItemList;
+  final List<int>? _clothingItemList;
   @override
   @JsonKey(name: 'useditemsids')
-  List<ClothingItem>? get clothingItemList {
+  List<int>? get clothingItemList {
     final value = _clothingItemList;
     if (value == null) return null;
     if (_clothingItemList is EqualUnmodifiableListView)
@@ -203,10 +202,10 @@ class _$OutfitImpl with DiagnosticableTreeMixin implements _Outfit {
     return EqualUnmodifiableListView(value);
   }
 
-  final List<Tag>? _userTags;
+  final List<String>? _userTags;
   @override
-  @JsonKey(name: 'userTags')
-  List<Tag>? get userTags {
+  @JsonKey(name: 'user_tags')
+  List<String>? get userTags {
     final value = _userTags;
     if (value == null) return null;
     if (_userTags is EqualUnmodifiableListView) return _userTags;
@@ -216,7 +215,7 @@ class _$OutfitImpl with DiagnosticableTreeMixin implements _Outfit {
 
   final List<int>? _defaultTags;
   @override
-  @JsonKey(name: 'defaultTags')
+  @JsonKey(name: 'default_tags_id')
   List<int>? get defaultTags {
     final value = _defaultTags;
     if (value == null) return null;
@@ -286,13 +285,13 @@ class _$OutfitImpl with DiagnosticableTreeMixin implements _Outfit {
 
 abstract class _Outfit implements Outfit {
   const factory _Outfit(
-      {@JsonKey(name: 'id') required final int id,
-      @JsonKey(name: 'image_url') required final String imageUrl,
-      @JsonKey(name: 'season') required final String season,
-      @JsonKey(name: 'useditemsids') final List<ClothingItem>? clothingItemList,
-      @JsonKey(name: 'userTags') final List<Tag>? userTags,
-      @JsonKey(name: 'defaultTags')
-      final List<int>? defaultTags}) = _$OutfitImpl;
+          {@JsonKey(name: 'id') required final int id,
+          @JsonKey(name: 'image_url') required final String imageUrl,
+          @JsonKey(name: 'season') required final String season,
+          @JsonKey(name: 'useditemsids') final List<int>? clothingItemList,
+          @JsonKey(name: 'user_tags') final List<String>? userTags,
+          @JsonKey(name: 'default_tags_id') final List<int>? defaultTags}) =
+      _$OutfitImpl;
 
   factory _Outfit.fromJson(Map<String, dynamic> json) = _$OutfitImpl.fromJson;
 
@@ -307,12 +306,12 @@ abstract class _Outfit implements Outfit {
   String get season;
   @override
   @JsonKey(name: 'useditemsids')
-  List<ClothingItem>? get clothingItemList;
+  List<int>? get clothingItemList;
   @override
-  @JsonKey(name: 'userTags')
-  List<Tag>? get userTags;
+  @JsonKey(name: 'user_tags')
+  List<String>? get userTags;
   @override
-  @JsonKey(name: 'defaultTags')
+  @JsonKey(name: 'default_tags_id')
   List<int>? get defaultTags;
   @override
   @JsonKey(ignore: true)

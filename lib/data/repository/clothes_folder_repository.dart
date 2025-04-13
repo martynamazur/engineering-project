@@ -43,7 +43,8 @@ class ClothesFolderRepository {
   }
 
   //
-  Future<List<ClothingItem>> _getClothingItemsForFolder(List<int> clothingItemIds) async {
+  Future<List<ClothingItem>> _getClothingItemsForFolder(
+      List<int> clothingItemIds) async {
     try {
       if (clothingItemIds.isEmpty) return [];
 
@@ -111,31 +112,32 @@ class ClothesFolderRepository {
     }
   }
 
-  Future<void> createFolder(String folderName) async{
-    try{
-      await supabase.from('closetfolder').insert({
-        'user_id': _userId,
-        'closet_name': folderName,
-        'clothing_item_ids': []
-      });
-
-    }catch (e) {
+  Future<ClosetFolder> createFolder(String folderName) async {
+    try {
+      final response = await supabase
+          .from('closetfolder')
+          .insert({
+            'user_id': _userId,
+            'closet_name': folderName,
+            'type': 'normal',
+            'total_amount_of_clothes': 0
+          })
+          .select()
+          .single();
+      return ClosetFolder.fromJson(response);
+    } catch (e) {
       print('Caught an error: $e');
       throw Exception('Coundt');
     }
   }
 
-
   // na Backendzie scali dwie listy , tylko przekazuje parametry do funkcji
-  Future<void> addClothesToFolder(List<int> clothesId, int folderId) async{
-
-    try{
-      await supabase.rpc('add_items_to_closetfolder', params: {
-        'new_items': clothesId,
-        'closet_id_input': folderId
-      });
+  Future<void> addClothesToFolder(List<int> clothesId, int folderId) async {
+    try {
+      await supabase.rpc('add_items_to_closetfolder',
+          params: {'new_items': clothesId, 'closet_id_input': folderId});
       print('Clothes have been added');
-    }catch (e) {
+    } catch (e) {
       print('Caught an error: $e');
       throw Exception('Coundt');
     }
@@ -153,17 +155,18 @@ class ClothesFolderRepository {
           .single();
 
       // Extract the clothing_item_ids as a List<int>
-      List<int> clothingItemIds = List<int>.from(response['clothing_item_ids'] ?? []);
+      List<int> clothingItemIds =
+          List<int>.from(response['clothing_item_ids'] ?? []);
       print("Ile jest id ${clothingItemIds.length}");
       return fetchClothingItems(clothingItemIds);
-
     } catch (e) {
       print('Caught an error: $e');
       return [];
     }
   }
 
-  Future<List<ClothingItem>> fetchClothingItems(List<int> clothingItemIds) async {
+  Future<List<ClothingItem>> fetchClothingItems(
+      List<int> clothingItemIds) async {
     try {
       if (clothingItemIds.isEmpty) return [];
 
@@ -178,12 +181,19 @@ class ClothesFolderRepository {
 
       final List<dynamic> data = response as List<dynamic>;
       return data.map((json) => ClothingItem.fromJson(json)).toList();
-
     } catch (e) {
       print('Error fetching clothing items: $e');
       return [];
     }
   }
 
-
+  Future<void> removeClothingItemFromFolder(int folderId,
+      int clothingItemId) async {
+    try {
+      await supabase.rpc('remove_item_from_closetfolder_array',
+          params: {'folder_id': folderId, 'item_id': clothingItemId});
+    } catch (e) {
+      print('error $e');
+    }
+  }
 }

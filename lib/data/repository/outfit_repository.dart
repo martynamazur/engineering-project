@@ -22,6 +22,7 @@ class OutfitRepository {
     try {
       final response = await supabase.rpc(
           'get_outfits_by_user', params: {'p_user_id': _userId});
+
       final data = response as List<dynamic>;
       return data.map((item) => Outfit.fromJson(item)).toList();
     } catch (e) {
@@ -58,5 +59,54 @@ class OutfitRepository {
       throw Exception('Failed to save outfit');
     }
   }
+  
+  Future<void> editOutfitInformation(List<String> tags, String season, int outfitId) async{
+    try{
+      supabase.from('outfit').update({'user_tags': tags}).eq('id', outfitId);
+      supabase.from('outfit').update({'season': season}).eq('id', outfitId);
+    }catch(e){
+      print(e);
+    }
+  }
+
+  Future<void> editOutfitInformationTags(List<String> tags, int outfitId) async{
+    try{
+      await supabase.from('outfit').update({'user_tags': tags}).eq('id', outfitId);
+
+    }catch(e){
+      print(e);
+    }
+  }
+
+  Future<void> editOutfitInformationSeason(String season, int outfitId) async{
+    try{
+      await supabase.from('outfit').update({'season': season}).eq('id', outfitId);
+    }catch(e){
+      print(e);
+    }
+  }
+
+  Future<Outfit> getOutfit(int outfitId) async {
+    try {
+      print('Jakie id $outfitId');
+      // Fetch outfit data from Supabase
+      final response = await supabase
+          .from('outfit')
+          .select()
+          .eq('id', outfitId)
+          .single() ;
+
+      print('Response from Supabase: $response');
+
+
+      return Outfit.fromJson(response);
+    } catch (e) {
+      print(e);
+      throw Exception('Outfit not found');
+    }
+  }
+
 
 }
+
+

@@ -330,5 +330,429 @@ class _DeleteOutfitProviderElement
   @override
   int get outfitId => (origin as DeleteOutfitProvider).outfitId;
 }
+
+String _$editOutfitInformationTagsHash() =>
+    r'df3f212d1bc27bf3ed8b121c59e9b62d006f76e5';
+
+/// See also [editOutfitInformationTags].
+@ProviderFor(editOutfitInformationTags)
+const editOutfitInformationTagsProvider = EditOutfitInformationTagsFamily();
+
+/// See also [editOutfitInformationTags].
+class EditOutfitInformationTagsFamily extends Family<AsyncValue<void>> {
+  /// See also [editOutfitInformationTags].
+  const EditOutfitInformationTagsFamily();
+
+  /// See also [editOutfitInformationTags].
+  EditOutfitInformationTagsProvider call(
+    List<String> updatedTags,
+    int outfitId,
+  ) {
+    return EditOutfitInformationTagsProvider(
+      updatedTags,
+      outfitId,
+    );
+  }
+
+  @override
+  EditOutfitInformationTagsProvider getProviderOverride(
+    covariant EditOutfitInformationTagsProvider provider,
+  ) {
+    return call(
+      provider.updatedTags,
+      provider.outfitId,
+    );
+  }
+
+  static const Iterable<ProviderOrFamily>? _dependencies = null;
+
+  @override
+  Iterable<ProviderOrFamily>? get dependencies => _dependencies;
+
+  static const Iterable<ProviderOrFamily>? _allTransitiveDependencies = null;
+
+  @override
+  Iterable<ProviderOrFamily>? get allTransitiveDependencies =>
+      _allTransitiveDependencies;
+
+  @override
+  String? get name => r'editOutfitInformationTagsProvider';
+}
+
+/// See also [editOutfitInformationTags].
+class EditOutfitInformationTagsProvider
+    extends AutoDisposeFutureProvider<void> {
+  /// See also [editOutfitInformationTags].
+  EditOutfitInformationTagsProvider(
+    List<String> updatedTags,
+    int outfitId,
+  ) : this._internal(
+          (ref) => editOutfitInformationTags(
+            ref as EditOutfitInformationTagsRef,
+            updatedTags,
+            outfitId,
+          ),
+          from: editOutfitInformationTagsProvider,
+          name: r'editOutfitInformationTagsProvider',
+          debugGetCreateSourceHash:
+              const bool.fromEnvironment('dart.vm.product')
+                  ? null
+                  : _$editOutfitInformationTagsHash,
+          dependencies: EditOutfitInformationTagsFamily._dependencies,
+          allTransitiveDependencies:
+              EditOutfitInformationTagsFamily._allTransitiveDependencies,
+          updatedTags: updatedTags,
+          outfitId: outfitId,
+        );
+
+  EditOutfitInformationTagsProvider._internal(
+    super._createNotifier, {
+    required super.name,
+    required super.dependencies,
+    required super.allTransitiveDependencies,
+    required super.debugGetCreateSourceHash,
+    required super.from,
+    required this.updatedTags,
+    required this.outfitId,
+  }) : super.internal();
+
+  final List<String> updatedTags;
+  final int outfitId;
+
+  @override
+  Override overrideWith(
+    FutureOr<void> Function(EditOutfitInformationTagsRef provider) create,
+  ) {
+    return ProviderOverride(
+      origin: this,
+      override: EditOutfitInformationTagsProvider._internal(
+        (ref) => create(ref as EditOutfitInformationTagsRef),
+        from: from,
+        name: null,
+        dependencies: null,
+        allTransitiveDependencies: null,
+        debugGetCreateSourceHash: null,
+        updatedTags: updatedTags,
+        outfitId: outfitId,
+      ),
+    );
+  }
+
+  @override
+  AutoDisposeFutureProviderElement<void> createElement() {
+    return _EditOutfitInformationTagsProviderElement(this);
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return other is EditOutfitInformationTagsProvider &&
+        other.updatedTags == updatedTags &&
+        other.outfitId == outfitId;
+  }
+
+  @override
+  int get hashCode {
+    var hash = _SystemHash.combine(0, runtimeType.hashCode);
+    hash = _SystemHash.combine(hash, updatedTags.hashCode);
+    hash = _SystemHash.combine(hash, outfitId.hashCode);
+
+    return _SystemHash.finish(hash);
+  }
+}
+
+mixin EditOutfitInformationTagsRef on AutoDisposeFutureProviderRef<void> {
+  /// The parameter `updatedTags` of this provider.
+  List<String> get updatedTags;
+
+  /// The parameter `outfitId` of this provider.
+  int get outfitId;
+}
+
+class _EditOutfitInformationTagsProviderElement
+    extends AutoDisposeFutureProviderElement<void>
+    with EditOutfitInformationTagsRef {
+  _EditOutfitInformationTagsProviderElement(super.provider);
+
+  @override
+  List<String> get updatedTags =>
+      (origin as EditOutfitInformationTagsProvider).updatedTags;
+  @override
+  int get outfitId => (origin as EditOutfitInformationTagsProvider).outfitId;
+}
+
+String _$editOutfitInformationSeasonHash() =>
+    r'33ab466afd16c2fd237b480efb2d2e7eac7efc30';
+
+/// See also [editOutfitInformationSeason].
+@ProviderFor(editOutfitInformationSeason)
+const editOutfitInformationSeasonProvider = EditOutfitInformationSeasonFamily();
+
+/// See also [editOutfitInformationSeason].
+class EditOutfitInformationSeasonFamily extends Family<AsyncValue<void>> {
+  /// See also [editOutfitInformationSeason].
+  const EditOutfitInformationSeasonFamily();
+
+  /// See also [editOutfitInformationSeason].
+  EditOutfitInformationSeasonProvider call(
+    String season,
+    int outfitId,
+  ) {
+    return EditOutfitInformationSeasonProvider(
+      season,
+      outfitId,
+    );
+  }
+
+  @override
+  EditOutfitInformationSeasonProvider getProviderOverride(
+    covariant EditOutfitInformationSeasonProvider provider,
+  ) {
+    return call(
+      provider.season,
+      provider.outfitId,
+    );
+  }
+
+  static const Iterable<ProviderOrFamily>? _dependencies = null;
+
+  @override
+  Iterable<ProviderOrFamily>? get dependencies => _dependencies;
+
+  static const Iterable<ProviderOrFamily>? _allTransitiveDependencies = null;
+
+  @override
+  Iterable<ProviderOrFamily>? get allTransitiveDependencies =>
+      _allTransitiveDependencies;
+
+  @override
+  String? get name => r'editOutfitInformationSeasonProvider';
+}
+
+/// See also [editOutfitInformationSeason].
+class EditOutfitInformationSeasonProvider
+    extends AutoDisposeFutureProvider<void> {
+  /// See also [editOutfitInformationSeason].
+  EditOutfitInformationSeasonProvider(
+    String season,
+    int outfitId,
+  ) : this._internal(
+          (ref) => editOutfitInformationSeason(
+            ref as EditOutfitInformationSeasonRef,
+            season,
+            outfitId,
+          ),
+          from: editOutfitInformationSeasonProvider,
+          name: r'editOutfitInformationSeasonProvider',
+          debugGetCreateSourceHash:
+              const bool.fromEnvironment('dart.vm.product')
+                  ? null
+                  : _$editOutfitInformationSeasonHash,
+          dependencies: EditOutfitInformationSeasonFamily._dependencies,
+          allTransitiveDependencies:
+              EditOutfitInformationSeasonFamily._allTransitiveDependencies,
+          season: season,
+          outfitId: outfitId,
+        );
+
+  EditOutfitInformationSeasonProvider._internal(
+    super._createNotifier, {
+    required super.name,
+    required super.dependencies,
+    required super.allTransitiveDependencies,
+    required super.debugGetCreateSourceHash,
+    required super.from,
+    required this.season,
+    required this.outfitId,
+  }) : super.internal();
+
+  final String season;
+  final int outfitId;
+
+  @override
+  Override overrideWith(
+    FutureOr<void> Function(EditOutfitInformationSeasonRef provider) create,
+  ) {
+    return ProviderOverride(
+      origin: this,
+      override: EditOutfitInformationSeasonProvider._internal(
+        (ref) => create(ref as EditOutfitInformationSeasonRef),
+        from: from,
+        name: null,
+        dependencies: null,
+        allTransitiveDependencies: null,
+        debugGetCreateSourceHash: null,
+        season: season,
+        outfitId: outfitId,
+      ),
+    );
+  }
+
+  @override
+  AutoDisposeFutureProviderElement<void> createElement() {
+    return _EditOutfitInformationSeasonProviderElement(this);
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return other is EditOutfitInformationSeasonProvider &&
+        other.season == season &&
+        other.outfitId == outfitId;
+  }
+
+  @override
+  int get hashCode {
+    var hash = _SystemHash.combine(0, runtimeType.hashCode);
+    hash = _SystemHash.combine(hash, season.hashCode);
+    hash = _SystemHash.combine(hash, outfitId.hashCode);
+
+    return _SystemHash.finish(hash);
+  }
+}
+
+mixin EditOutfitInformationSeasonRef on AutoDisposeFutureProviderRef<void> {
+  /// The parameter `season` of this provider.
+  String get season;
+
+  /// The parameter `outfitId` of this provider.
+  int get outfitId;
+}
+
+class _EditOutfitInformationSeasonProviderElement
+    extends AutoDisposeFutureProviderElement<void>
+    with EditOutfitInformationSeasonRef {
+  _EditOutfitInformationSeasonProviderElement(super.provider);
+
+  @override
+  String get season => (origin as EditOutfitInformationSeasonProvider).season;
+  @override
+  int get outfitId => (origin as EditOutfitInformationSeasonProvider).outfitId;
+}
+
+String _$getOutfitHash() => r'6aadf37c47377a5ef3f942dc2544d72940b8c5a6';
+
+/// See also [getOutfit].
+@ProviderFor(getOutfit)
+const getOutfitProvider = GetOutfitFamily();
+
+/// See also [getOutfit].
+class GetOutfitFamily extends Family<AsyncValue<Outfit>> {
+  /// See also [getOutfit].
+  const GetOutfitFamily();
+
+  /// See also [getOutfit].
+  GetOutfitProvider call(
+    dynamic outfitId,
+  ) {
+    return GetOutfitProvider(
+      outfitId,
+    );
+  }
+
+  @override
+  GetOutfitProvider getProviderOverride(
+    covariant GetOutfitProvider provider,
+  ) {
+    return call(
+      provider.outfitId,
+    );
+  }
+
+  static const Iterable<ProviderOrFamily>? _dependencies = null;
+
+  @override
+  Iterable<ProviderOrFamily>? get dependencies => _dependencies;
+
+  static const Iterable<ProviderOrFamily>? _allTransitiveDependencies = null;
+
+  @override
+  Iterable<ProviderOrFamily>? get allTransitiveDependencies =>
+      _allTransitiveDependencies;
+
+  @override
+  String? get name => r'getOutfitProvider';
+}
+
+/// See also [getOutfit].
+class GetOutfitProvider extends AutoDisposeFutureProvider<Outfit> {
+  /// See also [getOutfit].
+  GetOutfitProvider(
+    dynamic outfitId,
+  ) : this._internal(
+          (ref) => getOutfit(
+            ref as GetOutfitRef,
+            outfitId,
+          ),
+          from: getOutfitProvider,
+          name: r'getOutfitProvider',
+          debugGetCreateSourceHash:
+              const bool.fromEnvironment('dart.vm.product')
+                  ? null
+                  : _$getOutfitHash,
+          dependencies: GetOutfitFamily._dependencies,
+          allTransitiveDependencies: GetOutfitFamily._allTransitiveDependencies,
+          outfitId: outfitId,
+        );
+
+  GetOutfitProvider._internal(
+    super._createNotifier, {
+    required super.name,
+    required super.dependencies,
+    required super.allTransitiveDependencies,
+    required super.debugGetCreateSourceHash,
+    required super.from,
+    required this.outfitId,
+  }) : super.internal();
+
+  final dynamic outfitId;
+
+  @override
+  Override overrideWith(
+    FutureOr<Outfit> Function(GetOutfitRef provider) create,
+  ) {
+    return ProviderOverride(
+      origin: this,
+      override: GetOutfitProvider._internal(
+        (ref) => create(ref as GetOutfitRef),
+        from: from,
+        name: null,
+        dependencies: null,
+        allTransitiveDependencies: null,
+        debugGetCreateSourceHash: null,
+        outfitId: outfitId,
+      ),
+    );
+  }
+
+  @override
+  AutoDisposeFutureProviderElement<Outfit> createElement() {
+    return _GetOutfitProviderElement(this);
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return other is GetOutfitProvider && other.outfitId == outfitId;
+  }
+
+  @override
+  int get hashCode {
+    var hash = _SystemHash.combine(0, runtimeType.hashCode);
+    hash = _SystemHash.combine(hash, outfitId.hashCode);
+
+    return _SystemHash.finish(hash);
+  }
+}
+
+mixin GetOutfitRef on AutoDisposeFutureProviderRef<Outfit> {
+  /// The parameter `outfitId` of this provider.
+  dynamic get outfitId;
+}
+
+class _GetOutfitProviderElement extends AutoDisposeFutureProviderElement<Outfit>
+    with GetOutfitRef {
+  _GetOutfitProviderElement(super.provider);
+
+  @override
+  dynamic get outfitId => (origin as GetOutfitProvider).outfitId;
+}
 // ignore_for_file: type=lint
 // ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member

@@ -15,7 +15,7 @@ enum Season {
 class ClothingItem with _$ClothingItem {
   const factory ClothingItem({
     @JsonKey(name: 'clothing_item_id') int? clothingItemId,
-    //@JsonKey(name: 'item_name') required String itemName,
+    //@JsonKey(name: 'item_name') required String itemName,//nie potzrebne
     @JsonKey(name: 'item_photo') required String itemPhoto,
     @JsonKey(name: 'item_type') String? itemType,
 

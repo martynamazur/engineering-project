@@ -3,7 +3,7 @@ import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:ootd/domain/state_management/clothes_folder_provider.dart';
-
+import 'package:ootd/domain/state_management/folder_list_notifier.dart' as folderList;
 import '../../domain/state_management/outfit_list_notifier.dart';
 
 @RoutePage()
@@ -56,6 +56,10 @@ class _PickOwnedClothesScreenState extends ConsumerState<PickOwnedClothesScreen>
                       return GestureDetector(
                         onTap: () async{
                           ref.read(addClothesToFolderProvider([outfit.clothingItemId!],widget._folderId));
+                          ref.invalidate(getFolderProvider(widget._folderId));
+
+                          //refresh home screen
+                          ref.invalidate(folderList.folderListNotifierProvider);
                           context.router.maybePop();
                         },
                         child: Container(

@@ -42,6 +42,7 @@ ClothesListNotifier clothesListNotifier (ClothesListNotifierRef ref) {
 //i pass argumnet in the constructor
 final picketClosetFolderProvider = StateProvider((ref) => 0);
 
+
 @riverpod
 Future<void> deleteFolder(DeleteFolderRef ref, int folderId) async {
   return ref.read(clothesFolderRepositoryProvider).deleteFolder(folderId);
@@ -53,8 +54,10 @@ Future<void> changeFolderName(ChangeFolderNameRef ref,String newFolderName, int 
 }
 
 @riverpod
-Future<void> createNewFolder(CreateNewFolderRef ref, String folderName) async {
-  return ref.read(clothesFolderRepositoryProvider).createFolder(folderName);
+Future<ClosetFolder> createNewFolder(CreateNewFolderRef ref, String folderName) async {
+  final newFolder = await ref.read(clothesFolderRepositoryProvider).createFolder(folderName);
+  return newFolder;
+
 }
 
 @riverpod
@@ -65,4 +68,9 @@ Future<void> addClothesToFolder(AddClothesToFolderRef ref, List<int> clothesId, 
 @riverpod
 Future<List<ClothingItem>> getAllClothes(GetAllClothesRef ref) async {
   return ref.read(clothesFolderRepositoryProvider).getAllOwnedClothes();
+}
+
+@riverpod
+Future<void> removeClothingItemFromFolder(RemoveClothingItemFromFolderRef ref, int folderId, int clothingItemId) async {
+  return ref.read(clothesFolderRepositoryProvider).removeClothingItemFromFolder(folderId,clothingItemId,);
 }

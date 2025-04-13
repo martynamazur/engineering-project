@@ -26,15 +26,24 @@ class ClothesRepository {
         'item_photo' : clothingItem.itemPhoto,
         'item_category_id': clothingItem.itemCategoryId,
         'seasons' :  clothingItem.seasons?.map((season) => season.toString().split('.').last).toList(),
-      });
+      }).select().maybeSingle();
 
+      print('response $response');
       if (response != null) {
         int clothingItemId = response['clothing_item_id'];
         print('Dodano ubranie z ID: $clothingItemId');
+        await supabase.rpc('add_clothing_to_user',
+            params: {
+              '_user_id': _userId,
+              '_clothing_id': clothingItemId
+        });
+
+        await supabase.rpc('add_clothing_to_all_folder', params: {
+          'p_user_id': _userId,
+          'p_clothing_item_id': clothingItemId,
+        });
+
       }
-
-      //dodaj do tablicy trigger w tym momencie ale nie mam uuid :/ albo z tego poziomu wywoluje funkcje ?
-
     }catch (e) {
       print('Caught an error: $e');
       throw Exception('cannot add clothing item to databse');

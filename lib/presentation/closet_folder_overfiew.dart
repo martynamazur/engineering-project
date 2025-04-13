@@ -11,6 +11,7 @@ import 'package:ootd/presentation/styles/headline_text.dart';
 import '../domain/state_management/clothes_folder_provider.dart';
 import '../model/clothing_item.dart';
 import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
+import 'package:ootd/domain/state_management/folder_list_notifier.dart' as folderList;
 
 @RoutePage()
 class ClosetFolderOverviewScreen extends ConsumerStatefulWidget {
@@ -25,10 +26,11 @@ class ClosetFolderOverviewScreen extends ConsumerStatefulWidget {
 
 class _ClosetFolderOverviewScreenState
     extends ConsumerState<ClosetFolderOverviewScreen> {
+  int? selectedValue;
+
   @override
   Widget build(BuildContext context) {
     final closetFolder = ref.watch(getFolderProvider(widget.folderId));
-    int? selectedValue;
 
     return Scaffold(
       appBar: AppBar(
@@ -38,47 +40,7 @@ class _ClosetFolderOverviewScreenState
           loading: () => const Text('Loading...'),
           error: (error, stackTrace) => const Text('Error'),
         ),
-        actions: [
-          IconButton(
-            onPressed: () {
-              // Obsługa filtrowania
-            },
-            icon: Icon(Icons.filter_list_alt),
-          ),
-          IconButton(
-            onPressed: () => context.router.push(PickOwnedClothesRoute(folderId: widget.folderId)),
-            icon: Icon(Icons.add),
-          ),
-          DropdownButton(
-            underline: SizedBox(),
-            icon: Icon(Icons.edit),
-            value: selectedValue,
-            items: [
-              DropdownMenuItem(
-                value: 1,
-                child: Text('Change folder name'),
-              ),
-              DropdownMenuItem(
-                value: 2,
-                child: Text('Delete folder'),
-              ),
-            ],
-            onChanged: (value) {
-              setState(() {
-                selectedValue = value;
-              });
-
-              switch (value) {
-                case 1:
-                  showAlertDialogChangeFolderName();
-                  break;
-                case 2:
-                  showAlertDialog();
-                  break;
-              }
-            },
-          ),
-        ],
+        actions: _folderActionBar(),
       ),
       body: SafeArea(
         child: closetFolder.when(
@@ -88,14 +50,56 @@ class _ClosetFolderOverviewScreenState
                 : _buildEmptyCloset();
           },
           loading: () => const Center(child: CircularProgressIndicator()),
-          error: (error, stackTrace) =>
-              Center(child: Text('Error: $error')),
+          error: (error, stackTrace) => Center(child: Text('Error: $error')),
         ),
       ),
     );
   }
 
-  void showAlertDialog() {
+  List<Widget> _folderActionBar() {
+    return [
+      IconButton(
+        onPressed: () {
+          // Obsługa filtrowania
+        },
+        icon: Icon(Icons.filter_list_alt),
+      ),
+      IconButton(
+        onPressed: () => context.router
+            .push(PickOwnedClothesRoute(folderId: widget.folderId)),
+        icon: Icon(Icons.add),
+      ),
+      SizedBox(
+        width: 40,
+        child: PopupMenuButton<int>(
+          onSelected: (value) {
+            switch (value) {
+              case 1:
+                showAlertDialogChangeFolderName();
+                break;
+              case 2:
+                showAlertDialogDeleteFolder();
+                break;
+            }
+          },
+          icon: Icon(Icons.edit),
+          itemBuilder: (BuildContext context) => [
+            PopupMenuItem<int>(
+              value: 1,
+              child: Text('Change folder name'),
+            ),
+            PopupMenuItem<int>(
+              value: 2,
+              child: Text('Delete folder'),
+            ),
+          ],
+        ),
+      )
+
+    ];
+  }
+
+  void showAlertDialogDeleteFolder() {
     showDialog(
       context: context,
       builder: (BuildContext context) {
@@ -105,9 +109,15 @@ class _ClosetFolderOverviewScreenState
           actions: [
             TextButton(
               onPressed: () async {
-                ref.read(deleteFolderProvider(widget.folderId));
+
                 if (mounted) {
-                  context.router.pop();
+                  ref.read(deleteFolderProvider(widget.folderId));
+                  ref.invalidate(folderList.folderListNotifierProvider);
+                  Navigator.of(context).pop(); //zamkniecie dialogu
+
+                  if (mounted) {
+                    context.router.maybePop();//przejscie do poprzedniego ekranu
+                  }
                 }
               },
               child: Text('Delete'),
@@ -149,6 +159,15 @@ class _ClosetFolderOverviewScreenState
                 if (_controller.text.isNotEmpty) {
                   ref.read(changeFolderNameProvider(
                       _controller.text, widget.folderId));
+
+
+
+                  //ok zmienia sie w home screen
+                  await ref.read(folderList.folderListNotifierProvider.notifier).updateFolderName(widget.folderId,_controller.text);
+
+                  ref.invalidate(getFolderProvider(widget.folderId)); //odswiezac dane, pobieram cala liste ponownie
+                  ref.invalidate(folderListNotifierProvider);//odswiezam home
+
                 }
                 if (mounted) {
                   Navigator.of(context).pop();
@@ -206,10 +225,9 @@ class _ClosetFolderOverviewScreenState
   Widget _buildClothingItemTile(
       ClothingItem clothingItem, BuildContext context) {
     return GestureDetector(
-      onTap: () {
-        context.router
-            .push(ClothingItemOverviewRoute(clothingItem: clothingItem));
-      },
+      onTap: () => context.router
+          .push(ClothingItemOverviewRoute(clothingItem: clothingItem)),
+      onLongPress: () => _removeFromFolderDialog(clothingItem.clothingItemId!),
       child: Container(
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(8.0),
@@ -244,23 +262,49 @@ class _ClosetFolderOverviewScreenState
     );
   }
 
-  Widget _buildEmptyCloset(){
+  void _removeFromFolderDialog(int clothingItemId) {
+    showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: Text('Remove from the folder'),
+            content:
+                Text('This action will be permanent and cannot be undone.'),
+            actions: [
+              TextButton(onPressed: () => context.router.maybePop(), child: Text('Cancel')),
+              TextButton(
+                  onPressed: () async {
+                    ref.read(removeClothingItemFromFolderProvider(widget.folderId, clothingItemId));
+                    ref.invalidate(getFolderProvider(widget.folderId));
+                    await ref.read(folderList.folderListNotifierProvider.notifier).removeClothingItemFromFolder(widget.folderId, clothingItemId);
+                    ref.invalidate(folderList.folderListNotifierProvider);
+                    if(mounted){
+                      context.router.maybePop();
+                    }
+
+                  },
+                  child: Text('Remove'))
+            ],
+          );
+        });
+  }
+
+  Widget _buildEmptyCloset() {
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
         GestureDetector(
-          onTap: () => context.router.push(AddClothesRoute()),
+          onTap: () => context.router
+              .push(PickOwnedClothesRoute(folderId: widget.folderId)),
           child: Container(
             width: 100,
             height: 100,
             decoration: BoxDecoration(
-                shape: BoxShape.circle,
-                color: Colors.lightGreenAccent
-            ),
+                shape: BoxShape.circle, color: Colors.lightGreenAccent),
             child: Icon(Icons.add),
           ),
         ),
-        Center(child: Text("Empty closet", style:  headline)),
+        Center(child: Text("Empty closet", style: headline)),
       ],
     );
   }
@@ -283,5 +327,4 @@ class _ClosetFolderOverviewScreenState
       },
     );
   }
-
 }

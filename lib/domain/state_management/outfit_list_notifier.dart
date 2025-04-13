@@ -76,8 +76,6 @@ class OutfitListNotifier extends _$OutfitListNotifier {
   Future<void> removeOutfit(int outfitId) async{
     _originalList = _originalList.where((outfit) => outfit.id != outfitId).toList();
     state = AsyncData(_originalList);
-
-
   }
 
 
