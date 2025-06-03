@@ -4,15 +4,13 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:ootd/navigation/app_router.dart';
 
 import '../domain/state_management/outfit_list_notifier.dart';
-import '../domain/state_management/outfit_provider.dart';
 import '../utils/show_confirm_deletion_dialog.dart';
-import 'outfit_overfiew.dart';
 
 
 
 @RoutePage()
 class CreatedOutfitsScreen extends ConsumerStatefulWidget {
-  const CreatedOutfitsScreen({super.key});
+  CreatedOutfitsScreen({super.key});
 
   @override
   ConsumerState<CreatedOutfitsScreen> createState() =>
@@ -23,22 +21,21 @@ class _CreatedOutfitsScreenState extends ConsumerState<CreatedOutfitsScreen> {
   @override
   Widget build(BuildContext context) {
     final outfitState = ref.watch(outfitListNotifierProvider);
-    print('ootd $outfitState');
 
     return Scaffold(
       appBar: AppBar(
-        title: Text('Outfits'),
+        title: const Text('Outfits'),
         actions: [
           IconButton(onPressed: (){
             context.router.push(ChooseTemplateRoute());
-          }, icon: Icon(Icons.add_circle_outlined)
+          }, icon: const Icon(Icons.add_circle_outlined)
           ),
 
           IconButton(
             onPressed: () {
               context.router.push(FilterRoute());
             },
-            icon: Icon(Icons.filter_list_alt),
+            icon: const Icon(Icons.filter_list_alt),
           ),
 
         ],
@@ -46,9 +43,8 @@ class _CreatedOutfitsScreenState extends ConsumerState<CreatedOutfitsScreen> {
       body: SafeArea(
         child: outfitState.when(
           data: (data) {
-            print("data tak $data");
             if (data.isEmpty) {
-              return Center(
+              return const Center(
                 child: Text(
                   'Brak danych do wyświetlenia',
                   style: TextStyle(fontSize: 16, color: Colors.grey),
@@ -58,7 +54,7 @@ class _CreatedOutfitsScreenState extends ConsumerState<CreatedOutfitsScreen> {
             return Padding(
               padding: const EdgeInsets.symmetric(horizontal: 16.0),
               child: GridView.builder(
-                gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                   crossAxisCount: 2,
                   crossAxisSpacing: 12,
                   mainAxisSpacing: 12,
@@ -90,12 +86,12 @@ class _CreatedOutfitsScreenState extends ConsumerState<CreatedOutfitsScreen> {
             return Center(
               child: Text(
                 'Wystąpił błąd: $err',
-                style: TextStyle(fontSize: 16, color: Colors.red),
+                style: const TextStyle(fontSize: 16, color: Colors.red),
               ),
             );
           },
           loading: () {
-            return Center(
+            return const Center(
               child: CircularProgressIndicator(),
             );
           },

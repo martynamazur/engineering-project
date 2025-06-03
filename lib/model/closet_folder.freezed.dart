@@ -30,8 +30,12 @@ mixin _$ClosetFolder {
   List<int> get clothingItemIds => throw _privateConstructorUsedError;
   List<ClothingItem> get clothingItems => throw _privateConstructorUsedError;
 
+  /// Serializes this ClosetFolder to a JSON map.
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
-  @JsonKey(ignore: true)
+
+  /// Create a copy of ClosetFolder
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   $ClosetFolderCopyWith<ClosetFolder> get copyWith =>
       throw _privateConstructorUsedError;
 }
@@ -60,6 +64,8 @@ class _$ClosetFolderCopyWithImpl<$Res, $Val extends ClosetFolder>
   // ignore: unused_field
   final $Res Function($Val) _then;
 
+  /// Create a copy of ClosetFolder
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -118,6 +124,8 @@ class __$$ClosetFolderImplCopyWithImpl<$Res>
       _$ClosetFolderImpl _value, $Res Function(_$ClosetFolderImpl) _then)
       : super(_value, _then);
 
+  /// Create a copy of ClosetFolder
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -230,7 +238,7 @@ class _$ClosetFolderImpl with DiagnosticableTreeMixin implements _ClosetFolder {
                 .equals(other._clothingItems, _clothingItems));
   }
 
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   int get hashCode => Object.hash(
       runtimeType,
@@ -240,7 +248,9 @@ class _$ClosetFolderImpl with DiagnosticableTreeMixin implements _ClosetFolder {
       const DeepCollectionEquality().hash(_clothingItemIds),
       const DeepCollectionEquality().hash(_clothingItems));
 
-  @JsonKey(ignore: true)
+  /// Create a copy of ClosetFolder
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   @pragma('vm:prefer-inline')
   _$$ClosetFolderImplCopyWith<_$ClosetFolderImpl> get copyWith =>
@@ -281,8 +291,11 @@ abstract class _ClosetFolder implements ClosetFolder {
   List<int> get clothingItemIds;
   @override
   List<ClothingItem> get clothingItems;
+
+  /// Create a copy of ClosetFolder
+  /// with the given fields replaced by the non-null parameter values.
   @override
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   _$$ClosetFolderImplCopyWith<_$ClosetFolderImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }

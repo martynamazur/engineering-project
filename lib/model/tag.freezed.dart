@@ -28,8 +28,12 @@ mixin _$Tag {
   String get tagImagePath => throw _privateConstructorUsedError;
   bool get isSelected => throw _privateConstructorUsedError;
 
+  /// Serializes this Tag to a JSON map.
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
-  @JsonKey(ignore: true)
+
+  /// Create a copy of Tag
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   $TagCopyWith<Tag> get copyWith => throw _privateConstructorUsedError;
 }
 
@@ -54,6 +58,8 @@ class _$TagCopyWithImpl<$Res, $Val extends Tag> implements $TagCopyWith<$Res> {
   // ignore: unused_field
   final $Res Function($Val) _then;
 
+  /// Create a copy of Tag
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -102,6 +108,8 @@ class __$$TagImplCopyWithImpl<$Res> extends _$TagCopyWithImpl<$Res, _$TagImpl>
   __$$TagImplCopyWithImpl(_$TagImpl _value, $Res Function(_$TagImpl) _then)
       : super(_value, _then);
 
+  /// Create a copy of Tag
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -174,12 +182,14 @@ class _$TagImpl implements _Tag {
                 other.isSelected == isSelected));
   }
 
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   int get hashCode =>
       Object.hash(runtimeType, tagId, tagName, tagImagePath, isSelected);
 
-  @JsonKey(ignore: true)
+  /// Create a copy of Tag
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   @pragma('vm:prefer-inline')
   _$$TagImplCopyWith<_$TagImpl> get copyWith =>
@@ -213,8 +223,11 @@ abstract class _Tag implements Tag {
   String get tagImagePath;
   @override
   bool get isSelected;
+
+  /// Create a copy of Tag
+  /// with the given fields replaced by the non-null parameter values.
   @override
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   _$$TagImplCopyWith<_$TagImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }

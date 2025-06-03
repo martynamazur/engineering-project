@@ -1,24 +1,18 @@
-import 'package:auto_route/annotations.dart';
 import 'package:auto_route/auto_route.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:ootd/data/service/share_content_manager.dart';
-import 'package:ootd/model/outfit.dart';
-import 'package:ootd/model/clothing_item.dart';
-import 'package:ootd/model/tag.dart';
+import 'package:ootd/extensions/localization_extension.dart';
 import 'package:ootd/navigation/app_router.dart';
 
 import '../domain/state_management/outfit_list_notifier.dart';
 import '../domain/state_management/outfit_provider.dart';
-import '../utils/show_confirm_deletion_dialog.dart';
-import 'package:smooth_sheets/smooth_sheets.dart';
 
 @RoutePage()
 class OutfitOverviewScreen extends ConsumerStatefulWidget {
-  final int outfitId;
+  final int _outfitId;
 
-  const OutfitOverviewScreen({Key? key, required this.outfitId})
-      : super(key: key);
+  const OutfitOverviewScreen({super.key, required int outfitId}) : _outfitId = outfitId;
 
   @override
   ConsumerState<OutfitOverviewScreen> createState() =>
@@ -29,29 +23,29 @@ class _OutfitOverviewScreenState extends ConsumerState<OutfitOverviewScreen> {
   @override
   Widget build(BuildContext context) {
     int? selectedValue;
-    final outfit = ref.watch(getOutfitProvider(widget.outfitId));
+    final outfit = ref.watch(getOutfitProvider(widget._outfitId));
 
     return Scaffold(
       appBar: AppBar(
-        title: Text('Outfit Overview'),
+        title: const Text('Outfit Overview'),
         actions: [
           CircleAvatar(
             backgroundColor: Colors.white70,
             child: IconButton(
               onPressed: () {
-                ShareContentManager(outfit.value!.imageUrl).onSharePhotoLink(context);
+                //ShareContentManager(outfit.value!.imageUrl).onSharePhotoLink(context);
               },
-              icon: Icon(Icons.share),
+              icon: const Icon(Icons.share),
             ),
           ),
           DropdownButton(
-              icon: Icon(Icons.edit),
+              icon: const Icon(Icons.edit),
               value: selectedValue,
-              underline: SizedBox.shrink(),
-              padding: EdgeInsets.symmetric(horizontal: 4.0),
+              underline: const SizedBox.shrink(),
+              padding: const EdgeInsets.symmetric(horizontal: 4.0),
               items: [
-                DropdownMenuItem(value: 1, child: Text('Edit')),
-                DropdownMenuItem(value: 2, child: Text('Delete')),
+                DropdownMenuItem(value: 1, child: Text(context.loc.edit)),
+                DropdownMenuItem(value: 2, child: Text(context.loc.delete)),
               ],
               onChanged: (value) {
                 setState(() {
@@ -63,7 +57,7 @@ class _OutfitOverviewScreenState extends ConsumerState<OutfitOverviewScreen> {
                     context.router.push(EditOutfitDetailsRoute(outfit: outfit.value!));
                     break;
                   case 2:
-                    _showConfirmDeletionDialog(outfitId: widget.outfitId);
+                    _showConfirmDeletionDialog(outfitId: widget._outfitId);
                 }
               })
         ],
@@ -74,15 +68,21 @@ class _OutfitOverviewScreenState extends ConsumerState<OutfitOverviewScreen> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Image.network(data.imageUrl),
-                Text('Season: ${data.season}',style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),),
-                _buildTagsSection('Tags', data.userTags),
+                //Image.network(data.imageUrl),
+                CachedNetworkImage(
+                  imageUrl: data.imageUrl,
+                  progressIndicatorBuilder: (context, url, downloadProgress) =>
+                      CircularProgressIndicator(value: downloadProgress.progress),
+                  errorWidget: (context, url, error) => Icon(Icons.error),
+                ),
+                Text('${context.loc.seasonHeader} : ${data.season}',style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),),
+                _buildTagsSection(context.loc.tagsHeader, data.userTags),
                 // Add more fields from your `Outfit` class
               ],
             ),
           );
         },
-        loading: () => Center(child: CircularProgressIndicator()),
+        loading: () => const Center(child: CircularProgressIndicator()),
         error: (error, stackTrace) => Center(child: Text('Error: $error')),
       ),
     );
@@ -92,8 +92,8 @@ class _OutfitOverviewScreenState extends ConsumerState<OutfitOverviewScreen> {
     if (tags == null || tags.isEmpty) {
       return Row(
         children: [
-          Text('$title: No tags available.'),
-          OutlinedButton(onPressed: (){}, child: Text('Add a new tag'))
+          Text('$title: ${context.loc.noTagsAvailableMessage}.'),
+          OutlinedButton(onPressed: (){}, child: Text(context.loc.addAnewTag))
         ],
       );
     }
@@ -145,8 +145,8 @@ class _OutfitOverviewScreenState extends ConsumerState<OutfitOverviewScreen> {
                       context.router.maybePop();
                     }
                   },
-                  child: Row(
-                    children: const [
+                  child: const Row(
+                    children: [
                       Icon(Icons.restore_from_trash),
                       Text('Delete'),
                     ],

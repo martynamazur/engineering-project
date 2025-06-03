@@ -1,6 +1,7 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:ootd/extensions/localization_extension.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 import '../navigation/app_router.dart';
@@ -16,41 +17,40 @@ class MyProfileScreen extends ConsumerWidget {
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Mój Profil'),
+        title: Text(context.loc.profileHeader),
         actions: [
           IconButton(
             icon: const Icon(Icons.settings),
-            onPressed: () {
-              context.router.push(SettingsRoute());
-            },
+            onPressed: () => context.router.push(SettingsRoute())
+            ,
           ),
         ],
       ),
-      body: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            // Obrazek profilu
-
-            Center(
-              child: CircleAvatar(
-                radius: 50,
-                backgroundImage: user!.userMetadata!['profile_image_url'] != null
-                    ? NetworkImage(user.userMetadata!['profile_image_url'])
-                    : const AssetImage('assets/brand_logo.png') as ImageProvider,
+      body: SafeArea(
+        child: SingleChildScrollView(
+          padding: const EdgeInsets.all(16.0),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Center(
+                child: CircleAvatar(
+                  radius: 50,
+                  backgroundImage: user!.userMetadata!['profile_image_url'] != null
+                      ? NetworkImage(user.userMetadata!['profile_image_url'])
+                      : const AssetImage('assets/brand_logo.png') as ImageProvider,
+                ),
               ),
-            ),
 
 
-            const SizedBox(height: 16),
-            Text(
-              user.userMetadata?['displayName'] ?? 'Nieznany Użytkownik',
-              style: Theme.of(context).textTheme.titleLarge,
-            ),
-            const SizedBox(height: 8),
+              const SizedBox(height: 16),
+              Text(
+                user.userMetadata?['displayName'] ?? context.loc.unknownUserHeader,
+                style: Theme.of(context).textTheme.titleLarge,
+              ),
+              const SizedBox(height: 8),
 
-          ],
+            ],
+          ),
         ),
       ),
     );

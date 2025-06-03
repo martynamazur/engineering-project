@@ -87,16 +87,28 @@ abstract class _$AppRouter extends RootStackRouter {
         ),
       );
     },
-    CreatedOutfitsRoute.name: (routeData) {
+    CreatedOutfitSuccessfulRoute.name: (routeData) {
       return AutoRoutePage<dynamic>(
         routeData: routeData,
-        child: const CreatedOutfitsScreen(),
+        child: const CreatedOutfitSuccessfulScreen(),
       );
     },
-    CreatedOutiftSucesfullRoute.name: (routeData) {
+    CreatedOutfitsRoute.name: (routeData) {
+      final args = routeData.argsAs<CreatedOutfitsRouteArgs>(
+          orElse: () => const CreatedOutfitsRouteArgs());
       return AutoRoutePage<dynamic>(
         routeData: routeData,
-        child: const CreatedOutiftSucesfullScreen(),
+        child: CreatedOutfitsScreen(key: args.key),
+      );
+    },
+    EditClothingitemRoute.name: (routeData) {
+      final args = routeData.argsAs<EditClothingitemRouteArgs>();
+      return AutoRoutePage<dynamic>(
+        routeData: routeData,
+        child: EditClothingitemScreen(
+          key: args.key,
+          clothingItem: args.clothingItem,
+        ),
       );
     },
     EditOutfitDetailsRoute.name: (routeData) {
@@ -199,6 +211,14 @@ abstract class _$AppRouter extends RootStackRouter {
       return AutoRoutePage<dynamic>(
         routeData: routeData,
         child: const SettingDeleteAccountScreen(),
+      );
+    },
+    SettingNotificationsRoute.name: (routeData) {
+      final args = routeData.argsAs<SettingNotificationsRouteArgs>(
+          orElse: () => const SettingNotificationsRouteArgs());
+      return AutoRoutePage<dynamic>(
+        routeData: routeData,
+        child: SettingNotificationsScreen(key: args.key),
       );
     },
     SettingsRoute.name: (routeData) {
@@ -447,31 +467,84 @@ class CreateOutfitRouteArgs {
 }
 
 /// generated route for
-/// [CreatedOutfitsScreen]
-class CreatedOutfitsRoute extends PageRouteInfo<void> {
-  const CreatedOutfitsRoute({List<PageRouteInfo>? children})
+/// [CreatedOutfitSuccessfulScreen]
+class CreatedOutfitSuccessfulRoute extends PageRouteInfo<void> {
+  const CreatedOutfitSuccessfulRoute({List<PageRouteInfo>? children})
       : super(
-          CreatedOutfitsRoute.name,
+          CreatedOutfitSuccessfulRoute.name,
           initialChildren: children,
         );
 
-  static const String name = 'CreatedOutfitsRoute';
+  static const String name = 'CreatedOutfitSuccessfulRoute';
 
   static const PageInfo<void> page = PageInfo<void>(name);
 }
 
 /// generated route for
-/// [CreatedOutiftSucesfullScreen]
-class CreatedOutiftSucesfullRoute extends PageRouteInfo<void> {
-  const CreatedOutiftSucesfullRoute({List<PageRouteInfo>? children})
-      : super(
-          CreatedOutiftSucesfullRoute.name,
+/// [CreatedOutfitsScreen]
+class CreatedOutfitsRoute extends PageRouteInfo<CreatedOutfitsRouteArgs> {
+  CreatedOutfitsRoute({
+    Key? key,
+    List<PageRouteInfo>? children,
+  }) : super(
+          CreatedOutfitsRoute.name,
+          args: CreatedOutfitsRouteArgs(key: key),
           initialChildren: children,
         );
 
-  static const String name = 'CreatedOutiftSucesfullRoute';
+  static const String name = 'CreatedOutfitsRoute';
 
-  static const PageInfo<void> page = PageInfo<void>(name);
+  static const PageInfo<CreatedOutfitsRouteArgs> page =
+      PageInfo<CreatedOutfitsRouteArgs>(name);
+}
+
+class CreatedOutfitsRouteArgs {
+  const CreatedOutfitsRouteArgs({this.key});
+
+  final Key? key;
+
+  @override
+  String toString() {
+    return 'CreatedOutfitsRouteArgs{key: $key}';
+  }
+}
+
+/// generated route for
+/// [EditClothingitemScreen]
+class EditClothingitemRoute extends PageRouteInfo<EditClothingitemRouteArgs> {
+  EditClothingitemRoute({
+    Key? key,
+    required ClothingItem clothingItem,
+    List<PageRouteInfo>? children,
+  }) : super(
+          EditClothingitemRoute.name,
+          args: EditClothingitemRouteArgs(
+            key: key,
+            clothingItem: clothingItem,
+          ),
+          initialChildren: children,
+        );
+
+  static const String name = 'EditClothingitemRoute';
+
+  static const PageInfo<EditClothingitemRouteArgs> page =
+      PageInfo<EditClothingitemRouteArgs>(name);
+}
+
+class EditClothingitemRouteArgs {
+  const EditClothingitemRouteArgs({
+    this.key,
+    required this.clothingItem,
+  });
+
+  final Key? key;
+
+  final ClothingItem clothingItem;
+
+  @override
+  String toString() {
+    return 'EditClothingitemRouteArgs{key: $key, clothingItem: $clothingItem}';
+  }
 }
 
 /// generated route for
@@ -754,6 +827,36 @@ class SettingDeleteAccountRoute extends PageRouteInfo<void> {
   static const String name = 'SettingDeleteAccountRoute';
 
   static const PageInfo<void> page = PageInfo<void>(name);
+}
+
+/// generated route for
+/// [SettingNotificationsScreen]
+class SettingNotificationsRoute
+    extends PageRouteInfo<SettingNotificationsRouteArgs> {
+  SettingNotificationsRoute({
+    Key? key,
+    List<PageRouteInfo>? children,
+  }) : super(
+          SettingNotificationsRoute.name,
+          args: SettingNotificationsRouteArgs(key: key),
+          initialChildren: children,
+        );
+
+  static const String name = 'SettingNotificationsRoute';
+
+  static const PageInfo<SettingNotificationsRouteArgs> page =
+      PageInfo<SettingNotificationsRouteArgs>(name);
+}
+
+class SettingNotificationsRouteArgs {
+  const SettingNotificationsRouteArgs({this.key});
+
+  final Key? key;
+
+  @override
+  String toString() {
+    return 'SettingNotificationsRouteArgs{key: $key}';
+  }
 }
 
 /// generated route for

@@ -12,6 +12,7 @@ class SelectableSeasonTile extends StatelessWidget {
   final Season season;
   final bool isSelected;
 
+
   const SelectableSeasonTile({super.key,
     required this.onTap,
     required this.season,
@@ -29,7 +30,9 @@ class SelectableSeasonTile extends StatelessWidget {
               border: Border.all(
                 color: isSelected ? Colors.blue : Colors.transparent,
                 width: 2
-              )
+              ),
+              borderRadius: BorderRadius.circular(8),
+              color: isSelected ? Colors.yellow : Colors.grey,
             ),
               child: Image.asset(season.seasonImagePath, width: 100, height: 100)),
           Text(season.seasonName),

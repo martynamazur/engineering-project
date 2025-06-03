@@ -6,7 +6,7 @@ part of 'outfit_provider.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$outfitRepositoryHash() => r'c0363bd466b52e9c54bea335f0057985563b5790';
+String _$outfitRepositoryHash() => r'98ca028b965d925e8fb4af25fbf74651842be8a8';
 
 /// See also [outfitRepository].
 @ProviderFor(outfitRepository)
@@ -21,7 +21,7 @@ final outfitRepositoryProvider = AutoDisposeProvider<OutfitRepository>.internal(
 );
 
 typedef OutfitRepositoryRef = AutoDisposeProviderRef<OutfitRepository>;
-String _$getOwnedOutfitsHash() => r'2bc61e3aaef7ef59f7ee694b734d18c608360344';
+String _$getOwnedOutfitsHash() => r'2b1065c0d5a0803bead3c13ce60e5b2a88e683f5';
 
 /// See also [getOwnedOutfits].
 @ProviderFor(getOwnedOutfits)
@@ -37,7 +37,7 @@ final getOwnedOutfitsProvider =
 );
 
 typedef GetOwnedOutfitsRef = AutoDisposeFutureProviderRef<List<Outfit>>;
-String _$saveOutfitHash() => r'c88f1018e46a054214310c052fa7017504f27716';
+String _$saveOutfitHash() => r'7db782a5cd048f31f5f908d06d101e6b59b55ed2';
 
 /// Copied from Dart SDK
 class _SystemHash {
@@ -203,7 +203,7 @@ class _SaveOutfitProviderElement extends AutoDisposeFutureProviderElement<void>
   List<int> get clothingItemId => (origin as SaveOutfitProvider).clothingItemId;
 }
 
-String _$deleteOutfitHash() => r'455636b58f2972f1ac2127b67680eaec4d12da22';
+String _$deleteOutfitHash() => r'ffe07386a8d20732fe9e214c56ce5449b2a4b348';
 
 /// See also [deleteOutfit].
 @ProviderFor(deleteOutfit)
@@ -332,7 +332,7 @@ class _DeleteOutfitProviderElement
 }
 
 String _$editOutfitInformationTagsHash() =>
-    r'df3f212d1bc27bf3ed8b121c59e9b62d006f76e5';
+    r'8745565d0af5988de2100605c291b92e3da0addb';
 
 /// See also [editOutfitInformationTags].
 @ProviderFor(editOutfitInformationTags)
@@ -481,7 +481,7 @@ class _EditOutfitInformationTagsProviderElement
 }
 
 String _$editOutfitInformationSeasonHash() =>
-    r'33ab466afd16c2fd237b480efb2d2e7eac7efc30';
+    r'e4739c19b72eafa6d75131b7511b86f813f754f5';
 
 /// See also [editOutfitInformationSeason].
 @ProviderFor(editOutfitInformationSeason)
@@ -628,7 +628,7 @@ class _EditOutfitInformationSeasonProviderElement
   int get outfitId => (origin as EditOutfitInformationSeasonProvider).outfitId;
 }
 
-String _$getOutfitHash() => r'6aadf37c47377a5ef3f942dc2544d72940b8c5a6';
+String _$getOutfitHash() => r'ff75f8b17c173f67deccbe14746e82ccba8f723e';
 
 /// See also [getOutfit].
 @ProviderFor(getOutfit)

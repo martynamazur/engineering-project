@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:riverpod/riverpod.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:dio/dio.dart';
 
@@ -9,7 +10,7 @@ import '../../data/repository/remove_bg_repository.dart';
 part 'remove_bg_provider.g.dart';
 
 @riverpod
-Dio dio (DioRef ref) {
+Dio dio (Ref ref) {
   final apiKe = dotenv.env['REMOVE_BG_API_KEY'];
   final options = BaseOptions(
     baseUrl: 'https://api.remove.bg/v1.0/',
@@ -21,12 +22,12 @@ Dio dio (DioRef ref) {
 }
 
 @riverpod
-RemoveBgRepository removeBgRepository (RemoveBgRepositoryRef ref) {
+RemoveBgRepository removeBgRepository (Ref ref) {
   return RemoveBgRepository(ref.watch(dioProvider)) ;
 }
 
 @riverpod
-Future<File?> removePhotoBackground(RemovePhotoBackgroundRef ref,File image ) async {
+Future<File?> removePhotoBackground(Ref ref,File image ) async {
   return ref.watch(removeBgRepositoryProvider).removeBackground(image);
 }
 

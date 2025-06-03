@@ -1,20 +1,11 @@
-import 'package:auto_route/annotations.dart';
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:ootd/domain/state_management/outfit_list_notifier.dart';
+import 'package:ootd/extensions/localization_extension.dart';
 import 'package:ootd/domain/state_management/outfit_provider.dart';
 import 'package:ootd/model/outfit.dart';
-import 'package:ootd/model/season.dart';
-import 'package:ootd/navigation/app_router.dart';
-import 'package:ootd/presentation/styles/season_dropdown.dart';
-import 'package:screenshot/screenshot.dart';
-import 'package:textfield_tags/textfield_tags.dart';
 
-import '../domain/state_management/clothes_category_provider.dart';
 import '../domain/state_management/season_provider.dart';
-import 'package:filter_list/filter_list.dart';
 
 @RoutePage()
 class EditOutfitDetailsScreen extends ConsumerStatefulWidget {
@@ -29,7 +20,7 @@ class EditOutfitDetailsScreen extends ConsumerStatefulWidget {
 
 class _EditOutfitDetailsState extends ConsumerState<EditOutfitDetailsScreen> {
   late String _selectedSeason;
-  List<String> _newTags = ['grzesiu']; //nowe ktore dodaje
+  List<String> _newTags = []; //nowe ktore dodaje
   List<String> _allTags = [];
   //lista aby wyswietlic wszystkie aktualne tagi stare+nowe
 
@@ -45,43 +36,45 @@ class _EditOutfitDetailsState extends ConsumerState<EditOutfitDetailsScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      bottomNavigationBar: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: SizedBox(
-          width: double.infinity,
-          child: OutlinedButton(
-            onPressed: () async{
-              // zapis db jako update bo mam i tak tablice poprzednia z obiektu outfit
-              //cofniecie sie do ekranu porpzedniego
-              //odswiezenie sekcji Tagi
-              //odswiezenie sekcji Season
-
-              if(_newTags.isNotEmpty) ref.read(editOutfitInformationTagsProvider([..._newTags,..._allTags], widget.outfit.id));
-              if(_selectedSeason != widget.outfit.season) ref.read(editOutfitInformationSeasonProvider(_selectedSeason, widget.outfit.id));
-              ref.invalidate(getOutfitProvider(widget.outfit.id));//to pobierze od nowa cala liste strojów
-              //problem bo przekazuje obiekt bez pobierania danych ponownie wiec po odswiezeniu nic sie nie dzieje
-
-              print('tags: $_newTags, season: $_selectedSeason');
-              if(mounted)context.router.maybePop();
-
-            },
-            child: Text('Save'),
-          ),
-        ),
-      ),
+      bottomNavigationBar: _buildBottomNavigationBar(context),
       appBar: AppBar(
-        title: Text('Edit information'),
+        title: Text(context.loc.editInformationHeader),
       ),
       body: SafeArea(
           child: SingleChildScrollView(
-        child: Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: Column(
-            mainAxisSize: MainAxisSize.max,
-            children: [_buildSeasonSection(), _buildTagSection()],
-          ),
+            padding: const EdgeInsets.all(8.0),
+        child: Column(
+          mainAxisSize: MainAxisSize.max,
+          children: [_buildSeasonSection(), _buildTagSection()],
         ),
       )),
+    );
+  }
+
+  Padding _buildBottomNavigationBar(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.all(16.0),
+      child: SizedBox(
+        width: double.infinity,
+        child: OutlinedButton(
+          onPressed: () async{
+            // zapis db jako update bo mam i tak tablice poprzednia z obiektu outfit
+            //cofniecie sie do ekranu porpzedniego
+            //odswiezenie sekcji Tagi
+            //odswiezenie sekcji Season
+
+            if(_newTags.isNotEmpty) ref.read(editOutfitInformationTagsProvider([..._newTags,..._allTags], widget.outfit.id));
+            if(_selectedSeason != widget.outfit.season) ref.read(editOutfitInformationSeasonProvider(_selectedSeason, widget.outfit.id));
+            ref.invalidate(getOutfitProvider(widget.outfit.id));//to pobierze od nowa cala liste strojów
+            //problem bo przekazuje obiekt bez pobierania danych ponownie wiec po odswiezeniu nic sie nie dzieje
+
+            print('tags: $_newTags, season: $_selectedSeason');
+            if(mounted)context.router.maybePop();
+
+          },
+          child: Text(context.loc.save),
+        ),
+      ),
     );
   }
 
@@ -90,13 +83,13 @@ class _EditOutfitDetailsState extends ConsumerState<EditOutfitDetailsScreen> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text('Season',
-            style: TextStyle(fontWeight: FontWeight.bold, fontSize: 32.0)),
+        Text(context.loc.seasonHeader,
+            style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 32.0)),
         GridView.builder(
             shrinkWrap: true,
             itemCount: seasonList.length,
-            physics: NeverScrollableScrollPhysics(),
-            gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+            physics: const NeverScrollableScrollPhysics(),
+            gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
               crossAxisCount: 2,
             ),
             itemBuilder: (context, index) {
@@ -120,21 +113,20 @@ class _EditOutfitDetailsState extends ConsumerState<EditOutfitDetailsScreen> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-      Text('Tags',
-          style: TextStyle(fontWeight: FontWeight.bold, fontSize: 32.0)),
+      Text(context.loc.tagsHeader,
+          style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 32.0)),
       Wrap(
         spacing: 8.0,
         runSpacing: 4.0,
         children: [..._newTags,..._allTags].map((tag) => Chip(label: Text(tag))).toList(),
       ),
       IconButton(
-          onPressed: () => _addNewTagDialog(),
-          icon: Icon(Icons.add))
+          onPressed: () => _showAddNewTagDialog(),
+          icon: const Icon(Icons.add))
     ]);
   }
 
-
-  void _addNewTagDialog() {
+  void _showAddNewTagDialog() {
     String newTag = '';
     showDialog(
       context: context,

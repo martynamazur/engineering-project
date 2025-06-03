@@ -1,6 +1,7 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:ootd/presentation/account_settings.dart';
+import '../presentation/edit_clothingitem.dart';
 import '../presentation/setting_change_email_adress.dart';
 import '../presentation/setting_change_password.dart';
 import 'package:ootd/presentation/add_outfit_to_planer.dart';
@@ -33,6 +34,7 @@ import '../presentation/setting_change_email_adress.dart';
 import '../presentation/setting_change_password.dart';
 import '../presentation/setting_delete_account.dart';
 import '../presentation/setting_email_adress_sent_confirmation.dart';
+import '../presentation/setting_notifications.dart';
 part 'app_router.gr.dart';
 
 @AutoRouterConfig(replaceInRouteName: 'Screen|Page,Route')
@@ -56,7 +58,7 @@ class AppRouter extends _$AppRouter {
         AutoRoute(page: FilterRoute.page),
         AutoRoute(page: AddClothesRoute.page),
         AutoRoute(page: CreateOutfitRoute.page, path: '/create-outfit/:templateId' ),
-        AutoRoute(page: CreatedOutiftSucesfullRoute.page),
+        AutoRoute(page: CreatedOutfitSuccessfulRoute.page),
         AutoRoute(page: SettingsRoute.page),
         AutoRoute(page: OutfitOverviewRoute.page),
         AutoRoute(page: ChooseTemplateRoute.page),
@@ -68,7 +70,9 @@ class AppRouter extends _$AppRouter {
         AutoRoute(page: SettingChangeEmailAdressRoute.page),
         AutoRoute(page: SettingChangePasswordRoute.page),
         AutoRoute(page: EmailAddressSentConfirmationRoute.page),
-        AutoRoute(page: SettingDeleteAccountRoute.page)
+        AutoRoute(page: SettingDeleteAccountRoute.page),
+        AutoRoute(page: SettingNotificationsRoute.page),
+        AutoRoute(page: EditClothingitemRoute.page)
     
       ];
 }

@@ -53,7 +53,6 @@ class ClothesRepository {
 
   Future<void> deleteClothingItem(int clothingItemId) async{
     try{
-      print('id usuwanego elementu $clothingItemId');
       await supabase.from('clothingitem').delete().eq('clothing_item_id', clothingItemId);
 
     }catch (e) {
@@ -84,6 +83,15 @@ class ClothesRepository {
     }catch (e) {
       print('Caught an error: $e');
       throw Exception('Theres no clothes ');
+    }
+  }
+  
+  Future<void> editClothingItemInformation(int clothingItemId, int newCategoryId, List<Season> newSeasons) async{
+    try{
+      await supabase.from('clothingitem').update({'item_category_id': newCategoryId, 'seasons':newSeasons}).eq('clothing_item_id', clothingItemId);
+      
+    }catch(e){
+      print(e);
     }
   }
 }

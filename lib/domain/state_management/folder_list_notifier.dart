@@ -1,12 +1,10 @@
 import 'package:ootd/domain/state_management/clothes_folder_provider.dart';
 import 'package:ootd/model/closet_folder.dart';
-import 'package:ootd/model/clothing_item.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'folder_list_notifier.g.dart';
 
 @Riverpod(keepAlive: true)
-//@riverpod
 class FolderListNotifier extends _$FolderListNotifier {
   List<ClosetFolder> _originalList = [];
 
@@ -23,11 +21,10 @@ class FolderListNotifier extends _$FolderListNotifier {
   }
 
 
-  //on home screen
   Future<void> removeFolder(int folderId) async{
     _originalList = _originalList.where((folder) => folder.closetId != folderId).toList();
     state = AsyncData(_originalList);
-    ref.read(deleteFolderProvider(folderId));//z db
+    ref.read(deleteFolderProvider(folderId:  folderId));//z db
   }
 
   Future<void> removeClothingItemFromFolder(int folderId, int clothingItemId)async {

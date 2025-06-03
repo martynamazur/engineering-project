@@ -7,7 +7,7 @@ part of 'clothes_folder_provider.dart';
 // **************************************************************************
 
 String _$clothesFolderRepositoryHash() =>
-    r'0a94382dda2c4cbe13603b2695754ce401283594';
+    r'9e91bb60582f984f7bf447f93e1ab4cc779e496d';
 
 /// See also [clothesFolderRepository].
 @ProviderFor(clothesFolderRepository)
@@ -25,7 +25,7 @@ final clothesFolderRepositoryProvider =
 typedef ClothesFolderRepositoryRef
     = AutoDisposeProviderRef<ClothesFolderRepository>;
 String _$folderListNotifierHash() =>
-    r'4e721cb99fce69c8a457d6e6d6a293fdc6254f6a';
+    r'26c4a442dac5ccd402920ade666733ddb1ae4bf8';
 
 /// See also [folderListNotifier].
 @ProviderFor(folderListNotifier)
@@ -41,7 +41,7 @@ final folderListNotifierProvider =
 );
 
 typedef FolderListNotifierRef = AutoDisposeProviderRef<FolderListNotifier>;
-String _$getClosetFolderHash() => r'c4d1deb7ae03a567405419bd306736cb26a91d81';
+String _$getClosetFolderHash() => r'a3c510ebfa82b8b25febebca26a9234aa5635091';
 
 /// See also [getClosetFolder].
 @ProviderFor(getClosetFolder)
@@ -57,7 +57,7 @@ final getClosetFolderProvider =
 );
 
 typedef GetClosetFolderRef = AutoDisposeFutureProviderRef<List<ClosetFolder>>;
-String _$getFolderHash() => r'76928038dc386b02267a8a82056d1c65c86cb6a4';
+String _$getFolderHash() => r'5d750927f4a7de24dbfc861374be4ddf0d2ca22a';
 
 /// Copied from Dart SDK
 class _SystemHash {
@@ -206,7 +206,7 @@ class _GetFolderProviderElement
 }
 
 String _$clothesListNotifierHash() =>
-    r'd3f7ae1c30ba4687e2286b2e3673cc17dab9c77e';
+    r'8f9362d3fe1ba289014a4453199735775158b855';
 
 /// See also [clothesListNotifier].
 @ProviderFor(clothesListNotifier)
@@ -222,7 +222,7 @@ final clothesListNotifierProvider =
 );
 
 typedef ClothesListNotifierRef = AutoDisposeProviderRef<ClothesListNotifier>;
-String _$deleteFolderHash() => r'a04b63c0fe14bbec345ff89b89c5a1b51e2201bd';
+String _$deleteFolderHash() => r'3dc8ace3f1a80df8dc7094d923a9ca946866288e';
 
 /// See also [deleteFolder].
 @ProviderFor(deleteFolder)
@@ -234,11 +234,11 @@ class DeleteFolderFamily extends Family<AsyncValue<void>> {
   const DeleteFolderFamily();
 
   /// See also [deleteFolder].
-  DeleteFolderProvider call(
-    int folderId,
-  ) {
+  DeleteFolderProvider call({
+    required int folderId,
+  }) {
     return DeleteFolderProvider(
-      folderId,
+      folderId: folderId,
     );
   }
 
@@ -247,7 +247,7 @@ class DeleteFolderFamily extends Family<AsyncValue<void>> {
     covariant DeleteFolderProvider provider,
   ) {
     return call(
-      provider.folderId,
+      folderId: provider.folderId,
     );
   }
 
@@ -269,12 +269,12 @@ class DeleteFolderFamily extends Family<AsyncValue<void>> {
 /// See also [deleteFolder].
 class DeleteFolderProvider extends AutoDisposeFutureProvider<void> {
   /// See also [deleteFolder].
-  DeleteFolderProvider(
-    int folderId,
-  ) : this._internal(
+  DeleteFolderProvider({
+    required int folderId,
+  }) : this._internal(
           (ref) => deleteFolder(
             ref as DeleteFolderRef,
-            folderId,
+            folderId: folderId,
           ),
           from: deleteFolderProvider,
           name: r'deleteFolderProvider',
@@ -350,7 +350,7 @@ class _DeleteFolderProviderElement
   int get folderId => (origin as DeleteFolderProvider).folderId;
 }
 
-String _$changeFolderNameHash() => r'd3c2c329f5194edd7b06f7c426085e3e4c2d2704';
+String _$changeFolderNameHash() => r'f2f1b9f8337d510865870534997d40d9f7baf82b';
 
 /// See also [changeFolderName].
 @ProviderFor(changeFolderName)
@@ -362,13 +362,13 @@ class ChangeFolderNameFamily extends Family<AsyncValue<void>> {
   const ChangeFolderNameFamily();
 
   /// See also [changeFolderName].
-  ChangeFolderNameProvider call(
-    String newFolderName,
-    int folderId,
-  ) {
+  ChangeFolderNameProvider call({
+    required String newFolderName,
+    required int folderId,
+  }) {
     return ChangeFolderNameProvider(
-      newFolderName,
-      folderId,
+      newFolderName: newFolderName,
+      folderId: folderId,
     );
   }
 
@@ -377,8 +377,8 @@ class ChangeFolderNameFamily extends Family<AsyncValue<void>> {
     covariant ChangeFolderNameProvider provider,
   ) {
     return call(
-      provider.newFolderName,
-      provider.folderId,
+      newFolderName: provider.newFolderName,
+      folderId: provider.folderId,
     );
   }
 
@@ -400,14 +400,14 @@ class ChangeFolderNameFamily extends Family<AsyncValue<void>> {
 /// See also [changeFolderName].
 class ChangeFolderNameProvider extends AutoDisposeFutureProvider<void> {
   /// See also [changeFolderName].
-  ChangeFolderNameProvider(
-    String newFolderName,
-    int folderId,
-  ) : this._internal(
+  ChangeFolderNameProvider({
+    required String newFolderName,
+    required int folderId,
+  }) : this._internal(
           (ref) => changeFolderName(
             ref as ChangeFolderNameRef,
-            newFolderName,
-            folderId,
+            newFolderName: newFolderName,
+            folderId: folderId,
           ),
           from: changeFolderNameProvider,
           name: r'changeFolderNameProvider',
@@ -496,7 +496,7 @@ class _ChangeFolderNameProviderElement
   int get folderId => (origin as ChangeFolderNameProvider).folderId;
 }
 
-String _$createNewFolderHash() => r'b8f52226b3d38e8ec8b5f6a5ad9406d7e8f8d7ff';
+String _$createNewFolderHash() => r'84f988bf74e527189c89db5d9b98e34b76f50716';
 
 /// See also [createNewFolder].
 @ProviderFor(createNewFolder)
@@ -508,11 +508,11 @@ class CreateNewFolderFamily extends Family<AsyncValue<ClosetFolder>> {
   const CreateNewFolderFamily();
 
   /// See also [createNewFolder].
-  CreateNewFolderProvider call(
-    String folderName,
-  ) {
+  CreateNewFolderProvider call({
+    required String folderName,
+  }) {
     return CreateNewFolderProvider(
-      folderName,
+      folderName: folderName,
     );
   }
 
@@ -521,7 +521,7 @@ class CreateNewFolderFamily extends Family<AsyncValue<ClosetFolder>> {
     covariant CreateNewFolderProvider provider,
   ) {
     return call(
-      provider.folderName,
+      folderName: provider.folderName,
     );
   }
 
@@ -543,12 +543,12 @@ class CreateNewFolderFamily extends Family<AsyncValue<ClosetFolder>> {
 /// See also [createNewFolder].
 class CreateNewFolderProvider extends AutoDisposeFutureProvider<ClosetFolder> {
   /// See also [createNewFolder].
-  CreateNewFolderProvider(
-    String folderName,
-  ) : this._internal(
+  CreateNewFolderProvider({
+    required String folderName,
+  }) : this._internal(
           (ref) => createNewFolder(
             ref as CreateNewFolderRef,
-            folderName,
+            folderName: folderName,
           ),
           from: createNewFolderProvider,
           name: r'createNewFolderProvider',
@@ -626,7 +626,7 @@ class _CreateNewFolderProviderElement
 }
 
 String _$addClothesToFolderHash() =>
-    r'a3d9f175c2b715b7df35199475edebca4b5de28e';
+    r'fe7408364fa0ed9f0b447d453f37833c0385473c';
 
 /// See also [addClothesToFolder].
 @ProviderFor(addClothesToFolder)
@@ -638,13 +638,13 @@ class AddClothesToFolderFamily extends Family<AsyncValue<void>> {
   const AddClothesToFolderFamily();
 
   /// See also [addClothesToFolder].
-  AddClothesToFolderProvider call(
-    List<int> clothesId,
-    int folderId,
-  ) {
+  AddClothesToFolderProvider call({
+    required List<int> clothesId,
+    required int folderId,
+  }) {
     return AddClothesToFolderProvider(
-      clothesId,
-      folderId,
+      clothesId: clothesId,
+      folderId: folderId,
     );
   }
 
@@ -653,8 +653,8 @@ class AddClothesToFolderFamily extends Family<AsyncValue<void>> {
     covariant AddClothesToFolderProvider provider,
   ) {
     return call(
-      provider.clothesId,
-      provider.folderId,
+      clothesId: provider.clothesId,
+      folderId: provider.folderId,
     );
   }
 
@@ -676,14 +676,14 @@ class AddClothesToFolderFamily extends Family<AsyncValue<void>> {
 /// See also [addClothesToFolder].
 class AddClothesToFolderProvider extends AutoDisposeFutureProvider<void> {
   /// See also [addClothesToFolder].
-  AddClothesToFolderProvider(
-    List<int> clothesId,
-    int folderId,
-  ) : this._internal(
+  AddClothesToFolderProvider({
+    required List<int> clothesId,
+    required int folderId,
+  }) : this._internal(
           (ref) => addClothesToFolder(
             ref as AddClothesToFolderRef,
-            clothesId,
-            folderId,
+            clothesId: clothesId,
+            folderId: folderId,
           ),
           from: addClothesToFolderProvider,
           name: r'addClothesToFolderProvider',
@@ -771,7 +771,7 @@ class _AddClothesToFolderProviderElement
   int get folderId => (origin as AddClothesToFolderProvider).folderId;
 }
 
-String _$getAllClothesHash() => r'f6367fa614b88c321588a5574118730d45eee32c';
+String _$getAllClothesHash() => r'dfb65ef21eafcfc19e662308f6f947d3e9b53970';
 
 /// See also [getAllClothes].
 @ProviderFor(getAllClothes)
@@ -788,7 +788,7 @@ final getAllClothesProvider =
 
 typedef GetAllClothesRef = AutoDisposeFutureProviderRef<List<ClothingItem>>;
 String _$removeClothingItemFromFolderHash() =>
-    r'e1cb3499aab43df2f9359c313a2895b7fdf892c3';
+    r'1912938a4b770a90a8e636958a40ea1309ea3ff2';
 
 /// See also [removeClothingItemFromFolder].
 @ProviderFor(removeClothingItemFromFolder)
@@ -801,13 +801,13 @@ class RemoveClothingItemFromFolderFamily extends Family<AsyncValue<void>> {
   const RemoveClothingItemFromFolderFamily();
 
   /// See also [removeClothingItemFromFolder].
-  RemoveClothingItemFromFolderProvider call(
-    int folderId,
-    int clothingItemId,
-  ) {
+  RemoveClothingItemFromFolderProvider call({
+    required int folderId,
+    required int clothingItemId,
+  }) {
     return RemoveClothingItemFromFolderProvider(
-      folderId,
-      clothingItemId,
+      folderId: folderId,
+      clothingItemId: clothingItemId,
     );
   }
 
@@ -816,8 +816,8 @@ class RemoveClothingItemFromFolderFamily extends Family<AsyncValue<void>> {
     covariant RemoveClothingItemFromFolderProvider provider,
   ) {
     return call(
-      provider.folderId,
-      provider.clothingItemId,
+      folderId: provider.folderId,
+      clothingItemId: provider.clothingItemId,
     );
   }
 
@@ -840,14 +840,14 @@ class RemoveClothingItemFromFolderFamily extends Family<AsyncValue<void>> {
 class RemoveClothingItemFromFolderProvider
     extends AutoDisposeFutureProvider<void> {
   /// See also [removeClothingItemFromFolder].
-  RemoveClothingItemFromFolderProvider(
-    int folderId,
-    int clothingItemId,
-  ) : this._internal(
+  RemoveClothingItemFromFolderProvider({
+    required int folderId,
+    required int clothingItemId,
+  }) : this._internal(
           (ref) => removeClothingItemFromFolder(
             ref as RemoveClothingItemFromFolderRef,
-            folderId,
-            clothingItemId,
+            folderId: folderId,
+            clothingItemId: clothingItemId,
           ),
           from: removeClothingItemFromFolderProvider,
           name: r'removeClothingItemFromFolderProvider',

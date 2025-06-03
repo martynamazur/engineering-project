@@ -8,7 +8,7 @@ part of 'schedule.dart';
 
 _$ScheduleImpl _$$ScheduleImplFromJson(Map<String, dynamic> json) =>
     _$ScheduleImpl(
-      id: json['id'] as String?,
+      id: json['schedule_id'] as String?,
       scheduleDate: DateTime.parse(json['schedule_date'] as String),
       scheduleTime: json['schedule_time'] as String,
       outfitId: (json['outfit_id'] as num?)?.toInt(),
@@ -17,7 +17,7 @@ _$ScheduleImpl _$$ScheduleImplFromJson(Map<String, dynamic> json) =>
 
 Map<String, dynamic> _$$ScheduleImplToJson(_$ScheduleImpl instance) =>
     <String, dynamic>{
-      'id': instance.id,
+      'schedule_id': instance.id,
       'schedule_date': instance.scheduleDate.toIso8601String(),
       'schedule_time': instance.scheduleTime,
       'outfit_id': instance.outfitId,

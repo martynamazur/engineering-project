@@ -1,0 +1,108 @@
+{
+  "@@locale": "pl",
+
+  "loginHeader": "Logowanie",
+  "loginFailedTitle": "Logowanie nieudane",
+  "loginFailedMessage": "Nieprawidłowy e-mail lub hasło",
+  "emptyEmail": "Pole e-mail nie może być puste",
+  "invalidEmail": "Wprowadź poprawny adres e-mail",
+  "resetPasswordHeader": "Resetowanie hasła",
+  "signIn": "Zaloguj się",
+
+  "settingsHeader": "Ustawienia",
+  "notificationSettingsHeader": "Ustawienia powiadomień",
+  "privacySettingsHeader": "Ustawienia prywatności",
+  "helpAndSupportHeader": "Pomoc i wsparcie",
+
+  "accountSettingsHeader": "Ustawienia konta",
+  "changePasswordTitle": "Zmień hasło",
+  "changeEmailAddress": "Zmień adres e-mail",
+  "deleteMyAccountTitle": "Usuń moje konto",
+
+  "logOutHeader": "Wyloguj się",
+
+  "deleteAccountHeader": "Usuń konto",
+  "deleteAccountWarningText": "Twoje konto zostanie usunięte 30 dni po wylogowaniu. Jeśli w tym czasie zalogujesz się ponownie, dostęp do konta zostanie przywrócony, a konto nie zostanie usunięte.",
+
+  "invalidEmailAddress": "Nieprawidłowy e-mail",
+  "newEmailAddressLabel": "Nowy adres e-mail",
+  "changeLabel": "Zmień",
+
+  "registrationSuccessful": "Rejestracja zakończona sukcesem!",
+  "accountCreationConfirmationMessage": "Twoje konto zostało utworzone. Sprawdź swój e-mail, aby potwierdzić konto przed zalogowaniem.",
+  "goToLogin": "Przejdź do logowania",
+
+  "createAccountHeader": "Utwórz konto",
+  "fillInformationMessage": "Uzupełnij swoje dane poniżej",
+  "signUp": "Zarejestruj się",
+  "nameLabel": "Imię",
+  "emailLabel": "E-mail",
+  "passwordLabel": "Hasło",
+  "agreeWith": "Zgadzam się z",
+  "termsAndConditions": "Regulaminem",
+
+  "monthlyHeader": "Miesięczny",
+  "weeklyHeader": "Tygodniowy",
+  "yourOutfitsHeader": "Twoje stroje",
+  "addAnother": "Dodaj kolejny",
+
+  "pickClothesHeader": "Wybierz ubrania",
+  "youDoNotOwnClothesMessages": "Nie posiadasz żadnych ubrań",
+
+  "close": "Zamknij",
+  "next": "Dalej",
+  "send": "Wyślij",
+  "success": "Sukces",
+  "delete": "Usuń",
+  "edit": "Edytuj",
+  "save": "Zapisz",
+  "previous": "Poprzedni",
+  "cancel": "Anuluj",
+  "add": "Dodaj",
+
+  "seasonHeader": "Sezon",
+  "tagsHeader": "Tagi",
+  "noTagsAvailableMessage": "Brak dostępnych tagów",
+  "addAnewTag": "Dodaj nowy tag",
+
+  "profileHeader": "Mój profil",
+  "unknownUserHeader": "Nieznany użytkownik",
+
+  "coat": "Płaszcz",
+  "top": "Góra",
+  "bottom": "Dół",
+  "dress": "Sukienka",
+  "underwear": "Bielizna",
+  "accessories": "Akcesoria",
+  "shoes": "Buty",
+
+  "newTag": "Nowy tag",
+  "addTag": "Dodaj tag",
+  "seasonInformationMessage": "Ten strój mogę nosić w...",
+  "noSeasonAvailableMessage": "Brak dostępnych sezonów",
+  "applyFilters": "Zastosuj filtry",
+
+  "editInformationHeader": "Edytuj informacje",
+
+  "savedOutfitMessage": "Strój został zapisany!",
+  "createAnother": "Utwórz kolejny",
+  "redirectToOutfitGalleryMessage": "Przejdź do galerii strojów",
+
+  "templateHeader": "Szablon",
+  "createFromEmptyMessage": "Utwórz od zera",
+
+  "pickOutfitMessage": "Wybierz strój na dzień",
+
+  "noDataToDisplayMessage": "Brak danych do wyświetlenia",
+
+  "changeFolderName": "Zmień nazwę folderu",
+  "deleteFolder": "Usuń folder",
+  "emptyCloset": "Pusty szafa",
+  "imageNotAvailable": "Obraz niedostępny",
+
+  "closetHeader": "Szafa",
+
+  "addNewPieces": "Zacznij dodawac poszczegolne częsci",
+  "noItemsFound": "Nie znaleziono żadnych części dla danej kategori",
+  "failedToLoadImage": "Nie powiodło sie wczytanie"
+}

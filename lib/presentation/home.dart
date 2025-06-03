@@ -2,6 +2,7 @@ import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:ootd/domain/state_management/clothes_provider.dart';
+import 'package:ootd/l10n/app_localizations.dart';
 import 'package:ootd/model/clothing_item.dart';
 import 'package:ootd/navigation/app_router.dart';
 
@@ -34,7 +35,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
 
   return Scaffold(
       appBar: AppBar(
-        title: const Text('Szafa'),
+        title: Text(AppLocalizations.of(context)!.closetHeader),
         actions: [
           IconButton(
             icon: Icon(gridViewType == GridViewType.large ? Icons.grid_view : Icons.view_module),
@@ -44,14 +45,13 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
               });
             },
           ),
-          IconButton(onPressed: () => _createNewFolderDialog(), icon: const Icon(Icons.add_box_rounded))
+          IconButton(onPressed: () => _showCreateNewFolderDialog(), icon: const Icon(Icons.add_box_rounded))
         ],
       ),
       body: RefreshIndicator(
         onRefresh: () async {
           ref.refresh(folderList.folderListNotifierProvider);
         },
-
 
         child: folderListNotifier.when(
           data: (folders) => isThereAnyClothes != 0 ? _buildGridView(gridViewType, folders, ref) : _buildEmptyCloset(),
@@ -90,8 +90,8 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
           context.router.push(ClosetFolderOverviewRoute(folderId: folder.closetId));
         },
         onLongPress: () {
-          _confirmFolderDeletion(folder.closetId);
-          ref.read(deleteClothingItemProvider(folder.closetId));
+          _showFolderDeletionDialog(folderId: folder.closetId);
+          ref.read(deleteClothingItemProvider(clothingItemId:  folder.closetId));
         },
         child: Column(
           children: [
@@ -121,17 +121,13 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                     ),
                     itemCount: 6,
                     itemBuilder: (context, index) {
-
-                      if(folder.clothingItems.isEmpty){
-                        _buildPlaceholder();//iteruje 6 razy wiec nie potrzeba for
-                      }
-
+                      if(folder.clothingItems.isEmpty) _buildAddItemPlaceholder();
 
                       if(index < folder.clothingItems.length){
                         final clothingItem = folder.clothingItems[index];
-                        return _buildListItem(clothingItem);
+                        return _buildListItem(clothingItem:  clothingItem);
                       }else{
-                        return _buildPlaceholder();
+                        return _buildAddItemPlaceholder();
                       }
 
                     },
@@ -168,7 +164,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
     padding: const EdgeInsets.all(8.0),
     child: GestureDetector(
       onTap: () => context.router.push(ClosetFolderOverviewRoute(folderId: folderC.closetId)),
-      onLongPress: () => _confirmFolderDeletion(folderC.closetId),
+      onLongPress: () => _showFolderDeletionDialog(folderId:folderC.closetId),
       child: Column( // aby na dole umiesc tekst
         children: [
           //tu buduje jak wewnatrz wyglada grid ze zdjeciami elementu
@@ -222,7 +218,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
               itemCount: folder.length,
               itemBuilder: (context, index) {
                 final clothingItem = folder[index];
-                return _buildListItem(clothingItem);
+                return _buildListItem(clothingItem: clothingItem);
               },
               shrinkWrap: true,
               physics: NeverScrollableScrollPhysics(),
@@ -251,30 +247,26 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
   );
 }
 
-  Container _buildListItem(ClothingItem clothingItem) {
+  Container _buildListItem({required ClothingItem clothingItem}) {
     return Container(
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(8.0),
-        color: Colors.blue,
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withOpacity(0.1),
-            spreadRadius: 2,
-            blurRadius: 5,
-            offset: const Offset(0, 3),
-          ),
-        ],
+        border: Border.all(color: Colors.grey),
+        color: Colors.white,
       ),
-      child: ClipRRect(
-        borderRadius: BorderRadius.circular(8.0),
-        child: Image.network(
-          clothingItem.itemPhoto,
-          fit: BoxFit.cover,
-          errorBuilder: (context, error, stackTrace) {
-            return const Center(child: Text('Image not available'));
-          },
-        ),
+      child: Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: ClipRRect(
+          borderRadius: BorderRadius.circular(8.0),
+          child: Image.network(
+            clothingItem.itemPhoto,
+            fit: BoxFit.cover,
+            errorBuilder: (context, error, stackTrace) {
+              return const Center(child: Text('Image not available'));
+            },
+          ),
 
+        ),
       ),
     );
   }
@@ -300,26 +292,20 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
     );
   }
 
-  Widget _buildPlaceholder(){
+  Widget _buildAddItemPlaceholder(){
     return Container(
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(8.0),
+        border: Border.all(color: Colors.grey),
         color: Colors.white70,
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withOpacity(0.1),
-            spreadRadius: 2,
-            blurRadius: 5,
-            offset: const Offset(0, 3),
-          ),
-        ],
       ),
-      child: Icon(Icons.add, color: Colors.lightGreenAccent),
+      child: Icon(Icons.add, color: Colors.green),
     );
 
   }
 
-  void _confirmFolderDeletion(int folderId) {
+  void _showFolderDeletionDialog(
+      {required int folderId}) {
     showDialog(
       context: context,
       builder: (BuildContext context) {
@@ -357,8 +343,8 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
     );
   }
 
-  void _createNewFolderDialog() {
-    final _controller = TextEditingController();
+  void _showCreateNewFolderDialog() {
+    final controller = TextEditingController();
 
     showDialog(
       context: context,
@@ -371,7 +357,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
               Text('Please enter the new folder name:'),
               SizedBox(height: 10),
               TextField(
-                controller: _controller,
+                controller: controller,
                 decoration: InputDecoration(hintText: 'Folder Name'),
               ),
             ],
@@ -385,8 +371,8 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
             ),
             TextButton(
               onPressed: () async {
-                if (_controller.text.isNotEmpty) {
-                  final newFolder = await ref.read(createNewFolderProvider(_controller.text).future);
+                if (controller.text.isNotEmpty) {
+                  final newFolder = await ref.read(createNewFolderProvider(folderName:  controller.text).future);
                   await ref.read(folderList.folderListNotifierProvider.notifier).addFolder(newFolder);
                 }
                 if (mounted) {

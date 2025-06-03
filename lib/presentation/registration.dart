@@ -1,11 +1,10 @@
 import 'package:another_flushbar/flushbar.dart';
-import 'package:auto_route/annotations.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:ootd/extensions/localization_extension.dart';
 import 'package:ootd/navigation/app_router.dart';
 import 'package:ootd/presentation/styles/headline_text.dart';
 import 'package:auto_route/auto_route.dart';
-import 'package:ootd/presentation/styles/password_validator.dart';
 import '../domain/state_management/user_provider.dart';
 
 @RoutePage()
@@ -23,7 +22,7 @@ class RegistrationState extends ConsumerState<RegistrationScreen> {
   final _formKey = GlobalKey<FormState>();
   bool _checkbox = false;
   bool _obscureText = true;
-  bool _passwordIconVisibility = true;
+
 
   @override
   void dispose() {
@@ -33,7 +32,6 @@ class RegistrationState extends ConsumerState<RegistrationScreen> {
     super.dispose();
   }
 
-  // Each time the page rebuild, variables resets too
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -41,41 +39,37 @@ class RegistrationState extends ConsumerState<RegistrationScreen> {
         leading: IconButton(
           icon: const Icon(Icons.arrow_back),
           onPressed: () {
-            //Navigator.of(context).pop();
             context.router.maybePop();
           },
         ),
       ),
-      body: SingleChildScrollView(
-        child: SafeArea(
-          child: Padding(
-            padding:
-                const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
-            child: Form(
-              key: _formKey,
-              child: Column(
-                children: [
-                  Text('Create Account', style: headlineMedium),
-                  const Text('Fill your information below'),
-                  const SizedBox(height: 32.0),
-                  _inputName(),
-                  const SizedBox(height: 24.0),
-                  _inputEmail(),
-                  const SizedBox(height: 24.0),
-                  _inputPassword(),
-                  const SizedBox(height: 24.0),
-                  _checkboxTermsConditions(),
-                  const SizedBox(height: 24.0),
-                  OutlinedButton(
-                    onPressed: () async {
-                      _signInValidator();
-                    },
-                    child: const Text(
-                      'Sign up',
-                    ),
-                  )
-                ],
-              ),
+      body: SafeArea(
+        child: SingleChildScrollView(
+          padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
+          child: Form(
+            key: _formKey,
+            child: Column(
+              children: [
+                Text(context.loc.createAccountHeader, style: headlineMedium),
+                Text(context.loc.fillInformationMessage),
+                const SizedBox(height: 32.0),
+                _buildInputName(),
+                const SizedBox(height: 24.0),
+                _buildInputEmail(),
+                const SizedBox(height: 24.0),
+                _buildInputPassword(),
+                const SizedBox(height: 24.0),
+                _buildCheckboxTermsConditions(),
+                const SizedBox(height: 24.0),
+                OutlinedButton(
+                  onPressed: () async {
+                    _signInValidator();
+                  },
+                  child: Text(
+                    context.loc.signUp,
+                  ),
+                )
+              ],
             ),
           ),
         ),
@@ -83,66 +77,66 @@ class RegistrationState extends ConsumerState<RegistrationScreen> {
     );
   }
 
-  TextFormField _inputName(){
+  TextFormField _buildInputName(){
     return TextFormField(
       controller: _nameController,
-      decoration: const InputDecoration(
-        labelText: 'Name',
-        border: OutlineInputBorder(),
+      decoration: InputDecoration(
+        labelText: context.loc.nameLabel,
+        border: const OutlineInputBorder(),
       ),
     );
   }
 
-  TextFormField _inputEmail(){
+  TextFormField _buildInputEmail(){
     return TextFormField(
       controller: _emailController,
       keyboardType: TextInputType.emailAddress,
       validator: (value) {
-        if (value!.isEmpty) {
-          loginFailedMessage();
+        if (value == null || value.isEmpty) {
+          showLoginFailedMessage();
           return 'Email cannot be empty';
         }
         return null;
       },
-      decoration: const InputDecoration(
-        labelText: 'Email',
-        suffixIcon: Icon(Icons.email, color: Colors.grey),
-        border: OutlineInputBorder(),
+      decoration: InputDecoration(
+        labelText: context.loc.emailLabel,
+        suffixIcon: const Icon(Icons.email, color: Colors.grey),
+        border: const OutlineInputBorder(),
       ),
     );
   }
 
-  TextFormField _inputPassword(){
+  TextFormField _buildInputPassword(){
     return TextFormField(
       controller: _passwordController,
       obscureText: _obscureText,
       validator: (value){
         if(value!.isEmpty){
-          loginFailedMessage();
+          showLoginFailedMessage();
           return 'Password cannot be empty';
         }
         return null;
       },
       decoration: InputDecoration(
-        labelText: 'Password',
+        labelText: context.loc.passwordLabel,
         suffixIcon: IconButton(
           icon: Icon(
-            _passwordIconVisibility ? Icons.visibility : Icons.visibility_off,
+            _obscureText ? Icons.visibility : Icons.visibility_off,
             color: Colors.grey,
           ),
           onPressed: () {
-            _passwordIconVisibility= !_passwordIconVisibility;
+            //_passwordIconVisibility= !_passwordIconVisibility;
             setState(() {
               _obscureText = !_obscureText;
             });
           },
         ),
-        border: OutlineInputBorder(),
+        border: const OutlineInputBorder(),
       ),
     );
   }
 
-  Row _checkboxTermsConditions(){
+  Row _buildCheckboxTermsConditions(){
     return Row(
       children: [
         SizedBox(
@@ -162,13 +156,13 @@ class RegistrationState extends ConsumerState<RegistrationScreen> {
           onTap: () {
             // redirect to the website
           },
-          child: const Text.rich(
+          child: Text.rich(
             TextSpan(
-              text: 'Agree with ',
+              text: context.loc.agreeWith,
               children: [
                 TextSpan(
-                  text: 'Terms & Condition',
-                  style: TextStyle(
+                  text: context.loc.termsAndConditions,
+                  style: const TextStyle(
                     decoration: TextDecoration.underline,
                     color: Colors.blue,
                   ),
@@ -184,6 +178,18 @@ class RegistrationState extends ConsumerState<RegistrationScreen> {
   void _signInValidator() async{
     if(_formKey.currentState?.validate() ?? false){
       try {
+
+        if (!_checkbox) {
+          Flushbar(
+            title: 'Zgoda wymagana',
+            message: 'Musisz zaakceptować regulamin, aby się zarejestrować.',
+            duration: const Duration(seconds: 5),
+            backgroundColor: Colors.orangeAccent,
+            flushbarPosition: FlushbarPosition.TOP,
+          ).show(context);
+          return;
+        }
+
         await ref.read(userRepositoryProvider).signUp(
           _passwordController.text,
           _emailController.text,
@@ -197,7 +203,7 @@ class RegistrationState extends ConsumerState<RegistrationScreen> {
     }
   }
 
-  void loginFailedMessage() {
+  void showLoginFailedMessage() {
     _emailController.clear();
     _passwordController.clear();
     Flushbar(

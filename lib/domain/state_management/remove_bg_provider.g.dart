@@ -6,7 +6,7 @@ part of 'remove_bg_provider.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$dioHash() => r'88003a0ccbd9943d36be3d0e6f7f819daa31daeb';
+String _$dioHash() => r'db2ea42ee3e79da27c9c27de966a3e8909b52eca';
 
 /// See also [dio].
 @ProviderFor(dio)
@@ -21,7 +21,7 @@ final dioProvider = AutoDisposeProvider<Dio>.internal(
 
 typedef DioRef = AutoDisposeProviderRef<Dio>;
 String _$removeBgRepositoryHash() =>
-    r'b37c65984c5a696e94c3a46d5eb486ca98a79cbf';
+    r'12e2517d4d05d2c655cc71544516ba6406dfb90f';
 
 /// See also [removeBgRepository].
 @ProviderFor(removeBgRepository)
@@ -38,7 +38,7 @@ final removeBgRepositoryProvider =
 
 typedef RemoveBgRepositoryRef = AutoDisposeProviderRef<RemoveBgRepository>;
 String _$removePhotoBackgroundHash() =>
-    r'309211f8df6cee9fb884c2af3e00acdfb58c9afc';
+    r'04da025b25003695ddbc7f199f5b500979c3336d';
 
 /// Copied from Dart SDK
 class _SystemHash {

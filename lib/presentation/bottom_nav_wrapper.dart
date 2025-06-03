@@ -12,14 +12,25 @@ class BottomNavWrapperScreen extends StatelessWidget {
       routes:  [
         HomeRoute(),
         CreatedOutfitsRoute(),
-        AddClothesRoute(),
         PlannerRoute(),
         MyProfileRoute()
       ],
       bottomNavigationBuilder: (_, tabsRouter) {
         return BottomNavigationBar(
           currentIndex: tabsRouter.activeIndex,
-          onTap: tabsRouter.setActiveIndex,
+          onTap: (index){
+            /*
+            if(index ==2 ){
+              context.router.push(AddClothesRoute());
+            }else{
+              tabsRouter.setActiveIndex(index);
+            }
+            tymczasowo
+             */
+            tabsRouter.setActiveIndex(index);
+          },
+
+
           showSelectedLabels: false,
           showUnselectedLabels: false,
           type: BottomNavigationBarType.fixed,

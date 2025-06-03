@@ -20,7 +20,7 @@ Schedule _$ScheduleFromJson(Map<String, dynamic> json) {
 
 /// @nodoc
 mixin _$Schedule {
-  @JsonKey(name: 'id')
+  @JsonKey(name: 'schedule_id')
   String? get id => throw _privateConstructorUsedError;
   @JsonKey(name: 'schedule_date')
   DateTime get scheduleDate => throw _privateConstructorUsedError;
@@ -31,8 +31,12 @@ mixin _$Schedule {
   @JsonKey(name: 'image_url')
   String get imageUrl => throw _privateConstructorUsedError;
 
+  /// Serializes this Schedule to a JSON map.
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
-  @JsonKey(ignore: true)
+
+  /// Create a copy of Schedule
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   $ScheduleCopyWith<Schedule> get copyWith =>
       throw _privateConstructorUsedError;
 }
@@ -43,7 +47,7 @@ abstract class $ScheduleCopyWith<$Res> {
       _$ScheduleCopyWithImpl<$Res, Schedule>;
   @useResult
   $Res call(
-      {@JsonKey(name: 'id') String? id,
+      {@JsonKey(name: 'schedule_id') String? id,
       @JsonKey(name: 'schedule_date') DateTime scheduleDate,
       @JsonKey(name: 'schedule_time') String scheduleTime,
       @JsonKey(name: 'outfit_id') int? outfitId,
@@ -60,6 +64,8 @@ class _$ScheduleCopyWithImpl<$Res, $Val extends Schedule>
   // ignore: unused_field
   final $Res Function($Val) _then;
 
+  /// Create a copy of Schedule
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -103,7 +109,7 @@ abstract class _$$ScheduleImplCopyWith<$Res>
   @override
   @useResult
   $Res call(
-      {@JsonKey(name: 'id') String? id,
+      {@JsonKey(name: 'schedule_id') String? id,
       @JsonKey(name: 'schedule_date') DateTime scheduleDate,
       @JsonKey(name: 'schedule_time') String scheduleTime,
       @JsonKey(name: 'outfit_id') int? outfitId,
@@ -118,6 +124,8 @@ class __$$ScheduleImplCopyWithImpl<$Res>
       _$ScheduleImpl _value, $Res Function(_$ScheduleImpl) _then)
       : super(_value, _then);
 
+  /// Create a copy of Schedule
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -156,7 +164,7 @@ class __$$ScheduleImplCopyWithImpl<$Res>
 @JsonSerializable()
 class _$ScheduleImpl with DiagnosticableTreeMixin implements _Schedule {
   const _$ScheduleImpl(
-      {@JsonKey(name: 'id') this.id,
+      {@JsonKey(name: 'schedule_id') this.id,
       @JsonKey(name: 'schedule_date') required this.scheduleDate,
       @JsonKey(name: 'schedule_time') required this.scheduleTime,
       @JsonKey(name: 'outfit_id') this.outfitId,
@@ -166,7 +174,7 @@ class _$ScheduleImpl with DiagnosticableTreeMixin implements _Schedule {
       _$$ScheduleImplFromJson(json);
 
   @override
-  @JsonKey(name: 'id')
+  @JsonKey(name: 'schedule_id')
   final String? id;
   @override
   @JsonKey(name: 'schedule_date')
@@ -214,12 +222,14 @@ class _$ScheduleImpl with DiagnosticableTreeMixin implements _Schedule {
                 other.imageUrl == imageUrl));
   }
 
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   int get hashCode => Object.hash(
       runtimeType, id, scheduleDate, scheduleTime, outfitId, imageUrl);
 
-  @JsonKey(ignore: true)
+  /// Create a copy of Schedule
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   @pragma('vm:prefer-inline')
   _$$ScheduleImplCopyWith<_$ScheduleImpl> get copyWith =>
@@ -235,7 +245,7 @@ class _$ScheduleImpl with DiagnosticableTreeMixin implements _Schedule {
 
 abstract class _Schedule implements Schedule {
   const factory _Schedule(
-          {@JsonKey(name: 'id') final String? id,
+          {@JsonKey(name: 'schedule_id') final String? id,
           @JsonKey(name: 'schedule_date') required final DateTime scheduleDate,
           @JsonKey(name: 'schedule_time') required final String scheduleTime,
           @JsonKey(name: 'outfit_id') final int? outfitId,
@@ -246,7 +256,7 @@ abstract class _Schedule implements Schedule {
       _$ScheduleImpl.fromJson;
 
   @override
-  @JsonKey(name: 'id')
+  @JsonKey(name: 'schedule_id')
   String? get id;
   @override
   @JsonKey(name: 'schedule_date')
@@ -260,8 +270,11 @@ abstract class _Schedule implements Schedule {
   @override
   @JsonKey(name: 'image_url')
   String get imageUrl;
+
+  /// Create a copy of Schedule
+  /// with the given fields replaced by the non-null parameter values.
   @override
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   _$$ScheduleImplCopyWith<_$ScheduleImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }

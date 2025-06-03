@@ -6,7 +6,7 @@ part of 'clothes_provider.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$clothesRepositoryHash() => r'48b2c60791ffd3f3691a8c48158c10c223644b87';
+String _$clothesRepositoryHash() => r'1e78b51b8de70e5c9e95a1d5bf5a3e4a6ba073ca';
 
 /// See also [clothesRepository].
 @ProviderFor(clothesRepository)
@@ -23,7 +23,7 @@ final clothesRepositoryProvider =
 
 typedef ClothesRepositoryRef = AutoDisposeProviderRef<ClothesRepository>;
 String _$deleteClothingItemHash() =>
-    r'98b780e3aaabe7395684ce713dbb4ceec85172ba';
+    r'7912b8a1469cf8db4bbea2bc756be3dd8e293165';
 
 /// Copied from Dart SDK
 class _SystemHash {
@@ -56,11 +56,11 @@ class DeleteClothingItemFamily extends Family<AsyncValue<void>> {
   const DeleteClothingItemFamily();
 
   /// See also [deleteClothingItem].
-  DeleteClothingItemProvider call(
-    int clothingItemId,
-  ) {
+  DeleteClothingItemProvider call({
+    required int clothingItemId,
+  }) {
     return DeleteClothingItemProvider(
-      clothingItemId,
+      clothingItemId: clothingItemId,
     );
   }
 
@@ -69,7 +69,7 @@ class DeleteClothingItemFamily extends Family<AsyncValue<void>> {
     covariant DeleteClothingItemProvider provider,
   ) {
     return call(
-      provider.clothingItemId,
+      clothingItemId: provider.clothingItemId,
     );
   }
 
@@ -91,12 +91,12 @@ class DeleteClothingItemFamily extends Family<AsyncValue<void>> {
 /// See also [deleteClothingItem].
 class DeleteClothingItemProvider extends AutoDisposeFutureProvider<void> {
   /// See also [deleteClothingItem].
-  DeleteClothingItemProvider(
-    int clothingItemId,
-  ) : this._internal(
+  DeleteClothingItemProvider({
+    required int clothingItemId,
+  }) : this._internal(
           (ref) => deleteClothingItem(
             ref as DeleteClothingItemRef,
-            clothingItemId,
+            clothingItemId: clothingItemId,
           ),
           from: deleteClothingItemProvider,
           name: r'deleteClothingItemProvider',
@@ -175,7 +175,7 @@ class _DeleteClothingItemProviderElement
 }
 
 String _$addNewClothingItemHash() =>
-    r'bcff0686dbb3b86ef2e13691e55cfaa67b1f955c';
+    r'eecd045d17026137466a3fd12912583b6f495b3d';
 
 /// See also [addNewClothingItem].
 @ProviderFor(addNewClothingItem)
@@ -187,11 +187,11 @@ class AddNewClothingItemFamily extends Family<AsyncValue<void>> {
   const AddNewClothingItemFamily();
 
   /// See also [addNewClothingItem].
-  AddNewClothingItemProvider call(
-    ClothingItem newClothingItem,
-  ) {
+  AddNewClothingItemProvider call({
+    required ClothingItem newClothingItem,
+  }) {
     return AddNewClothingItemProvider(
-      newClothingItem,
+      newClothingItem: newClothingItem,
     );
   }
 
@@ -200,7 +200,7 @@ class AddNewClothingItemFamily extends Family<AsyncValue<void>> {
     covariant AddNewClothingItemProvider provider,
   ) {
     return call(
-      provider.newClothingItem,
+      newClothingItem: provider.newClothingItem,
     );
   }
 
@@ -222,12 +222,12 @@ class AddNewClothingItemFamily extends Family<AsyncValue<void>> {
 /// See also [addNewClothingItem].
 class AddNewClothingItemProvider extends AutoDisposeFutureProvider<void> {
   /// See also [addNewClothingItem].
-  AddNewClothingItemProvider(
-    ClothingItem newClothingItem,
-  ) : this._internal(
+  AddNewClothingItemProvider({
+    required ClothingItem newClothingItem,
+  }) : this._internal(
           (ref) => addNewClothingItem(
             ref as AddNewClothingItemRef,
-            newClothingItem,
+            newClothingItem: newClothingItem,
           ),
           from: addNewClothingItemProvider,
           name: r'addNewClothingItemProvider',
@@ -305,7 +305,7 @@ class _AddNewClothingItemProviderElement
       (origin as AddNewClothingItemProvider).newClothingItem;
 }
 
-String _$countClothesHash() => r'77996419fedccf2f76139d3eae435f35b25d2b2c';
+String _$countClothesHash() => r'5676116a746d331ef8790794e0af8651a1747896';
 
 /// See also [countClothes].
 @ProviderFor(countClothes)
@@ -319,5 +319,166 @@ final countClothesProvider = AutoDisposeFutureProvider<int>.internal(
 );
 
 typedef CountClothesRef = AutoDisposeFutureProviderRef<int>;
+String _$editClothingItemHash() => r'3847976471439d1970064971baf8c4a0510cc8db';
+
+/// See also [editClothingItem].
+@ProviderFor(editClothingItem)
+const editClothingItemProvider = EditClothingItemFamily();
+
+/// See also [editClothingItem].
+class EditClothingItemFamily extends Family<AsyncValue<void>> {
+  /// See also [editClothingItem].
+  const EditClothingItemFamily();
+
+  /// See also [editClothingItem].
+  EditClothingItemProvider call({
+    required int clothingItemId,
+    required int newCategoryId,
+    required List<Season> newSeasons,
+  }) {
+    return EditClothingItemProvider(
+      clothingItemId: clothingItemId,
+      newCategoryId: newCategoryId,
+      newSeasons: newSeasons,
+    );
+  }
+
+  @override
+  EditClothingItemProvider getProviderOverride(
+    covariant EditClothingItemProvider provider,
+  ) {
+    return call(
+      clothingItemId: provider.clothingItemId,
+      newCategoryId: provider.newCategoryId,
+      newSeasons: provider.newSeasons,
+    );
+  }
+
+  static const Iterable<ProviderOrFamily>? _dependencies = null;
+
+  @override
+  Iterable<ProviderOrFamily>? get dependencies => _dependencies;
+
+  static const Iterable<ProviderOrFamily>? _allTransitiveDependencies = null;
+
+  @override
+  Iterable<ProviderOrFamily>? get allTransitiveDependencies =>
+      _allTransitiveDependencies;
+
+  @override
+  String? get name => r'editClothingItemProvider';
+}
+
+/// See also [editClothingItem].
+class EditClothingItemProvider extends AutoDisposeFutureProvider<void> {
+  /// See also [editClothingItem].
+  EditClothingItemProvider({
+    required int clothingItemId,
+    required int newCategoryId,
+    required List<Season> newSeasons,
+  }) : this._internal(
+          (ref) => editClothingItem(
+            ref as EditClothingItemRef,
+            clothingItemId: clothingItemId,
+            newCategoryId: newCategoryId,
+            newSeasons: newSeasons,
+          ),
+          from: editClothingItemProvider,
+          name: r'editClothingItemProvider',
+          debugGetCreateSourceHash:
+              const bool.fromEnvironment('dart.vm.product')
+                  ? null
+                  : _$editClothingItemHash,
+          dependencies: EditClothingItemFamily._dependencies,
+          allTransitiveDependencies:
+              EditClothingItemFamily._allTransitiveDependencies,
+          clothingItemId: clothingItemId,
+          newCategoryId: newCategoryId,
+          newSeasons: newSeasons,
+        );
+
+  EditClothingItemProvider._internal(
+    super._createNotifier, {
+    required super.name,
+    required super.dependencies,
+    required super.allTransitiveDependencies,
+    required super.debugGetCreateSourceHash,
+    required super.from,
+    required this.clothingItemId,
+    required this.newCategoryId,
+    required this.newSeasons,
+  }) : super.internal();
+
+  final int clothingItemId;
+  final int newCategoryId;
+  final List<Season> newSeasons;
+
+  @override
+  Override overrideWith(
+    FutureOr<void> Function(EditClothingItemRef provider) create,
+  ) {
+    return ProviderOverride(
+      origin: this,
+      override: EditClothingItemProvider._internal(
+        (ref) => create(ref as EditClothingItemRef),
+        from: from,
+        name: null,
+        dependencies: null,
+        allTransitiveDependencies: null,
+        debugGetCreateSourceHash: null,
+        clothingItemId: clothingItemId,
+        newCategoryId: newCategoryId,
+        newSeasons: newSeasons,
+      ),
+    );
+  }
+
+  @override
+  AutoDisposeFutureProviderElement<void> createElement() {
+    return _EditClothingItemProviderElement(this);
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return other is EditClothingItemProvider &&
+        other.clothingItemId == clothingItemId &&
+        other.newCategoryId == newCategoryId &&
+        other.newSeasons == newSeasons;
+  }
+
+  @override
+  int get hashCode {
+    var hash = _SystemHash.combine(0, runtimeType.hashCode);
+    hash = _SystemHash.combine(hash, clothingItemId.hashCode);
+    hash = _SystemHash.combine(hash, newCategoryId.hashCode);
+    hash = _SystemHash.combine(hash, newSeasons.hashCode);
+
+    return _SystemHash.finish(hash);
+  }
+}
+
+mixin EditClothingItemRef on AutoDisposeFutureProviderRef<void> {
+  /// The parameter `clothingItemId` of this provider.
+  int get clothingItemId;
+
+  /// The parameter `newCategoryId` of this provider.
+  int get newCategoryId;
+
+  /// The parameter `newSeasons` of this provider.
+  List<Season> get newSeasons;
+}
+
+class _EditClothingItemProviderElement
+    extends AutoDisposeFutureProviderElement<void> with EditClothingItemRef {
+  _EditClothingItemProviderElement(super.provider);
+
+  @override
+  int get clothingItemId => (origin as EditClothingItemProvider).clothingItemId;
+  @override
+  int get newCategoryId => (origin as EditClothingItemProvider).newCategoryId;
+  @override
+  List<Season> get newSeasons =>
+      (origin as EditClothingItemProvider).newSeasons;
+}
 // ignore_for_file: type=lint
 // ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member

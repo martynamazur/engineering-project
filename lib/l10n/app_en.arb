@@ -1,0 +1,321 @@
+{
+  "@@locale": "en",
+  "loginHeader": "Login",
+  "@loginHeader": {
+    "description": "Translation for loginHeader"
+  },
+  "loginFailedTitle": "Login failed",
+  "@loginFailedTitle": {
+    "description": "Translation for loginFailedTitle"
+  },
+  "loginFailedMessage": "Invalid email or password",
+  "@loginFailedMessage": {
+    "description": "Translation for loginFailedMessage"
+  },
+  "emptyEmail": "Email cannot be empty",
+  "@emptyEmail": {
+    "description": "Translation for emptyEmail"
+  },
+  "invalidEmail": "Please enter a valid email address",
+  "@invalidEmail": {
+    "description": "Translation for invalidEmail"
+  },
+  "resetPasswordHeader": "Password reset",
+  "@resetPasswordHeader": {
+    "description": "Translation for resetPasswordHeader"
+  },
+  "signIn": "Sign in",
+  "@signIn": {
+    "description": "Translation for signIn"
+  },
+  "settingsHeader": "Settings",
+  "@settingsHeader": {
+    "description": "Translation for settingsHeader"
+  },
+  "notificationSettingsHeader": "Notification Settings",
+  "@notificationSettingsHeader": {
+    "description": "Translation for notificationSettingsHeader"
+  },
+  "privacySettingsHeader": "Privacy Settings",
+  "@privacySettingsHeader": {
+    "description": "Translation for privacySettingsHeader"
+  },
+  "helpAndSupportHeader": "Help & Support",
+  "@helpAndSupportHeader": {
+    "description": "Translation for helpAndSupportHeader"
+  },
+  "accountSettingsHeader": "Account settings",
+  "@accountSettingsHeader": {
+    "description": "Translation for accountSettingsHeader"
+  },
+  "changePasswordTitle": "Change password",
+  "@changePasswordTitle": {
+    "description": "Translation for changePasswordTitle"
+  },
+  "changeEmailAddress": "Change email adress",
+  "@changeEmailAddress": {
+    "description": "Translation for changeEmailAddress"
+  },
+  "deleteMyAccountTitle": "Delete my account",
+  "@deleteMyAccountTitle": {
+    "description": "Translation for deleteMyAccountTitle"
+  },
+  "logOutHeader": "Log out",
+  "@logOutHeader": {
+    "description": "Translation for logOutHeader"
+  },
+  "deleteAccountHeader": "Delete account",
+  "@deleteAccountHeader": {
+    "description": "Translation for deleteAccountHeader"
+  },
+  "deleteAccountWarningText": "Your account will be deleted 30 days after logging out. If you log in again within this time, your account access will be restored and the account will not be deleted.",
+  "@deleteAccountWarningText": {
+    "description": "Translation for deleteAccountWarningText"
+  },
+  "invalidEmailAddress": "Invalid email",
+  "@invalidEmailAddress": {
+    "description": "Translation for invalidEmailAddress"
+  },
+  "newEmailAddressLabel": "New email address",
+  "@newEmailAddressLabel": {
+    "description": "Translation for newEmailAddressLabel"
+  },
+  "changeLabel": "Change",
+  "@changeLabel": {
+    "description": "Translation for changeLabel"
+  },
+  "registrationSuccessful": "Registration Successful!",
+  "@registrationSuccessful": {
+    "description": "Translation for registrationSuccessful"
+  },
+  "accountCreationConfirmationMessage": "Your account has been successfully created. Please check your email to confirm your account before logging in.",
+  "@accountCreationConfirmationMessage": {
+    "description": "Translation for accountCreationConfirmationMessage"
+  },
+  "goToLogin": "Go to login",
+  "@goToLogin": {
+    "description": "Translation for goToLogin"
+  },
+  "createAccountHeader": "Create Account",
+  "@createAccountHeader": {
+    "description": "Translation for createAccountHeader"
+  },
+  "fillInformationMessage": "Fill your information below",
+  "@fillInformationMessage": {
+    "description": "Translation for fillInformationMessage"
+  },
+  "signUp": "Sign up",
+  "@signUp": {
+    "description": "Translation for signUp"
+  },
+  "nameLabel": "Name",
+  "@nameLabel": {
+    "description": "Translation for nameLabel"
+  },
+  "emailLabel": "Email",
+  "@emailLabel": {
+    "description": "Translation for emailLabel"
+  },
+  "passwordLabel": "Password",
+  "@passwordLabel": {
+    "description": "Translation for passwordLabel"
+  },
+  "agreeWith": "Agree with",
+  "@agreeWith": {
+    "description": "Translation for agreeWith"
+  },
+  "termsAndConditions": "Terms & Condition",
+  "@termsAndConditions": {
+    "description": "Translation for termsAndConditions"
+  },
+  "monthlyHeader": "Monthly",
+  "@monthlyHeader": {
+    "description": "Translation for monthlyHeader"
+  },
+  "weeklyHeader": "Weekly",
+  "@weeklyHeader": {
+    "description": "Translation for weeklyHeader"
+  },
+  "yourOutfitsHeader": "Your Outfits",
+  "@yourOutfitsHeader": {
+    "description": "Translation for yourOutfitsHeader"
+  },
+  "addAnother": "Add another",
+  "@addAnother": {
+    "description": "Translation for addAnother"
+  },
+  "pickClothesHeader": "Pick clothes",
+  "@pickClothesHeader": {
+    "description": "Translation for pickClothesHeader"
+  },
+  "youDoNotOwnClothesMessages": "You do not own any clothes",
+  "@youDoNotOwnClothesMessages": {
+    "description": "Translation for youDoNotOwnClothesMessages"
+  },
+  "close": "Close",
+  "@close": {
+    "description": "Translation for close"
+  },
+  "next": "Next",
+  "@next": {
+    "description": "Translation for next"
+  },
+  "send": "Send",
+  "@send": {
+    "description": "Translation for send"
+  },
+  "success": "Success",
+  "@success": {
+    "description": "Translation for success"
+  },
+  "delete": "Delete",
+  "@delete": {
+    "description": "Translation for delete"
+  },
+  "edit": "Edit",
+  "@edit": {
+    "description": "Translation for edit"
+  },
+  "save": "Save",
+  "@save": {
+    "description": "Translation for save"
+  },
+  "previous": "Previous",
+  "@previous": {
+    "description": "Translation for previous"
+  },
+  "cancel": "Cancel",
+  "@cancel": {
+    "description": "Translation for cancel"
+  },
+  "add": "Add",
+  "@add": {
+    "description": "Translation for add"
+  },
+  "seasonHeader": "Season",
+  "@seasonHeader": {
+    "description": "Translation for seasonHeader"
+  },
+  "tagsHeader": "Tags",
+  "@tagsHeader": {
+    "description": "Translation for tagsHeader"
+  },
+  "noTagsAvailableMessage": "No tags available",
+  "@noTagsAvailableMessage": {
+    "description": "Translation for noTagsAvailableMessage"
+  },
+  "addAnewTag": "Add a new tag",
+  "@addAnewTag": {
+    "description": "Translation for addAnewTag"
+  },
+  "profileHeader": "My Profile",
+  "@profileHeader": {
+    "description": "Translation for profileHeader"
+  },
+  "unknownUserHeader": "Unknown user",
+  "@unknownUserHeader": {
+    "description": "Translation for unknownUserHeader"
+  },
+  "coat": "Coat",
+  "@coat": {
+    "description": "Translation for coat"
+  },
+  "top": "Top",
+  "@top": {
+    "description": "Translation for top"
+  },
+  "bottom": "Bottom",
+  "@bottom": {
+    "description": "Translation for bottom"
+  },
+  "dress": "Dress",
+  "@dress": {
+    "description": "Translation for dress"
+  },
+  "underwear": "Underwear",
+  "@underwear": {
+    "description": "Translation for underwear"
+  },
+  "accessories": "Accesories",
+  "@accessories": {
+    "description": "Translation for accessories"
+  },
+  "shoes": "Shoes",
+  "@shoes": {
+    "description": "Translation for shoes"
+  },
+  "newTag": "New tag",
+  "@newTag": {
+    "description": "Translation for newTag"
+  },
+  "addTag": "Add tag",
+  "@addTag": {
+    "description": "Translation for addTag"
+  },
+  "seasonInformationMessage": "This outfit I can wear in ...",
+  "@seasonInformationMessage": {
+    "description": "Translation for seasonInformationMessage"
+  },
+  "noSeasonAvailableMessage": "No seasons available",
+  "@noSeasonAvailableMessage": {
+    "description": "Translation for noSeasonAvailableMessage"
+  },
+  "applyFilters": "Apply filters",
+  "@applyFilters": {
+    "description": "Translation for applyFilters"
+  },
+  "editInformationHeader": "Edit information",
+  "@editInformationHeader": {
+    "description": "Translation for editInformationHeader"
+  },
+  "savedOutfitMessage": "Outfit has been saved!",
+  "@savedOutfitMessage": {
+    "description": "Translation for savedOutfitMessage"
+  },
+  "createAnother": "Create another",
+  "@createAnother": {
+    "description": "Translation for createAnother"
+  },
+  "redirectToOutfitGalleryMessage": "Go to the outfit gallery",
+  "@redirectToOutfitGalleryMessage": {
+    "description": "Translation for redirectToOutfitGalleryMessage"
+  },
+  "templateHeader": "Template",
+  "@templateHeader": {
+    "description": "Translation for templateHeader"
+  },
+  "createFromEmptyMessage": "Create from empty",
+  "@createFromEmptyMessage": {
+    "description": "Translation for createFromEmptyMessage"
+  },
+  "pickOutfitMessage": "Pick Outfit for a day",
+  "@pickOutfitMessage": {
+    "description": "Translation for pickOutfitMessage"
+  },
+  "noDataToDisplayMessage": "No data to display",
+  "@noDataToDisplayMessage": {
+    "description": "Translation for noDataToDisplayMessage"
+  },
+  "changeFolderName": "Change folder name",
+  "@changeFolderName": {
+    "description": "Translation for changeFolderName"
+  },
+  "deleteFolder": "Delete folder",
+  "@deleteFolder": {
+    "description": "Translation for deleteFolder"
+  },
+  "emptyCloset": "Empty closet",
+  "@emptyCloset": {
+    "description": "Translation for emptyCloset"
+  },
+  "imageNotAvailable": "Image not available",
+  "@imageNotAvailable": {
+    "description": "Translation for imageNotAvailable"
+  },
+
+  "closetHeader": "Closet",
+  "addNewPieces": "Start adding new pieces of your outfit",
+  "noItemsFound": "No items found for",
+  "failedToLoadImage": "Failed to load image"
+
+}

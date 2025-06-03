@@ -7,7 +7,7 @@ part of 'folder_list_notifier.dart';
 // **************************************************************************
 
 String _$folderListNotifierHash() =>
-    r'753e69398b8977a3c485d8cbbb5c656ada3fe448';
+    r'153b0e9c52a3481bec4f2271756d13c19c6f849c';
 
 /// See also [FolderListNotifier].
 @ProviderFor(FolderListNotifier)

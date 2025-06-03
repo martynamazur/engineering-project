@@ -10,29 +10,29 @@ import 'clothes_list_provider.dart';
 part 'clothes_folder_provider.g.dart';
 
 @riverpod
-ClothesFolderRepository clothesFolderRepository(ClothesFolderRepositoryRef ref) {
+ClothesFolderRepository clothesFolderRepository(Ref ref) {
   return ClothesFolderRepository();
 }
 
 @riverpod
-FolderListNotifier folderListNotifier(FolderListNotifierRef ref) {
+FolderListNotifier folderListNotifier(Ref ref) {
   return FolderListNotifier();
 }
 
 @riverpod
-Future<List<ClosetFolder>> getClosetFolder(GetClosetFolderRef ref) async {
+Future<List<ClosetFolder>> getClosetFolder(Ref ref) async {
   return ref.read(clothesFolderRepositoryProvider).getAllClosetFolder();
 }
 
 // podmienic na notfier
 @riverpod
-Future<ClosetFolder> getFolder(GetFolderRef ref, int id) async {
+Future<ClosetFolder> getFolder(Ref ref, int id) async {
   return ref.read(clothesFolderRepositoryProvider).getClosetFolder(id);
 }
 
 
 @riverpod
-ClothesListNotifier clothesListNotifier (ClothesListNotifierRef ref) {
+ClothesListNotifier clothesListNotifier(Ref ref) {
   return ClothesListNotifier();
 }
 
@@ -44,33 +44,35 @@ final picketClosetFolderProvider = StateProvider((ref) => 0);
 
 
 @riverpod
-Future<void> deleteFolder(DeleteFolderRef ref, int folderId) async {
+Future<void> deleteFolder(Ref ref, {required int folderId}) async {
   return ref.read(clothesFolderRepositoryProvider).deleteFolder(folderId);
 }
 
 @riverpod
-Future<void> changeFolderName(ChangeFolderNameRef ref,String newFolderName, int folderId) async {
+Future<void> changeFolderName(Ref ref,
+    {required String newFolderName, required int folderId}) async {
   return ref.read(clothesFolderRepositoryProvider).changeFolderName(newFolderName, folderId);
 }
 
 @riverpod
-Future<ClosetFolder> createNewFolder(CreateNewFolderRef ref, String folderName) async {
+Future<ClosetFolder> createNewFolder(Ref ref, {required String folderName}) async {
   final newFolder = await ref.read(clothesFolderRepositoryProvider).createFolder(folderName);
   return newFolder;
 
 }
 
 @riverpod
-Future<void> addClothesToFolder(AddClothesToFolderRef ref, List<int> clothesId, int folderId) async {
+Future<void> addClothesToFolder(Ref ref, {required List<int> clothesId,required int folderId}) async {
   return ref.read(clothesFolderRepositoryProvider).addClothesToFolder(clothesId, folderId);
 }
 
 @riverpod
-Future<List<ClothingItem>> getAllClothes(GetAllClothesRef ref) async {
+Future<List<ClothingItem>> getAllClothes(Ref ref) async {
   return ref.read(clothesFolderRepositoryProvider).getAllOwnedClothes();
 }
 
 @riverpod
-Future<void> removeClothingItemFromFolder(RemoveClothingItemFromFolderRef ref, int folderId, int clothingItemId) async {
+Future<void> removeClothingItemFromFolder(Ref ref,
+    {required int folderId, required int clothingItemId}) async {
   return ref.read(clothesFolderRepositoryProvider).removeClothingItemFromFolder(folderId,clothingItemId,);
 }

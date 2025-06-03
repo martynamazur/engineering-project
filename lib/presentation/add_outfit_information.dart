@@ -1,16 +1,16 @@
-import 'dart:io';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:image_picker/image_picker.dart';
+import 'package:ootd/extensions/localization_extension.dart';
 
 import 'package:ootd/presentation/styles/selectable_season_tile.dart';
 import 'package:step_progress_indicator/step_progress_indicator.dart';
 
 
 import '../domain/state_management/category_provider.dart';
+import '../domain/state_management/filter_provider.dart';
 import '../domain/state_management/season_provider.dart';
 import '../domain/state_management/tag_provider.dart';
 import '../model/tag.dart';
@@ -24,7 +24,7 @@ class AddClothesInformation extends ConsumerStatefulWidget {
 class _AddClothesInformationState extends ConsumerState<AddClothesInformation> {
   late final GlobalKey<FormState> _formKey;
   late final PageController _pageController;
-  late final TextEditingController addNewTagController;
+  late final TextEditingController _addNewTagController;
   late final int _currentPage;
   late final List<Tag> markedTags;
 
@@ -35,7 +35,7 @@ class _AddClothesInformationState extends ConsumerState<AddClothesInformation> {
     super.initState();
     _formKey = GlobalKey<FormState>();
     _pageController = PageController();
-    addNewTagController = TextEditingController();
+    _addNewTagController = TextEditingController();
     _currentPage = 0;
     markedTags = [];
   }
@@ -43,7 +43,7 @@ class _AddClothesInformationState extends ConsumerState<AddClothesInformation> {
   @override
   void dispose() {
     super.dispose();
-    addNewTagController.dispose();
+    _addNewTagController.dispose();
   }
 
   @override
@@ -52,47 +52,48 @@ class _AddClothesInformationState extends ConsumerState<AddClothesInformation> {
     final seasonList = ref.watch(seasonRepositoryProvider).getSeason();
     return Scaffold(
       body: SafeArea(
-        child: Column(
-          children: [
-            StepProgressIndicator(
-              totalSteps: 3,
-              currentStep: _currentPage + 1,
-              selectedColor: Colors.red,
-              unselectedColor: Colors.yellow,
-            ),
-            Expanded(
-                child: PageView(
-              controller: _pageController,
-              onPageChanged: (page) {
-                setState(() {
-                  _currentPage = page;
-                  print('o kurde');
-                });
-              },
-              children: [
-                _pickSeason(),
-                _pickTags(),
-              ],
-            )),
-            Row(
-              children: [
-                OutlinedButton(
-                    onPressed: () {
-                      _pageController.previousPage(
-                          duration: Duration(milliseconds: 300),
-                          curve: Curves.easeInOut);
-                    },
-                    child: Text('Cofnij')),
-                OutlinedButton(
-                    onPressed: () {
-                      _pageController.nextPage(
-                          duration: Duration(milliseconds: 300),
-                          curve: Curves.easeInOut);
-                    },
-                    child: Text('Dalej'))
-              ],
-            )
-          ],
+        child: SingleChildScrollView(
+          child: Column(
+            children: [
+              StepProgressIndicator(
+                totalSteps: 3,
+                currentStep: _currentPage + 1,
+                selectedColor: Colors.red,
+                unselectedColor: Colors.yellow,
+              ),
+              Expanded(
+                  child: PageView(
+                controller: _pageController,
+                onPageChanged: (page) {
+                  setState(() {
+                    _currentPage = page;
+                  });
+                },
+                children: [
+                  _pickSeason(),
+                  _pickTags(),
+                ],
+              )),
+              Row(
+                children: [
+                  OutlinedButton(
+                      onPressed: () {
+                        _pageController.previousPage(
+                            duration: const Duration(milliseconds: 300),
+                            curve: Curves.easeInOut);
+                      },
+                      child: Text(context.loc.previous)),
+                  OutlinedButton(
+                      onPressed: () {
+                        _pageController.nextPage(
+                            duration: const Duration(milliseconds: 300),
+                            curve: Curves.easeInOut);
+                      },
+                      child: Text(context.loc.next))
+                ],
+              )
+            ],
+          ),
         ),
       ),
     );
@@ -105,17 +106,17 @@ class _AddClothesInformationState extends ConsumerState<AddClothesInformation> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text('Pora roku'),
-        Text('Ten outfit mogę ubrac w'),
+        Text(context.loc.seasonHeader),
+        Text(context.loc.seasonInformationMessage),
         GridView.builder(
-          gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+          gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
             crossAxisCount: 2,
             crossAxisSpacing: 6.0,
             mainAxisSpacing: 6.0,
           ),
           itemCount: seasonList.length,
           shrinkWrap: true,
-          physics: NeverScrollableScrollPhysics(),
+          physics: const NeverScrollableScrollPhysics(),
           itemBuilder: (context, index) {
             final season = seasonList[index];
             return SelectableSeasonTile(
@@ -136,7 +137,7 @@ class _AddClothesInformationState extends ConsumerState<AddClothesInformation> {
     final List<int> selectedTags = [];
 
     return Column(children: [
-      Text('Dodaj tagi'),
+      Text(context.loc.addTag),
       Text('Pozniej szybciej znajdziesz to czego szukasz'),
       tagList.when(
         data: (data) {
@@ -158,22 +159,22 @@ class _AddClothesInformationState extends ConsumerState<AddClothesInformation> {
           );
         },
         error: (e, st) => Text('ups'),
-        loading: () => CircularProgressIndicator(),
+        loading: () => const CircularProgressIndicator(),
       ),
       OutlinedButton(
           onPressed: () {
-            addTagDialog(context);
+            _addTagDialog(context);
           },
-          child: Text('Nowy tag'))
+          child: Text(context.loc.newTag))
     ]);
   }
 
-  void addTagDialog(BuildContext context) {
+  void _addTagDialog(BuildContext context) {
     showDialog(
       context: context,
       builder: (BuildContext context) {
         return Dialog(
-          child: Container(
+          child: SizedBox(
             height: 200,
             child: Form(
               key: _formKey,
@@ -183,9 +184,9 @@ class _AddClothesInformationState extends ConsumerState<AddClothesInformation> {
                       onPressed: () {
                         //Navigator.of(context).pop();
                       },
-                      icon: Icon(Icons.close)),
+                      icon: const Icon(Icons.close)),
                   TextFormField(
-                    controller: addNewTagController,
+                    controller: _addNewTagController,
                     decoration:
                         InputDecoration(hintText: 'Kliknij aby dodac tag'),
                     validator: (value) {
@@ -203,7 +204,7 @@ class _AddClothesInformationState extends ConsumerState<AddClothesInformation> {
                           onPressed: () {
                             //Navigator.of(context).pop();
                           },
-                          child: Text('Anuluj')),
+                          child: Text(context.loc.cancel)),
                       OutlinedButton(
                           onPressed: () {
                             if(_formKey.currentState?.validate() ?? false){
@@ -211,7 +212,7 @@ class _AddClothesInformationState extends ConsumerState<AddClothesInformation> {
                               //Navigator.of(context).pop();
                             }
                           },
-                          child: Text('Dodaj'))
+                          child: Text(context.loc.add))
                     ],
                   )
                 ],

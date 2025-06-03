@@ -11,33 +11,46 @@ import 'package:carousel_slider/carousel_slider.dart';
 import 'package:ootd/domain/state_management/clothes_category_provider.dart';
 import 'package:ootd/domain/state_management/outfit_provider.dart';
 import 'package:ootd/domain/state_management/supabase_utils.dart';
+import 'package:ootd/extensions/localization_extension.dart';
 import 'package:ootd/navigation/app_router.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:screenshot/screenshot.dart';
+import '../domain/state_management/outfit_list_notifier.dart';
 import '../model/clothes_category.dart';
 import '../model/template.dart';
-import 'gallery_notifier.dart';
+import '../domain/state_management/gallery_notifier.dart';
 
 @RoutePage()
 class CreateOutfitScreen extends ConsumerStatefulWidget {
 
-  final int templateId;
-  const CreateOutfitScreen({@PathParam('templateId') required this.templateId, super.key});
+  final int _templateId;
+  const CreateOutfitScreen({@PathParam('templateId') required int templateId, super.key}) : _templateId = templateId;
 
   @override
   ConsumerState<CreateOutfitScreen> createState() => _CreateOutfitScreenState();
 }
 
 class _CreateOutfitScreenState extends ConsumerState<CreateOutfitScreen> {
-  final ScreenshotController screenshotController = ScreenshotController();
-  Map<int, int> selectedClothingItems = {};
+  final ScreenshotController _screenshotController = ScreenshotController();
+  Map<int, int> _selectedClothingItems = {};
   @override
   void initState() {
     super.initState();
 
-    // Inicjalizacja po zbudowaniu widgetu
+    final categories = [
+      ClothesCategory(id: 1, categoryName: context.loc.coat, imagePath: 'assets/category_icon/category_icon_test.png'),
+      ClothesCategory(id: 2, categoryName: context.loc.top, imagePath: 'assets/category_icon/category_icon_test.png'),
+      ClothesCategory(id: 3, categoryName: context.loc.bottom, imagePath: 'assets/category_icon/category_icon_test.png'),
+      ClothesCategory(id: 4, categoryName: context.loc.dress, imagePath: 'assets/category_icon/category_icon_test.png'),
+      ClothesCategory(id: 5, categoryName: context.loc.underwear, imagePath: 'assets/category_icon/category_icon_test.png'),
+      ClothesCategory(id: 8, categoryName: context.loc.accessories, imagePath: 'assets/category_icon/category_icon_test.png'),
+      ClothesCategory(id: 9, categoryName: context.loc.shoes, imagePath: 'assets/category_icon/category_icon_test.png'),
+    ];
+
+    ref.read(galleryProvider.notifier).setCategories(categories);
+
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      final templateType = TemplateType.values[widget.templateId - 1];
+      final templateType = TemplateType.values[widget._templateId - 1];
       final template = templates.firstWhere((t) => t.type == templateType);
       ref.read(galleryProvider.notifier).initializeFromTemplate(template);
     });
@@ -45,6 +58,7 @@ class _CreateOutfitScreenState extends ConsumerState<CreateOutfitScreen> {
 
   @override
   Widget build(BuildContext context) {
+
     final categories = ref.watch(galleryProvider);
     final selectedCategories = categories.where((category) => category.isSelected).toList();
     List<int> clothingItemId = [];
@@ -59,7 +73,7 @@ class _CreateOutfitScreenState extends ConsumerState<CreateOutfitScreen> {
               child: Row(
                 children: [
                   Icon(Icons.save_as),
-                  Text('Save'),
+                  Text(context.loc.save),
                 ],
               ),
             ),
@@ -69,15 +83,14 @@ class _CreateOutfitScreenState extends ConsumerState<CreateOutfitScreen> {
       body: SafeArea(
         child: SingleChildScrollView(
           child: Screenshot(
-            controller: screenshotController,
+            controller: _screenshotController,
             child: Column(
               children: [
                 if (selectedCategories.isEmpty)
-                  _emptyGallery()
+                  _buildEmptyGallery()
                 else
                   for (var category in selectedCategories)
-                    _carouselSlider(category, ref)
-
+                    _buildCarouselSlider(category, ref)
               ],
             ),
           ),
@@ -119,28 +132,25 @@ class _CreateOutfitScreenState extends ConsumerState<CreateOutfitScreen> {
     );
   }
 
-  Widget _emptyGallery() {
+  Widget _buildEmptyGallery() {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
-        Text('Zacznij dodawac poszczegolne częsci')
+        Text(context.loc.addNewPieces)
       ],
     );
   }
 
-  Widget _carouselSlider(ClothesCategory category, WidgetRef ref) {
-    final clothingItemsAsyncValue = ref.watch(getCategoryClothingItemProvider(category.id));
+  Widget _buildCarouselSlider(ClothesCategory category, WidgetRef ref) {
+    final clothingItemsAsyncValue = ref.watch(getCategoryClothingItemProvider(categoryId:  category.id));
 
     return clothingItemsAsyncValue.when(
       data: (clothingItems) {
         if (clothingItems.isEmpty) {
-          return Center(child: Text('No items found for ${category.categoryName}'));
+          return Center(child: Text('${context.loc.noItemsFound}} ${category.categoryName}'));
         }
-
-
-        if (!selectedClothingItems.containsKey(category.id) && clothingItems.isNotEmpty) {
-          selectedClothingItems[category.id] = clothingItems.first.clothingItemId!;
-          print('$selectedClothingItems itemki default');
+        if (!_selectedClothingItems.containsKey(category.id) && clothingItems.isNotEmpty) {
+          _selectedClothingItems[category.id] = clothingItems.first.clothingItemId!;
         }
 
 
@@ -148,8 +158,7 @@ class _CreateOutfitScreenState extends ConsumerState<CreateOutfitScreen> {
           options: CarouselOptions(
             enlargeCenterPage: true,
             onPageChanged: (index, reason){
-              selectedClothingItems[category.id] = clothingItems[index].clothingItemId!;
-              print('$selectedClothingItems itemki');
+              _selectedClothingItems[category.id] = clothingItems[index].clothingItemId!;
             }
           ),
           items: clothingItems.map((item) {
@@ -157,12 +166,12 @@ class _CreateOutfitScreenState extends ConsumerState<CreateOutfitScreen> {
               builder: (BuildContext context) {
                 return Container(
                   width: MediaQuery.of(context).size.width,
-                  margin: EdgeInsets.symmetric(horizontal: 5.0),
+                  margin: const EdgeInsets.symmetric(horizontal: 5.0),
                   child: Image.network(
                     item.itemPhoto,
                     fit: BoxFit.contain,
                     errorBuilder: (BuildContext context, Object error, StackTrace? stackTrace) {
-                      return Text('Failed to load image');
+                      return Text(context.loc.failedToLoadImage);
                     },
                   ),
                 );
@@ -186,17 +195,17 @@ class _CreateOutfitScreenState extends ConsumerState<CreateOutfitScreen> {
 
   void saveOutfit(List<int> clothingItemId) async {
     try {
-      final Uint8List? image = await screenshotController.capture();
+      final Uint8List? image = await _screenshotController.capture();
       if (image != null) {
 
-        final List<int> clothingItemIds = selectedClothingItems.values.toList();
+        final List<int> clothingItemIds = _selectedClothingItems.values.toList();
         final response = await ref.read(supabaseUtilsProvider).uploadImageAndReturnUrl(image);
         final result = ref.watch(saveOutfitProvider(response,clothingItemIds));
-        print('Obiekt $result');
 
-        context.router.push(CreatedOutiftSucesfullRoute());
+        ref.invalidate(getOwnedOutfitsProvider);
+        ref.invalidate(outfitListNotifierProvider);
 
-
+        context.router.push(CreatedOutfitSuccessfulRoute());
       }
     } catch (e) {
       print("Error capturing image: $e");

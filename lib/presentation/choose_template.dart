@@ -1,7 +1,6 @@
-import 'package:auto_route/annotations.dart';
 import 'package:auto_route/auto_route.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:ootd/extensions/localization_extension.dart';
 import 'package:ootd/navigation/app_router.dart';
 
 @RoutePage()
@@ -15,11 +14,11 @@ class ChooseTemplateScreen extends StatefulWidget {
 class _ChooseTemplateScreenState extends State<ChooseTemplateScreen> {
   @override
   Widget build(BuildContext context) {
-    final templates = [_emptyTemplate(), _templateOne(), _templateOne()];
+    final templates = [_buildEmptyTemplate(), _buildFirstTemplate(), _buildFirstTemplate()];
 
     return Scaffold(
       appBar: AppBar(
-        title: Text('Template'),
+        title: Text(context.loc.templateHeader),
       ),
       body: SafeArea(
         child: Padding(
@@ -29,7 +28,7 @@ class _ChooseTemplateScreenState extends State<ChooseTemplateScreen> {
               Expanded(
                 child: GridView.builder(
                     itemCount: templates.length,
-                    gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                    gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                         crossAxisCount: 2,
                         mainAxisSpacing: 8.0,
                         crossAxisSpacing: 8.0),
@@ -43,7 +42,7 @@ class _ChooseTemplateScreenState extends State<ChooseTemplateScreen> {
                       );
                     }),
               ),
-              //OutlinedButton(onPressed: (){}, child: Text('Create from empty'))
+
             ],
           ),
         ),
@@ -51,9 +50,8 @@ class _ChooseTemplateScreenState extends State<ChooseTemplateScreen> {
     );
   }
 
-  Widget _templateOne() {
+  Widget _buildFirstTemplate() {
     return Column(
-      //crossAxisAlignment: CrossAxisAlignment.center,
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
         Image.asset('assets/category_icon/category_icon_test.png',
@@ -66,17 +64,14 @@ class _ChooseTemplateScreenState extends State<ChooseTemplateScreen> {
     );
   }
 
-  Widget _emptyTemplate() {
+  Widget _buildEmptyTemplate() {
     return GestureDetector(
-      onTap: () {
-        context.router.push(CreateOutfitRoute(templateId: 1));
-        print('kliklam');
-      },
+      onTap: () => context.router.push(CreateOutfitRoute(templateId: 1)),
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Icon(Icons.add_box_rounded),
-          Text('Create from empty'),
+          const Icon(Icons.add_box_rounded),
+          Text(context.loc.createFromEmptyMessage),
         ],
       ),
     );

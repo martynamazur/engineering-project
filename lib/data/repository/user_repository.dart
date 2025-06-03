@@ -79,6 +79,7 @@ class UserRepository{
     }
   }
 
+
   Future<bool> changeEmailAdress(String newEmailAddress) async{
     try{
       await supabase.auth.updateUser(UserAttributes(email: newEmailAddress));

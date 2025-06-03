@@ -7,7 +7,7 @@ part of 'clothes_category_provider.dart';
 // **************************************************************************
 
 String _$clothesCategoryRepositoryHash() =>
-    r'0389b0a57d11e9a3cd924f919a676cf5f6dcb1c3';
+    r'a1505ee4a95723f74140ca2bccf6e2189ab0bfa7';
 
 /// See also [clothesCategoryRepository].
 @ProviderFor(clothesCategoryRepository)
@@ -25,7 +25,7 @@ final clothesCategoryRepositoryProvider =
 typedef ClothesCategoryRepositoryRef
     = AutoDisposeProviderRef<ClothesCategoryRepository>;
 String _$getClothesCategoryHash() =>
-    r'7dbcd667dcb4d95232fd9a59bf9a43d6cceda7e7';
+    r'75b279f4975d55bdc1483bb6e600053186bc1803';
 
 /// See also [getClothesCategory].
 @ProviderFor(getClothesCategory)
@@ -43,7 +43,7 @@ final getClothesCategoryProvider =
 typedef GetClothesCategoryRef
     = AutoDisposeFutureProviderRef<List<ClothesCategory>>;
 String _$getCategoryClothingItemHash() =>
-    r'7981a959f22d852572897b823655a490cd0c361b';
+    r'f7277e734d2db82caae4c891e19e95f63eacb0ae';
 
 /// Copied from Dart SDK
 class _SystemHash {
@@ -77,11 +77,11 @@ class GetCategoryClothingItemFamily
   const GetCategoryClothingItemFamily();
 
   /// See also [getCategoryClothingItem].
-  GetCategoryClothingItemProvider call(
-    int categoryId,
-  ) {
+  GetCategoryClothingItemProvider call({
+    required int categoryId,
+  }) {
     return GetCategoryClothingItemProvider(
-      categoryId,
+      categoryId: categoryId,
     );
   }
 
@@ -90,7 +90,7 @@ class GetCategoryClothingItemFamily
     covariant GetCategoryClothingItemProvider provider,
   ) {
     return call(
-      provider.categoryId,
+      categoryId: provider.categoryId,
     );
   }
 
@@ -113,12 +113,12 @@ class GetCategoryClothingItemFamily
 class GetCategoryClothingItemProvider
     extends AutoDisposeFutureProvider<List<ClothingItem>> {
   /// See also [getCategoryClothingItem].
-  GetCategoryClothingItemProvider(
-    int categoryId,
-  ) : this._internal(
+  GetCategoryClothingItemProvider({
+    required int categoryId,
+  }) : this._internal(
           (ref) => getCategoryClothingItem(
             ref as GetCategoryClothingItemRef,
-            categoryId,
+            categoryId: categoryId,
           ),
           from: getCategoryClothingItemProvider,
           name: r'getCategoryClothingItemProvider',

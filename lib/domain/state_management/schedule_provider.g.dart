@@ -7,7 +7,7 @@ part of 'schedule_provider.dart';
 // **************************************************************************
 
 String _$scheduleRepositoryHash() =>
-    r'85fb357cc129c9eacba355128d9132d718df1195';
+    r'0961b45f21f081fbd866b70d750eac53db83f9a1';
 
 /// See also [scheduleRepository].
 @ProviderFor(scheduleRepository)
@@ -24,7 +24,7 @@ final scheduleRepositoryProvider =
 
 typedef ScheduleRepositoryRef = AutoDisposeProviderRef<ScheduleRepository>;
 String _$getScheduleForMonthHash() =>
-    r'e62dba19d25b93d16953185c3699ea787e77e699';
+    r'46f70cdc06ed25e5b2a528c7f52ea703fe117850';
 
 /// Copied from Dart SDK
 class _SystemHash {
@@ -57,13 +57,13 @@ class GetScheduleForMonthFamily extends Family<AsyncValue<List<Schedule>>> {
   const GetScheduleForMonthFamily();
 
   /// See also [getScheduleForMonth].
-  GetScheduleForMonthProvider call(
-    int year,
-    int month,
-  ) {
+  GetScheduleForMonthProvider call({
+    required int year,
+    required int month,
+  }) {
     return GetScheduleForMonthProvider(
-      year,
-      month,
+      year: year,
+      month: month,
     );
   }
 
@@ -72,8 +72,8 @@ class GetScheduleForMonthFamily extends Family<AsyncValue<List<Schedule>>> {
     covariant GetScheduleForMonthProvider provider,
   ) {
     return call(
-      provider.year,
-      provider.month,
+      year: provider.year,
+      month: provider.month,
     );
   }
 
@@ -96,14 +96,14 @@ class GetScheduleForMonthFamily extends Family<AsyncValue<List<Schedule>>> {
 class GetScheduleForMonthProvider
     extends AutoDisposeFutureProvider<List<Schedule>> {
   /// See also [getScheduleForMonth].
-  GetScheduleForMonthProvider(
-    int year,
-    int month,
-  ) : this._internal(
+  GetScheduleForMonthProvider({
+    required int year,
+    required int month,
+  }) : this._internal(
           (ref) => getScheduleForMonth(
             ref as GetScheduleForMonthRef,
-            year,
-            month,
+            year: year,
+            month: month,
           ),
           from: getScheduleForMonthProvider,
           name: r'getScheduleForMonthProvider',
@@ -193,7 +193,7 @@ class _GetScheduleForMonthProviderElement
 }
 
 String _$getScheduleForWeekHash() =>
-    r'a2f18914b77f1e9e7cfebc50be4e073f97b8aa53';
+    r'0229b862fe44a391ea4642b5e7e7598738793fe6';
 
 /// See also [getScheduleForWeek].
 @ProviderFor(getScheduleForWeek)
@@ -210,7 +210,7 @@ final getScheduleForWeekProvider =
 
 typedef GetScheduleForWeekRef = AutoDisposeFutureProviderRef<List<Schedule>>;
 String _$removeFromScheduleHash() =>
-    r'a688bc5c352cbed46d177580e3571c6b7b887ebc';
+    r'fc278f812e79fa4039805f2a50ec93368bb13cc0';
 
 /// See also [removeFromSchedule].
 @ProviderFor(removeFromSchedule)
@@ -222,11 +222,11 @@ class RemoveFromScheduleFamily extends Family<AsyncValue<void>> {
   const RemoveFromScheduleFamily();
 
   /// See also [removeFromSchedule].
-  RemoveFromScheduleProvider call(
-    int scheduleId,
-  ) {
+  RemoveFromScheduleProvider call({
+    required String scheduleId,
+  }) {
     return RemoveFromScheduleProvider(
-      scheduleId,
+      scheduleId: scheduleId,
     );
   }
 
@@ -235,7 +235,7 @@ class RemoveFromScheduleFamily extends Family<AsyncValue<void>> {
     covariant RemoveFromScheduleProvider provider,
   ) {
     return call(
-      provider.scheduleId,
+      scheduleId: provider.scheduleId,
     );
   }
 
@@ -257,12 +257,12 @@ class RemoveFromScheduleFamily extends Family<AsyncValue<void>> {
 /// See also [removeFromSchedule].
 class RemoveFromScheduleProvider extends AutoDisposeFutureProvider<void> {
   /// See also [removeFromSchedule].
-  RemoveFromScheduleProvider(
-    int scheduleId,
-  ) : this._internal(
+  RemoveFromScheduleProvider({
+    required String scheduleId,
+  }) : this._internal(
           (ref) => removeFromSchedule(
             ref as RemoveFromScheduleRef,
-            scheduleId,
+            scheduleId: scheduleId,
           ),
           from: removeFromScheduleProvider,
           name: r'removeFromScheduleProvider',
@@ -286,7 +286,7 @@ class RemoveFromScheduleProvider extends AutoDisposeFutureProvider<void> {
     required this.scheduleId,
   }) : super.internal();
 
-  final int scheduleId;
+  final String scheduleId;
 
   @override
   Override overrideWith(
@@ -328,7 +328,7 @@ class RemoveFromScheduleProvider extends AutoDisposeFutureProvider<void> {
 
 mixin RemoveFromScheduleRef on AutoDisposeFutureProviderRef<void> {
   /// The parameter `scheduleId` of this provider.
-  int get scheduleId;
+  String get scheduleId;
 }
 
 class _RemoveFromScheduleProviderElement
@@ -336,10 +336,10 @@ class _RemoveFromScheduleProviderElement
   _RemoveFromScheduleProviderElement(super.provider);
 
   @override
-  int get scheduleId => (origin as RemoveFromScheduleProvider).scheduleId;
+  String get scheduleId => (origin as RemoveFromScheduleProvider).scheduleId;
 }
 
-String _$scheduleOutfitHash() => r'cb44f89dc72338d0b5122cb5a1d3b1f69e6ec24c';
+String _$scheduleOutfitHash() => r'4f3fd78cc82f96af889bccc5205f802a52597fe5';
 
 /// See also [scheduleOutfit].
 @ProviderFor(scheduleOutfit)
@@ -351,11 +351,11 @@ class ScheduleOutfitFamily extends Family<void> {
   const ScheduleOutfitFamily();
 
   /// See also [scheduleOutfit].
-  ScheduleOutfitProvider call(
-    Schedule schedule,
-  ) {
+  ScheduleOutfitProvider call({
+    required Schedule schedule,
+  }) {
     return ScheduleOutfitProvider(
-      schedule,
+      schedule: schedule,
     );
   }
 
@@ -364,7 +364,7 @@ class ScheduleOutfitFamily extends Family<void> {
     covariant ScheduleOutfitProvider provider,
   ) {
     return call(
-      provider.schedule,
+      schedule: provider.schedule,
     );
   }
 
@@ -386,12 +386,12 @@ class ScheduleOutfitFamily extends Family<void> {
 /// See also [scheduleOutfit].
 class ScheduleOutfitProvider extends AutoDisposeProvider<void> {
   /// See also [scheduleOutfit].
-  ScheduleOutfitProvider(
-    Schedule schedule,
-  ) : this._internal(
+  ScheduleOutfitProvider({
+    required Schedule schedule,
+  }) : this._internal(
           (ref) => scheduleOutfit(
             ref as ScheduleOutfitRef,
-            schedule,
+            schedule: schedule,
           ),
           from: scheduleOutfitProvider,
           name: r'scheduleOutfitProvider',

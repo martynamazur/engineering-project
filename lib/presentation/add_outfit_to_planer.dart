@@ -6,18 +6,17 @@ mozna wybrac 1 stroj a po kliknieciu dalej wracam do kalendarza
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:intl/intl.dart';
+import 'package:ootd/extensions/localization_extension.dart';
 import 'package:ootd/domain/state_management/schedule_provider.dart';
-import 'package:ootd/navigation/app_router.dart';
 
 import '../domain/state_management/outfit_list_notifier.dart';
 import '../model/schedule.dart';
 
 @RoutePage()
 class AddOutfitToCalendarScreen extends ConsumerStatefulWidget {
-  final String selectedDate;
+  final String _selectedDate;
 
-  const AddOutfitToCalendarScreen({super.key, @PathParam('selectedDate') required this.selectedDate});
+  const AddOutfitToCalendarScreen({super.key, @PathParam('selectedDate') required String selectedDate}) : _selectedDate = selectedDate;
 
   @override
   ConsumerState<AddOutfitToCalendarScreen> createState() =>
@@ -25,6 +24,7 @@ class AddOutfitToCalendarScreen extends ConsumerStatefulWidget {
 }
 
 class _AddOutfitToCallendarScreenState extends ConsumerState<AddOutfitToCalendarScreen> {
+
   int? _selectedOutfitId;
   bool _isChoosen = false;
   Schedule? _schedule;
@@ -34,13 +34,9 @@ class _AddOutfitToCallendarScreenState extends ConsumerState<AddOutfitToCalendar
   @override
   void initState() {
     super.initState();
-    parsedDate = DateTime.parse(widget.selectedDate);
+    parsedDate = DateTime.parse(widget._selectedDate);
     _outfitUrl = "";
 
-    //final now = DateTime.now();
-    //final formattedDate = DateFormat('yyyy-MM-dd').format(now);
-
-    // Inicjalizacja obiektu Schedule
     _schedule = Schedule(
       scheduleDate: parsedDate,
       scheduleTime: "10:30",
@@ -53,20 +49,20 @@ class _AddOutfitToCallendarScreenState extends ConsumerState<AddOutfitToCalendar
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Pick Outfit for a day'),
+        title: Text(context.loc.pickOutfitMessage),
       ),
       body: SafeArea(
         child: Column(
           children: [
             Expanded(child: _buildOutfitList()),
-            if (_isChoosen) _navigation(),
+            if (_isChoosen) _buildNavigationBtn(),
           ],
         ),
       ),
     );
   }
 
-  Widget _navigation() {
+  Widget _buildNavigationBtn() {
     return Row(
       children: [
         Expanded(
@@ -74,23 +70,28 @@ class _AddOutfitToCallendarScreenState extends ConsumerState<AddOutfitToCalendar
             onPressed: () {
               context.router.maybePop();
             },
-            child: const Text('Anuluj'),
+            child: Text(context.loc.cancel),
           ),
         ),
         const SizedBox(width: 12.0),
         Expanded(
           child: OutlinedButton(
             onPressed: () async {
-              if (_schedule != null && _selectedOutfitId != null) {
+
                 final updatedSchedule = _schedule!.copyWith(
                   outfitId: _selectedOutfitId,
                   imageUrl: _outfitUrl,
                 );
-                ref.read(scheduleOutfitProvider(updatedSchedule));
-                context.router.maybePop();
-              }
+                ref.read(scheduleOutfitProvider(schedule: updatedSchedule));
+                ref.invalidate(getScheduleForWeekProvider);
+                ref.invalidate(getScheduleForMonthProvider);
+
+                if(mounted){
+                  context.router.maybePop();
+                }
+
             },
-            child: const Text('Save'),
+            child: Text(context.loc.save),
           ),
         ),
       ],
@@ -103,10 +104,10 @@ class _AddOutfitToCallendarScreenState extends ConsumerState<AddOutfitToCalendar
     return outfitState.when(
       data: (data) {
         if (data.isEmpty) {
-          return const Center(
+          return Center(
             child: Text(
-              'Brak danych do wyświetlenia',
-              style: TextStyle(fontSize: 16, color: Colors.grey),
+              context.loc.noDataToDisplayMessage,
+              style: const TextStyle(fontSize: 16, color: Colors.grey),
             ),
           );
         }

@@ -33,8 +33,12 @@ mixin _$Outfit {
   @JsonKey(name: 'default_tags_id')
   List<int>? get defaultTags => throw _privateConstructorUsedError;
 
+  /// Serializes this Outfit to a JSON map.
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
-  @JsonKey(ignore: true)
+
+  /// Create a copy of Outfit
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   $OutfitCopyWith<Outfit> get copyWith => throw _privateConstructorUsedError;
 }
 
@@ -62,6 +66,8 @@ class _$OutfitCopyWithImpl<$Res, $Val extends Outfit>
   // ignore: unused_field
   final $Res Function($Val) _then;
 
+  /// Create a copy of Outfit
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -125,6 +131,8 @@ class __$$OutfitImplCopyWithImpl<$Res>
       _$OutfitImpl _value, $Res Function(_$OutfitImpl) _then)
       : super(_value, _then);
 
+  /// Create a copy of Outfit
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -258,7 +266,7 @@ class _$OutfitImpl with DiagnosticableTreeMixin implements _Outfit {
                 .equals(other._defaultTags, _defaultTags));
   }
 
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   int get hashCode => Object.hash(
       runtimeType,
@@ -269,7 +277,9 @@ class _$OutfitImpl with DiagnosticableTreeMixin implements _Outfit {
       const DeepCollectionEquality().hash(_userTags),
       const DeepCollectionEquality().hash(_defaultTags));
 
-  @JsonKey(ignore: true)
+  /// Create a copy of Outfit
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   @pragma('vm:prefer-inline')
   _$$OutfitImplCopyWith<_$OutfitImpl> get copyWith =>
@@ -313,8 +323,11 @@ abstract class _Outfit implements Outfit {
   @override
   @JsonKey(name: 'default_tags_id')
   List<int>? get defaultTags;
+
+  /// Create a copy of Outfit
+  /// with the given fields replaced by the non-null parameter values.
   @override
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   _$$OutfitImplCopyWith<_$OutfitImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }

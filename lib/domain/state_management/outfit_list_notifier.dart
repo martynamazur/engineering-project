@@ -14,7 +14,7 @@ w jakiejkolwiek zmiennej etc to Ui odswiezy ekran z lista !!!
 class OutfitListNotifier extends _$OutfitListNotifier {
   List<Outfit> _originalList = [];
   String? _selectedSeason;
-  List<int> selectedTagIds = [];
+  List<int> selectedDefaultTagIds = [];
 
   @override
   Future<List<Outfit>> build() async {
@@ -31,10 +31,10 @@ class OutfitListNotifier extends _$OutfitListNotifier {
 
   // Obsługa dodawania i usuwania tagów przez ID
   void toggleTagFilter(int tagId) {
-    if (selectedTagIds.contains(tagId)) {
-      selectedTagIds.remove(tagId);
+    if (selectedDefaultTagIds.contains(tagId)) {
+      selectedDefaultTagIds.remove(tagId);
     } else {
-      selectedTagIds.add(tagId);
+      selectedDefaultTagIds.add(tagId);
     }
     //applyFilters();
   }
@@ -46,25 +46,26 @@ class OutfitListNotifier extends _$OutfitListNotifier {
     // Filtrowanie po sezonie
     if (_selectedSeason != null && _selectedSeason!.isNotEmpty) {
       filteredList = filteredList.where((outfit) {
-        return outfit.season == _selectedSeason;
+        return outfit.season == _selectedSeason || outfit.season =='all';
       }).toList();
     }
 
-    // Filtrowanie po ID tagów
-    if (selectedTagIds.isNotEmpty) {
+    // Filtrowanie po ID tagów defaultowe
+    if (selectedDefaultTagIds.isNotEmpty) {
       filteredList = filteredList.where((outfit) {
-        return selectedTagIds.every((tagId) => outfit.id ==tagId);
+        final tags = outfit.defaultTags ?? [];
+        return selectedDefaultTagIds.any((tagId) => tags.contains(tagId));
       }).toList();
     }
 
-    // Aktualizuj stan listy
+
     state = AsyncData(filteredList);
   }
 
-  // Funkcja do resetowania filtrów
+
   void clearFilters() {
     _selectedSeason = null;
-    selectedTagIds.clear();
+    selectedDefaultTagIds.clear();
     state = AsyncData(_originalList);
   }
 

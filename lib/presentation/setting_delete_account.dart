@@ -1,12 +1,11 @@
 import 'package:another_flushbar/flushbar.dart';
 import 'package:auto_route/annotations.dart';
 import 'package:auto_route/auto_route.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:ootd/extensions/localization_extension.dart';
 import 'package:ootd/domain/state_management/user_provider.dart';
 
-import '../navigation/app_router.dart';
 
 @RoutePage()
 class SettingDeleteAccountScreen extends ConsumerStatefulWidget {
@@ -22,22 +21,16 @@ class _SettingDeleteAccountScreenState extends ConsumerState<SettingDeleteAccoun
 
     return Scaffold(
       appBar: AppBar(
-        title: Text('Delete account'),
+        title: Text(context.loc.deleteAccountHeader),
       ),
       body: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Text('Your account will be deleted 30 days after logging out. '
-              'If you log in again within this time, your account access will be restored and the account will not be deleted.'),
+          Text(context.loc.deleteAccountWarningText),
           OutlinedButton(onPressed: () async{
-          try{
-            await ref.read(userRepositoryProvider).requestAccountDeletion();
-            await ref.read(userRepositoryProvider).signOut(context);
-          }catch(e){
-            _showErrorMessage(context);
-          }
-
-    }, child: Text('Usun konto', style: TextStyle(color: Colors.redAccent),))
+            _onDeleteAccountPressed();
+          },
+              child: Text(context.loc.deleteAccountHeader, style: const TextStyle(color: Colors.redAccent),))
         ],
       ),
     ) ;
@@ -48,9 +41,17 @@ class _SettingDeleteAccountScreenState extends ConsumerState<SettingDeleteAccoun
     Flushbar(
       title: 'Error',
       message: 'Failed to request account deletion.',
-      duration: Duration(seconds: 3),
+      duration: const Duration(seconds: 3),
       backgroundColor: Colors.redAccent,
     ).show(context);
   }
 
+  Future<void> _onDeleteAccountPressed() async{
+    try{
+      await ref.read(userRepositoryProvider).requestAccountDeletion();
+      await ref.read(userRepositoryProvider).signOut(context);
+    }catch(e){
+      _showErrorMessage(context);
+    }
+  }
 }

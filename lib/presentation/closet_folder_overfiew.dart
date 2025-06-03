@@ -1,14 +1,14 @@
-import 'package:auto_route/annotations.dart';
 import 'package:auto_route/auto_route.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_tags/flutter_tags.dart';
+import 'package:ootd/extensions/localization_extension.dart';
 import 'package:ootd/model/closet_folder.dart';
 import 'package:ootd/navigation/app_router.dart';
 import 'package:ootd/presentation/styles/empty_closet_widget.dart';
 import 'package:ootd/presentation/styles/headline_text.dart';
 import '../domain/state_management/clothes_folder_provider.dart';
+import '../domain/state_management/clothing_list_notifier.dart';
 import '../model/clothing_item.dart';
 import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
 import 'package:ootd/domain/state_management/folder_list_notifier.dart' as folderList;
@@ -16,7 +16,6 @@ import 'package:ootd/domain/state_management/folder_list_notifier.dart' as folde
 @RoutePage()
 class ClosetFolderOverviewScreen extends ConsumerStatefulWidget {
   final int folderId;
-
   const ClosetFolderOverviewScreen(this.folderId, {super.key});
 
   @override
@@ -27,26 +26,30 @@ class ClosetFolderOverviewScreen extends ConsumerStatefulWidget {
 class _ClosetFolderOverviewScreenState
     extends ConsumerState<ClosetFolderOverviewScreen> {
   int? selectedValue;
+  bool _isSelected = false;
 
   @override
   Widget build(BuildContext context) {
     final closetFolder = ref.watch(getFolderProvider(widget.folderId));
+    final clothingList = ref.watch(clothingListNotifierProvider(widget.folderId));
+
 
     return Scaffold(
       appBar: AppBar(
         title: closetFolder.when(
-          data: (folder) =>
-              Text('${folder.closetName} (${folder.totalAmountOfClothes})'),
+          data: (folder) {
+            return Text('${folder.closetName} (${ folder.totalAmountOfClothes})');
+          },
           loading: () => const Text('Loading...'),
           error: (error, stackTrace) => const Text('Error'),
         ),
-        actions: _folderActionBar(),
+        actions: _buildActionBar(),
       ),
       body: SafeArea(
         child: closetFolder.when(
           data: (folder) {
             return folder.clothingItems.isNotEmpty
-                ? _clothesList(folder)
+                ? _buildClothesList(clothingList)
                 : _buildEmptyCloset();
           },
           loading: () => const Center(child: CircularProgressIndicator()),
@@ -56,18 +59,19 @@ class _ClosetFolderOverviewScreenState
     );
   }
 
-  List<Widget> _folderActionBar() {
+  List<Widget> _buildActionBar() {
     return [
       IconButton(
         onPressed: () {
-          // Obsługa filtrowania
+          _openFilterDialog();
         },
-        icon: Icon(Icons.filter_list_alt),
+        icon: Icon(_isSelected ? Icons.filter_list_off : Icons.filter_list_alt, color: _isSelected ? Colors.red :null),
       ),
+
       IconButton(
         onPressed: () => context.router
             .push(PickOwnedClothesRoute(folderId: widget.folderId)),
-        icon: Icon(Icons.add),
+        icon: const Icon(Icons.add),
       ),
       SizedBox(
         width: 40,
@@ -75,22 +79,22 @@ class _ClosetFolderOverviewScreenState
           onSelected: (value) {
             switch (value) {
               case 1:
-                showAlertDialogChangeFolderName();
+                showChangeFolderNameDialog();
                 break;
               case 2:
-                showAlertDialogDeleteFolder();
+                showDeleteFolderDialog();
                 break;
             }
           },
-          icon: Icon(Icons.edit),
+          icon: const Icon(Icons.edit),
           itemBuilder: (BuildContext context) => [
             PopupMenuItem<int>(
               value: 1,
-              child: Text('Change folder name'),
+              child: Text(context.loc.changeFolderName),
             ),
             PopupMenuItem<int>(
               value: 2,
-              child: Text('Delete folder'),
+              child: Text(context.loc.deleteFolder),
             ),
           ],
         ),
@@ -99,95 +103,34 @@ class _ClosetFolderOverviewScreenState
     ];
   }
 
-  void showAlertDialogDeleteFolder() {
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          title: Text('Are you sure?'),
-          content: Text('This action will be permanent and cannot be undone.'),
-          actions: [
-            TextButton(
-              onPressed: () async {
 
-                if (mounted) {
-                  ref.read(deleteFolderProvider(widget.folderId));
-                  ref.invalidate(folderList.folderListNotifierProvider);
-                  Navigator.of(context).pop(); //zamkniecie dialogu
-
-                  if (mounted) {
-                    context.router.maybePop();//przejscie do poprzedniego ekranu
-                  }
-                }
-              },
-              child: Text('Delete'),
-            ),
-          ],
-        );
-      },
-    );
-  }
-
-  void showAlertDialogChangeFolderName() {
-    final _controller = TextEditingController();
-
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          title: Text('Change Folder Name'),
-          content: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Text('Please enter the new folder name:'),
-              SizedBox(height: 10),
-              TextField(
-                controller: _controller,
-                decoration: InputDecoration(hintText: 'Folder Name'),
-              ),
-            ],
+  Widget _buildEmptyCloset() {
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        GestureDetector(
+          onTap: () => context.router
+              .push(PickOwnedClothesRoute(folderId: widget.folderId)),
+          child: Container(
+            width: 100,
+            height: 100,
+            decoration: const BoxDecoration(
+                shape: BoxShape.circle, color: Colors.lightGreenAccent),
+            child: const Icon(Icons.add),
           ),
-          actions: [
-            TextButton(
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
-              child: Text('Cancel'),
-            ),
-            TextButton(
-              onPressed: () async {
-                if (_controller.text.isNotEmpty) {
-                  ref.read(changeFolderNameProvider(
-                      _controller.text, widget.folderId));
-
-
-
-                  //ok zmienia sie w home screen
-                  await ref.read(folderList.folderListNotifierProvider.notifier).updateFolderName(widget.folderId,_controller.text);
-
-                  ref.invalidate(getFolderProvider(widget.folderId)); //odswiezac dane, pobieram cala liste ponownie
-                  ref.invalidate(folderListNotifierProvider);//odswiezam home
-
-                }
-                if (mounted) {
-                  Navigator.of(context).pop();
-                }
-              },
-              child: Text('Change'),
-            ),
-          ],
-        );
-      },
+        ),
+        Center(child: Text(context.loc.emptyCloset, style: headline)),
+      ],
     );
   }
 
-  Widget _clothesList(ClosetFolder folder) {
+  Widget _buildClothesList(AsyncValue<List<ClothingItem>> clothingItemsList) {
     return SingleChildScrollView(
-      child: Column(
-        children: [
-          _clothesGrid(folder.clothingItems),
-        ],
-      ),
+      child: clothingItemsList.when(
+        data: (data) => _clothesGrid(data),
+        error: (Object error, StackTrace stackTrace) {  },
+        loading: () => const CircularProgressIndicator()
+      )
     );
   }
 
@@ -225,9 +168,8 @@ class _ClosetFolderOverviewScreenState
   Widget _buildClothingItemTile(
       ClothingItem clothingItem, BuildContext context) {
     return GestureDetector(
-      onTap: () => context.router
-          .push(ClothingItemOverviewRoute(clothingItem: clothingItem)),
-      onLongPress: () => _removeFromFolderDialog(clothingItem.clothingItemId!),
+      onTap: () => context.router.push(ClothingItemOverviewRoute(clothingItem: clothingItem)),
+      onLongPress: () => _showRemoveFromFolderDialog(clothingItem.clothingItemId!),
       child: Container(
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(8.0),
@@ -250,7 +192,7 @@ class _ClosetFolderOverviewScreenState
                   clothingItem.itemPhoto,
                   fit: BoxFit.cover,
                   errorBuilder: (context, error, stackTrace) {
-                    return Center(child: Text('Image not available'));
+                    return Center(child: Text(context.loc.imageNotAvailable));
                   },
                 ),
               ),
@@ -262,7 +204,7 @@ class _ClosetFolderOverviewScreenState
     );
   }
 
-  void _removeFromFolderDialog(int clothingItemId) {
+  void _showRemoveFromFolderDialog(int clothingItemId) {
     showDialog(
         context: context,
         builder: (BuildContext context) {
@@ -274,7 +216,7 @@ class _ClosetFolderOverviewScreenState
               TextButton(onPressed: () => context.router.maybePop(), child: Text('Cancel')),
               TextButton(
                   onPressed: () async {
-                    ref.read(removeClothingItemFromFolderProvider(widget.folderId, clothingItemId));
+                    ref.read(removeClothingItemFromFolderProvider(folderId:  widget.folderId, clothingItemId:  clothingItemId));
                     ref.invalidate(getFolderProvider(widget.folderId));
                     await ref.read(folderList.folderListNotifierProvider.notifier).removeClothingItemFromFolder(widget.folderId, clothingItemId);
                     ref.invalidate(folderList.folderListNotifierProvider);
@@ -289,42 +231,163 @@ class _ClosetFolderOverviewScreenState
         });
   }
 
-  Widget _buildEmptyCloset() {
-    return Column(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: [
-        GestureDetector(
-          onTap: () => context.router
-              .push(PickOwnedClothesRoute(folderId: widget.folderId)),
-          child: Container(
-            width: 100,
-            height: 100,
-            decoration: BoxDecoration(
-                shape: BoxShape.circle, color: Colors.lightGreenAccent),
-            child: Icon(Icons.add),
-          ),
-        ),
-        Center(child: Text("Empty closet", style: headline)),
-      ],
-    );
-  }
+  void showDeleteFolderDialog() {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text('Are you sure?'),
+          content: Text('This action will be permanent and cannot be undone.'),
+          actions: [
+            TextButton(
+              onPressed: () async {
 
-  Widget _tags() {
-    final tags = ["Tag1", "Tag2", "Tag3"];
-    return Tags(
-      itemCount: tags.length,
-      horizontalScroll: true,
-      itemBuilder: (int index) {
-        final item = tags[index];
-        return ItemTags(
-          index: index,
-          title: item,
-          active: true,
-          textStyle: TextStyle(fontSize: 14),
-          elevation: 5,
-          borderRadius: BorderRadius.circular(8),
+                if (mounted) {
+                  ref.read(deleteFolderProvider(folderId:  widget.folderId));
+                  ref.invalidate(folderList.folderListNotifierProvider);
+                  Navigator.of(context).pop(); //zamkniecie dialogu
+
+                  if (mounted) {
+                    context.router.maybePop();//przejscie do poprzedniego ekranu
+                  }
+                }
+              },
+              child: Text('Delete'),
+            ),
+          ],
         );
       },
     );
   }
+
+  void showChangeFolderNameDialog() {
+    final _controller = TextEditingController();
+
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text('Change Folder Name'),
+          content: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Text('Please enter the new folder name:'),
+              SizedBox(height: 10),
+              TextField(
+                controller: _controller,
+                decoration: InputDecoration(hintText: 'Folder Name'),
+              ),
+            ],
+          ),
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+              child: Text('Cancel'),
+            ),
+            TextButton(
+              onPressed: () async {
+                if (_controller.text.isNotEmpty) {
+                  ref.read(changeFolderNameProvider(
+                     newFolderName:  _controller.text, folderId:  widget.folderId));
+                  //ok zmienia sie w home screen
+                  await ref.read(folderList.folderListNotifierProvider.notifier).updateFolderName(widget.folderId,_controller.text);
+
+                  ref.invalidate(getFolderProvider(widget.folderId)); //odswiezac dane, pobieram cala liste ponownie
+                  ref.invalidate(folderListNotifierProvider);//odswiezam home
+
+                }
+                if (mounted) {
+                  Navigator.of(context).pop();
+                }
+              },
+              child: Text('Change'),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  void _openFilterDialog() {
+    final availableCategories = [
+      'Odzież wierzchnia',
+      'Odzież górna',
+      'Odzież dolna',
+      'Sukienki i kombinezony',
+      'Bielizna',
+      'Akcesoria',
+      'Obuwie'
+    ];
+
+    showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      backgroundColor: Colors.transparent,
+      builder: (context) => DraggableScrollableSheet(
+        minChildSize: 0.1,
+        maxChildSize: 0.9,
+        expand: true,
+        builder: (context, scrollController) => Container(
+          decoration: BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+          ),
+          child: ListView(
+            padding: const EdgeInsets.all(16.0),
+            controller: scrollController,
+            children: <Widget>[
+              const SizedBox(height: 16.0),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                spacing: 10.0,
+
+                children: [
+                TextButton(
+                    onPressed: () => context.router.maybePop(),
+                    child:  Row(
+                      children: [
+                        Text('Exit'),
+                        Icon(Icons.fullscreen_exit)
+                      ],
+                    )
+                ),
+                Text('Wybierz kategorię'),
+                TextButton(onPressed: () => ref.read(clothingListNotifierProvider(widget.folderId).notifier).resetFilters(),
+                    child: Row(
+                      children: [
+                        Text('Clear'),
+                        Icon(Icons.fullscreen_exit)
+                      ],
+                    )),
+              ],),
+              const SizedBox(height: 16.0),
+              ...availableCategories.asMap().map((index, category) {
+                return MapEntry(
+                  index,
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: OutlinedButton(
+                      onPressed: () {
+                        setState(() {
+                          _isSelected = true;
+                        });
+                        ref.read(clothingListNotifierProvider(widget.folderId).notifier).filterByCategory(index+1);
+                        context.router.maybePop();
+                      },
+                      child: Text(category),
+                    ),
+                  ),
+                );
+              }).values.toList(),
+              // itd...
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
 }

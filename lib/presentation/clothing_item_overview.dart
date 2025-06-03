@@ -7,6 +7,7 @@ import 'package:ootd/domain/state_management/clothes_provider.dart';
 import 'package:ootd/model/clothing_item.dart';
 
 import '../domain/state_management/clothes_folder_provider.dart';
+import '../navigation/app_router.dart';
 
 @RoutePage()
 class ClothingItemOverviewScreen extends ConsumerStatefulWidget {
@@ -38,28 +39,25 @@ class _ClothingItemOverviewScreenState extends ConsumerState<ClothingItemOvervie
 
                 switch(value){
                   case 1:
-                    //vagigate to edit page
+                    context.router.push(EditClothingitemRoute(clothingItem: widget.clothingItem));
                     break;
                   case 2:
-                    showAlertDialog();
+                    _showDeleteDialog();
                     context.router.back();
                 }
-
               })
-
         ],
       ),
       body: SafeArea(
           child: Column(
         children: [
           Expanded(child: Image.network(widget.clothingItem.itemPhoto, fit: BoxFit.cover))
-          //OutlinedButton(onPressed: (){}, child: Text('Create outfit'))
         ],
       )),
     );
   }
 
-  void showAlertDialog() {
+  void _showDeleteDialog() {
     showDialog(
       context: context,
       builder: (BuildContext context) {
@@ -69,12 +67,8 @@ class _ClothingItemOverviewScreenState extends ConsumerState<ClothingItemOvervie
           actions: [
             TextButton(
               onPressed: () async{
-                ref.read(deleteClothingItemProvider(widget.clothingItem.clothingItemId!));
-
-                if(mounted){
-                  context.router.pop();
-                }
-
+                ref.read(deleteClothingItemProvider(clothingItemId :widget.clothingItem.clothingItemId!));
+                if(mounted) context.router.maybePop();
               },
               child: Text('Delete'),
             ),

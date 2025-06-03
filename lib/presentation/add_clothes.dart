@@ -12,6 +12,7 @@ import 'package:ootd/model/clothing_item.dart';
 import 'package:ootd/navigation/app_router.dart';
 import 'package:ootd/presentation/styles/selectable_category_tile.dart';
 import 'package:ootd/presentation/styles/selectable_season_tile.dart';
+import 'package:path_provider/path_provider.dart';
 
 import '../domain/state_management/clothes_category_provider.dart';
 import '../domain/state_management/clothes_folder_provider.dart';
@@ -35,68 +36,70 @@ class _AddClothesState extends ConsumerState<AddClothesScreen> {
   late final PageController _pageController =PageController();
   late final ImagePicker _picker = ImagePicker();
 
-  final int _lastPage = 3;
+
   int _currentPage = 0;
+  final int _lastPage = 3;
   XFile? _image;
 
   List<Season> _pickedSeasons = [];
   int? _pickedCategory;
-  int? pickedSeason;
+  //int? pickedSeason;
 
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: SafeArea(
-        child: Column(
-          children: [
-            LinearProgressBar(
-                maxSteps: 3,
-                progressType: LinearProgressBar.progressTypeLinear,
-                currentStep: _currentPage,
-                progressColor: Color(0xFFD1E64B),
-                backgroundColor: Colors.grey,
-                borderRadius: BorderRadius.circular(10)),
-            Expanded(
-                child: PageView(
-              onPageChanged: (int page) {
-                setState(() {
-                  _currentPage = page;
-                });
-              },
-              controller: _pageController,
-              children: [
-                _pickClothesFromGallery(),
-                _pickCategory(),
-                _pickSeason(),
-                _finalize()
-              ],
-            )),
-            if (_currentPage != _lastPage) _navigation()
-          ],
+        child: Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: Column(
+            children: [
+              LinearProgressBar(
+                  maxSteps: 3,
+                  progressType: LinearProgressBar.progressTypeLinear,
+                  currentStep: _currentPage,
+                  progressColor: Color(0xFFD1E64B),
+                  backgroundColor: Colors.grey,
+                  borderRadius: BorderRadius.circular(10)),
+              Expanded(
+                  child: PageView(
+                onPageChanged: (int page) {
+                  setState(() {
+                    _currentPage = page;
+                  });
+                },
+
+                controller: _pageController,
+                children: [
+                  _buildPickClothesFromGallery(),
+                  _buildPickCategory(),
+                  _buildPickSeason(),
+                  _buildFinalize()
+                ],
+              )),
+              if (_currentPage != _lastPage) _buildPageNavigation()
+            ],
+          ),
         ),
       ),
     );
   }
 
-  Widget _pickClothesFromGallery() {
-    return Padding(
-      padding: const EdgeInsets.all(16.0),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text('Add photo', style: headline32),
-          SizedBox(height: 20),
-          _buildImageView(),
-          SizedBox(height: 20),
-          SizedBox(
-            width: double.infinity,
-            child: OutlinedButton(
-                onPressed: _pickImageFromGallery, child: Text('Choose photo')),
-          ),
-          SizedBox(height: 20),
-        ],
-      ),
+  Widget _buildPickClothesFromGallery() {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text('Add photo', style: headline32),
+        SizedBox(height: 20),
+        _buildImageView(),
+        SizedBox(height: 20),
+        SizedBox(
+          width: double.infinity,
+          child: OutlinedButton(
+              onPressed: _pickImageFromGallery, child: Text('Choose photo')),
+        ),
+        SizedBox(height: 20),
+      ],
     );
   }
 
@@ -130,21 +133,7 @@ class _AddClothesState extends ConsumerState<AddClothesScreen> {
           );
   }
 
-  void _pickImageFromGallery() async {
-    final XFile? image = await _picker.pickImage(source: ImageSource.gallery);
-    if (image != null) {
-      final file = File(image.path);
-      final result = await ref.read(removePhotoBackgroundProvider(file).future);
-
-      setState(() {
-        _image = result != null ? XFile(result.path) : null;
-      });
-
-
-    }
-  }
-
-  Widget _pickCategory() {
+  Widget _buildPickCategory() {
     final categoryList = ref.watch(getClothesCategoryProvider);
 
     return Padding(
@@ -178,11 +167,9 @@ class _AddClothesState extends ConsumerState<AddClothesScreen> {
                         isSelected: _pickedCategory == category.id,
                         onTap: () {
                           setState(() {
-                            _pickedCategory = _pickedCategory == category.id ? null : category.id; // Toggle selection
+                            _pickedCategory = _pickedCategory == category.id ? null : category.id;
                             print("Category : $_pickedCategory");
                           });
-
-
                         },
                       );
                     },
@@ -198,7 +185,7 @@ class _AddClothesState extends ConsumerState<AddClothesScreen> {
     );
   }
 
-  Widget _pickSeason() {
+  Widget _buildPickSeason() {
     final seasonList = ref.watch(seasonRepositoryProvider).getSeason();
     return Padding(
       padding: const EdgeInsets.all(16.0),
@@ -219,34 +206,28 @@ class _AddClothesState extends ConsumerState<AddClothesScreen> {
             physics: NeverScrollableScrollPhysics(),
             itemBuilder: (context, index) {
               final season = seasonList[index];
-              bool isSelected = _pickedSeasons.contains(season);
+              final seasonMap = {
+                1: Season.winter,
+                2: Season.spring,
+                3: Season.summer,
+                4: Season.autumn,
+              };
               return SelectableSeasonTile(
                 season: season,
-                isSelected: isSelected,
+                isSelected: _pickedSeasons.contains(seasonMap[season.id]),
                 onTap: () {
-                    final seasonMap = {
-                      1: Season.winter,
-                      2: Season.spring,
-                      3: Season.summer,
-                      4: Season.autumn,
-                    };
-
                     final selectedSeason = seasonMap[season.id];
-
                     if (selectedSeason != null) {
                       setState(() {
+                        //dodaje/usuwam z tabelki
                         if (_pickedSeasons.contains(selectedSeason)) {
                           _pickedSeasons.remove(selectedSeason);
-                          isSelected =  false;
+                          print(_pickedSeasons.contains(season));
                         } else {
                           _pickedSeasons.add(selectedSeason);
-                          isSelected = true;
                         }
                       });
                     }
-
-                    print('Wybrane sezony: $_pickedSeasons');
-
                 },
               );
             },
@@ -256,7 +237,7 @@ class _AddClothesState extends ConsumerState<AddClothesScreen> {
     );
   }
 
-  Widget _finalize() {
+  Widget _buildFinalize() {
     return Padding(
       padding: EdgeInsets.all(16.0),
       child: Column(
@@ -265,6 +246,7 @@ class _AddClothesState extends ConsumerState<AddClothesScreen> {
           Expanded(
             child: _image != null
                 ? Image.file(
+                    key: UniqueKey(),
                     File(_image!.path),
                     fit: BoxFit.cover,
                   )
@@ -275,18 +257,17 @@ class _AddClothesState extends ConsumerState<AddClothesScreen> {
               child: OutlinedButton(
                   onPressed: () async{
                     // jeszcze raz
-                    await saveClothingItemToDatabase();
-                    /*
+                    await _submitClothingItemForm();
+
                     setState(() {
+
                       _image = null;
                       _pickedCategory = null;
                       _pickedSeasons.clear();
-                      print("-imahe $_image $_pickedCategory");
-                    });
-                    context.router.dispose();
-                    //_pageController.jumpTo(0);
 
-                     */
+                      print("-imahe $_image $_pickedCategory");
+                      _pageController.jumpToPage(0);
+                    });
 
 
                   }, child: Text('Add another one'))),
@@ -294,21 +275,8 @@ class _AddClothesState extends ConsumerState<AddClothesScreen> {
               width: double.infinity,
               child: OutlinedButton(
                   onPressed: () async{
-                    await saveClothingItemToDatabase();
-                    AutoTabsRouter.of(context).setActiveIndex(1);
-                    /*
-                    setState(() {
-                      _image = null;
-                      _pickedCategory = null;
-                      _pickedSeasons.clear();
-                    });
-                    _pageController.jumpTo(0);
-                    //context.router.dispose();
-
-
-                     */
-
-
+                    await _submitClothingItemForm();
+                    context.router.maybePop();
                   },
                   child: Text('Finish')))
         ],
@@ -316,25 +284,7 @@ class _AddClothesState extends ConsumerState<AddClothesScreen> {
     );
   }
 
-  Future<void> saveClothingItemToDatabase() async {
-    final Uint8List? imageData = await _image?.readAsBytes();
-
-    final imageUrl = await ref
-        .read(supabaseUtilsProvider)
-        .uploadImageAndReturnUrl(imageData!);
-
-
-    final clothingItem = ClothingItem(
-        itemPhoto: imageUrl,
-        itemCategoryId: _pickedCategory,
-        seasons: _pickedSeasons);
-
-    await ref.read(clothesRepositoryProvider).addClothingItem(clothingItem);
-    ref.refresh(folderListNotifierProvider);
-
-  }
-
-  Widget _navigation() {
+  Widget _buildPageNavigation() {
     return Row(
       children: [
         Expanded(
@@ -359,4 +309,37 @@ class _AddClothesState extends ConsumerState<AddClothesScreen> {
       ],
     );
   }
+
+  void _pickImageFromGallery() async {
+    final XFile? image = await _picker.pickImage(source: ImageSource.gallery);
+
+    if (image != null) {
+      final file = File(image.path);
+      final result = await ref.read(removePhotoBackgroundProvider(file).future);
+
+      setState(() {
+        _image = result != null ? XFile(result.path) : null;
+      });
+
+    }}
+
+  Future<void> _submitClothingItemForm() async {
+    final Uint8List? imageData = await _image?.readAsBytes();
+
+    final imageUrl = await ref
+        .read(supabaseUtilsProvider)
+        .uploadImageAndReturnUrl(imageData!);
+
+
+    final clothingItem = ClothingItem(
+        itemPhoto: imageUrl,
+        itemCategoryId: _pickedCategory,
+        seasons: _pickedSeasons);
+
+    await ref.read(clothesRepositoryProvider).addClothingItem(clothingItem);
+    ref.refresh(folderListNotifierProvider);
+
+  }
+
+
 }

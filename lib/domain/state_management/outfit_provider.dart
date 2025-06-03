@@ -1,3 +1,4 @@
+import 'package:riverpod/riverpod.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 import '../../data/repository/outfit_repository.dart';
@@ -7,36 +8,36 @@ import '../../model/outfit.dart';
 part 'outfit_provider.g.dart';
 
 @riverpod
-OutfitRepository outfitRepository (OutfitRepositoryRef ref) {
-  return OutfitRepository() ;
+OutfitRepository outfitRepository (Ref ref) {
+  return OutfitRepository();
 }
 
 @riverpod
-Future<List<Outfit>> getOwnedOutfits(GetOwnedOutfitsRef ref) async {
+Future<List<Outfit>> getOwnedOutfits(Ref ref) async {
   return ref.read(outfitRepositoryProvider).getOwnedOutfits();
 }
 
 @riverpod
-Future<void> saveOutfit(SaveOutfitRef ref, String imageUrl, List<int> clothingItemId) async {
+Future<void> saveOutfit(Ref ref, String imageUrl, List<int> clothingItemId) async {
   await ref.read(outfitRepositoryProvider).saveOutfitToDatabase(imageUrl,clothingItemId);
 }
 
 @riverpod
-Future<void> deleteOutfit(DeleteOutfitRef ref, int outfitId) async {
+Future<void> deleteOutfit(Ref ref, int outfitId) async {
   return ref.read(outfitRepositoryProvider).removeOutfit(outfitId);
 }
 
 @riverpod
-Future<void> editOutfitInformationTags(EditOutfitInformationTagsRef ref, List<String> updatedTags, int outfitId) async {
+Future<void> editOutfitInformationTags(Ref ref, List<String> updatedTags, int outfitId) async {
   return ref.read(outfitRepositoryProvider).editOutfitInformationTags(updatedTags,outfitId);
 }
 
 @riverpod
-Future<void> editOutfitInformationSeason(EditOutfitInformationSeasonRef ref, String season, int outfitId) async {
+Future<void> editOutfitInformationSeason(Ref ref, String season, int outfitId) async {
   return ref.read(outfitRepositoryProvider).editOutfitInformationSeason(season,outfitId);
 }
 
 @riverpod
-Future<Outfit> getOutfit(GetOutfitRef ref, outfitId) async {
+Future<Outfit> getOutfit(Ref ref, outfitId) async {
   return ref.read(outfitRepositoryProvider).getOutfit(outfitId);
 }

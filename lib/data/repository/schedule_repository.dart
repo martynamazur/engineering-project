@@ -57,7 +57,7 @@ class ScheduleRepository {
     }
   }
 
-  Future<void> removeFromSchedule(int scheduleId) async {
+  Future<void> removeFromSchedule(String scheduleId) async {
     await supabase.rpc(' remove_schedule_and_update_user_list',
         params: {'schedule_id': scheduleId, 'user_uuid': _userId});
   }

@@ -6,7 +6,7 @@ part of 'tag_provider.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$tagRepositoryHash() => r'200ad85dab16807e6582d5a635fe7d1a2389a40e';
+String _$tagRepositoryHash() => r'ddb639249f7f7dd6c818f95fce09bf83e744d46e';
 
 /// See also [tagRepository].
 @ProviderFor(tagRepository)
@@ -22,7 +22,7 @@ final tagRepositoryProvider = AutoDisposeProvider<TagRepository>.internal(
 
 typedef TagRepositoryRef = AutoDisposeProviderRef<TagRepository>;
 String _$userTagsListStreamHash() =>
-    r'7e1bf444e3e410495524066ae0f9c9291a290caf';
+    r'1997851feacaa5129cb711eabce7b28da5710ce1';
 
 /// See also [userTagsListStream].
 @ProviderFor(userTagsListStream)
@@ -39,7 +39,7 @@ final userTagsListStreamProvider =
 
 typedef UserTagsListStreamRef = AutoDisposeStreamProviderRef<List<Tag>>;
 String _$getDefaultTagsListHash() =>
-    r'2ff6d35850e1c35bb819d7ba8bd76178f13e1f9a';
+    r'761007bc2acc6870202f85e2def43797f7a1ef5c';
 
 /// See also [getDefaultTagsList].
 @ProviderFor(getDefaultTagsList)

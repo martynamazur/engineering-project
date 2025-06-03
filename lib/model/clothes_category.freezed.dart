@@ -27,8 +27,12 @@ mixin _$ClothesCategory {
   String get imagePath => throw _privateConstructorUsedError;
   bool get isSelected => throw _privateConstructorUsedError;
 
+  /// Serializes this ClothesCategory to a JSON map.
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
-  @JsonKey(ignore: true)
+
+  /// Create a copy of ClothesCategory
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   $ClothesCategoryCopyWith<ClothesCategory> get copyWith =>
       throw _privateConstructorUsedError;
 }
@@ -56,6 +60,8 @@ class _$ClothesCategoryCopyWithImpl<$Res, $Val extends ClothesCategory>
   // ignore: unused_field
   final $Res Function($Val) _then;
 
+  /// Create a copy of ClothesCategory
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -108,6 +114,8 @@ class __$$ClothesCategoryImplCopyWithImpl<$Res>
       _$ClothesCategoryImpl _value, $Res Function(_$ClothesCategoryImpl) _then)
       : super(_value, _then);
 
+  /// Create a copy of ClothesCategory
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -193,12 +201,14 @@ class _$ClothesCategoryImpl
                 other.isSelected == isSelected));
   }
 
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   int get hashCode =>
       Object.hash(runtimeType, id, categoryName, imagePath, isSelected);
 
-  @JsonKey(ignore: true)
+  /// Create a copy of ClothesCategory
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   @pragma('vm:prefer-inline')
   _$$ClothesCategoryImplCopyWith<_$ClothesCategoryImpl> get copyWith =>
@@ -233,8 +243,11 @@ abstract class _ClothesCategory implements ClothesCategory {
   String get imagePath;
   @override
   bool get isSelected;
+
+  /// Create a copy of ClothesCategory
+  /// with the given fields replaced by the non-null parameter values.
   @override
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   _$$ClothesCategoryImplCopyWith<_$ClothesCategoryImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }

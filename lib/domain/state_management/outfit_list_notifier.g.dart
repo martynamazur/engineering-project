@@ -7,7 +7,7 @@ part of 'outfit_list_notifier.dart';
 // **************************************************************************
 
 String _$outfitListNotifierHash() =>
-    r'b2171228e8376412084904f36e8ea45c7e3da010';
+    r'0d8d7b74428fc8df9f34a6e4e1e41fb0590c3c3f';
 
 /// See also [OutfitListNotifier].
 @ProviderFor(OutfitListNotifier)

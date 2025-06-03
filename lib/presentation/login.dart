@@ -5,7 +5,9 @@ import 'package:email_validator/email_validator.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:ootd/navigation/app_router.dart';
-import 'package:ootd/presentation/styles/password_validator.dart';
+import 'package:ootd/presentation/styles/password_input.dart';
+import 'package:ootd/presentation/password_validator.dart';
+import 'package:ootd/extensions/localization_extension.dart';
 
 
 import '../domain/state_management/user_provider.dart';
@@ -38,29 +40,31 @@ class _LoginState extends ConsumerState<LoginScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Login'),
+        title: Text(context.loc.loginHeader),
       ),
-      body: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Form(
-          key: _formKey,
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              _inputEmail(),
-              SizedBox(height: 16.0),
-              _inputPassword(),
-              SizedBox(height: 16.0),
-              _resetPassword(),
-              _registration(),
-              _signInButton()
-          ]),
+      body: SingleChildScrollView(
+        child: Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: Form(
+            key: _formKey,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                _buildInputEmail(),
+                SizedBox(height: 16.0),
+                PasswordInput(passwordController: _passwordController, passwordValidator: _passwordValidator),
+                SizedBox(height: 16.0),
+                _buildResetPasswordLink(),
+                _buildRegistration(),
+                _buildSignInButton()
+            ]),
+          ),
         ),
       ),
     );
   }
 
-  TextFormField _inputEmail() {
+  TextFormField _buildInputEmail() {
     return TextFormField(
         controller: _emailController,
         keyboardType: TextInputType.emailAddress,
@@ -75,31 +79,17 @@ class _LoginState extends ConsumerState<LoginScreen> {
         decoration: emailInputDecoration);
   }
 
-  TextFormField _inputPassword() {
-    return TextFormField(
-        controller: _passwordController,
-        keyboardType: TextInputType.visiblePassword,
-        validator: (value) {
-          if (value == null || value.isEmpty) {
-            return 'Password cannot be empty';
-          } else if (!_passwordValidator.validate(value)) {
-            return 'Incorrect Email or Password';
-          }
-          return null;
-        },
-        decoration: passwordInputDecoration);
-  }
 
-  Widget _resetPassword() {
+  Widget _buildResetPasswordLink() {
     return GestureDetector(
       onTap: () {
         context.router.push(ResetPasswordRoute());
       },
-      child: Text('Password reset'),
+      child: Text(context.loc.resetPasswordHeader),
     );
   }
 
-  Widget _registration(){
+  Widget _buildRegistration(){
     return GestureDetector(
       onTap: () {
         context.router.push(RegistrationRoute());
@@ -121,10 +111,10 @@ class _LoginState extends ConsumerState<LoginScreen> {
     );
   }
 
-  Widget _signInButton(){
+  Widget _buildSignInButton(){
     return  ElevatedButton(
       onPressed: _signInValidator,
-      child: Text('Sign in'),
+      child: Text(context.loc.signIn),
     );
   }
 
@@ -140,14 +130,14 @@ class _LoginState extends ConsumerState<LoginScreen> {
       if (response) {
         context.router.replace(const HomeRoute());
       } else {
-        loginFailedMessage();
+        showLoginFailedMessage();
       }
     } else {
-      loginFailedMessage();
+      showLoginFailedMessage();
     }
   }
 
-  void loginFailedMessage() {
+  void showLoginFailedMessage() {
     _emailController.clear();
     _passwordController.clear();
     Flushbar(
@@ -159,3 +149,5 @@ class _LoginState extends ConsumerState<LoginScreen> {
     ).show(context);
   }
 }
+
+

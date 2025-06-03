@@ -36,8 +36,12 @@ mixin _$ClothingItem {
   @JsonKey(name: 'seasons')
   List<Season>? get seasons => throw _privateConstructorUsedError;
 
+  /// Serializes this ClothingItem to a JSON map.
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
-  @JsonKey(ignore: true)
+
+  /// Create a copy of ClothingItem
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   $ClothingItemCopyWith<ClothingItem> get copyWith =>
       throw _privateConstructorUsedError;
 }
@@ -68,6 +72,8 @@ class _$ClothingItemCopyWithImpl<$Res, $Val extends ClothingItem>
   // ignore: unused_field
   final $Res Function($Val) _then;
 
+  /// Create a copy of ClothingItem
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -138,6 +144,8 @@ class __$$ClothingItemImplCopyWithImpl<$Res>
       _$ClothingItemImpl _value, $Res Function(_$ClothingItemImpl) _then)
       : super(_value, _then);
 
+  /// Create a copy of ClothingItem
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -269,7 +277,7 @@ class _$ClothingItemImpl with DiagnosticableTreeMixin implements _ClothingItem {
             const DeepCollectionEquality().equals(other._seasons, _seasons));
   }
 
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   int get hashCode => Object.hash(
       runtimeType,
@@ -281,7 +289,9 @@ class _$ClothingItemImpl with DiagnosticableTreeMixin implements _ClothingItem {
       itemSeason,
       const DeepCollectionEquality().hash(_seasons));
 
-  @JsonKey(ignore: true)
+  /// Create a copy of ClothingItem
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   @pragma('vm:prefer-inline')
   _$$ClothingItemImplCopyWith<_$ClothingItemImpl> get copyWith =>
@@ -311,8 +321,9 @@ abstract class _ClothingItem implements ClothingItem {
 
   @override
   @JsonKey(name: 'clothing_item_id')
-  int? get clothingItemId;
-  @override //@JsonKey(name: 'item_name') required String itemName,//nie potzrebne
+  int?
+      get clothingItemId; //@JsonKey(name: 'item_name') required String itemName,//nie potzrebne
+  @override
   @JsonKey(name: 'item_photo')
   String get itemPhoto;
   @override
@@ -326,12 +337,15 @@ abstract class _ClothingItem implements ClothingItem {
   int? get itemCategoryId;
   @override
   @JsonKey(name: 'item_season_id')
-  int? get itemSeason;
-  @override //do usuniecia
+  int? get itemSeason; //do usuniecia
+  @override
   @JsonKey(name: 'seasons')
   List<Season>? get seasons;
+
+  /// Create a copy of ClothingItem
+  /// with the given fields replaced by the non-null parameter values.
   @override
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   _$$ClothingItemImplCopyWith<_$ClothingItemImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }
