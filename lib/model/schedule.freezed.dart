@@ -20,7 +20,7 @@ Schedule _$ScheduleFromJson(Map<String, dynamic> json) {
 
 /// @nodoc
 mixin _$Schedule {
-  @JsonKey(name: 'schedule_id')
+  @JsonKey(name: 'id')
   String? get id => throw _privateConstructorUsedError;
   @JsonKey(name: 'schedule_date')
   DateTime get scheduleDate => throw _privateConstructorUsedError;
@@ -47,7 +47,7 @@ abstract class $ScheduleCopyWith<$Res> {
       _$ScheduleCopyWithImpl<$Res, Schedule>;
   @useResult
   $Res call(
-      {@JsonKey(name: 'schedule_id') String? id,
+      {@JsonKey(name: 'id') String? id,
       @JsonKey(name: 'schedule_date') DateTime scheduleDate,
       @JsonKey(name: 'schedule_time') String scheduleTime,
       @JsonKey(name: 'outfit_id') int? outfitId,
@@ -109,7 +109,7 @@ abstract class _$$ScheduleImplCopyWith<$Res>
   @override
   @useResult
   $Res call(
-      {@JsonKey(name: 'schedule_id') String? id,
+      {@JsonKey(name: 'id') String? id,
       @JsonKey(name: 'schedule_date') DateTime scheduleDate,
       @JsonKey(name: 'schedule_time') String scheduleTime,
       @JsonKey(name: 'outfit_id') int? outfitId,
@@ -164,7 +164,7 @@ class __$$ScheduleImplCopyWithImpl<$Res>
 @JsonSerializable()
 class _$ScheduleImpl with DiagnosticableTreeMixin implements _Schedule {
   const _$ScheduleImpl(
-      {@JsonKey(name: 'schedule_id') this.id,
+      {@JsonKey(name: 'id') this.id,
       @JsonKey(name: 'schedule_date') required this.scheduleDate,
       @JsonKey(name: 'schedule_time') required this.scheduleTime,
       @JsonKey(name: 'outfit_id') this.outfitId,
@@ -174,7 +174,7 @@ class _$ScheduleImpl with DiagnosticableTreeMixin implements _Schedule {
       _$$ScheduleImplFromJson(json);
 
   @override
-  @JsonKey(name: 'schedule_id')
+  @JsonKey(name: 'id')
   final String? id;
   @override
   @JsonKey(name: 'schedule_date')
@@ -245,7 +245,7 @@ class _$ScheduleImpl with DiagnosticableTreeMixin implements _Schedule {
 
 abstract class _Schedule implements Schedule {
   const factory _Schedule(
-          {@JsonKey(name: 'schedule_id') final String? id,
+          {@JsonKey(name: 'id') final String? id,
           @JsonKey(name: 'schedule_date') required final DateTime scheduleDate,
           @JsonKey(name: 'schedule_time') required final String scheduleTime,
           @JsonKey(name: 'outfit_id') final int? outfitId,
@@ -256,7 +256,7 @@ abstract class _Schedule implements Schedule {
       _$ScheduleImpl.fromJson;
 
   @override
-  @JsonKey(name: 'schedule_id')
+  @JsonKey(name: 'id')
   String? get id;
   @override
   @JsonKey(name: 'schedule_date')

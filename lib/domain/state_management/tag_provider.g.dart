@@ -39,7 +39,7 @@ final userTagsListStreamProvider =
 
 typedef UserTagsListStreamRef = AutoDisposeStreamProviderRef<List<Tag>>;
 String _$getDefaultTagsListHash() =>
-    r'761007bc2acc6870202f85e2def43797f7a1ef5c';
+    r'cae2fb38505c24b5d47b41fd73edc9a0a1e1fe29';
 
 /// See also [getDefaultTagsList].
 @ProviderFor(getDefaultTagsList)

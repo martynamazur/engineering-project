@@ -94,11 +94,9 @@ abstract class _$AppRouter extends RootStackRouter {
       );
     },
     CreatedOutfitsRoute.name: (routeData) {
-      final args = routeData.argsAs<CreatedOutfitsRouteArgs>(
-          orElse: () => const CreatedOutfitsRouteArgs());
       return AutoRoutePage<dynamic>(
         routeData: routeData,
-        child: CreatedOutfitsScreen(key: args.key),
+        child: const CreatedOutfitsScreen(),
       );
     },
     EditClothingitemRoute.name: (routeData) {
@@ -216,11 +214,9 @@ abstract class _$AppRouter extends RootStackRouter {
       );
     },
     SettingNotificationsRoute.name: (routeData) {
-      final args = routeData.argsAs<SettingNotificationsRouteArgs>(
-          orElse: () => const SettingNotificationsRouteArgs());
       return AutoRoutePage<dynamic>(
         routeData: routeData,
-        child: SettingNotificationsScreen(key: args.key),
+        child: const SettingNotificationsScreen(),
       );
     },
     SettingsRoute.name: (routeData) {
@@ -482,31 +478,16 @@ class CreatedOutfitSuccessfulRoute extends PageRouteInfo<void> {
 
 /// generated route for
 /// [CreatedOutfitsScreen]
-class CreatedOutfitsRoute extends PageRouteInfo<CreatedOutfitsRouteArgs> {
-  CreatedOutfitsRoute({
-    Key? key,
-    List<PageRouteInfo>? children,
-  }) : super(
+class CreatedOutfitsRoute extends PageRouteInfo<void> {
+  const CreatedOutfitsRoute({List<PageRouteInfo>? children})
+      : super(
           CreatedOutfitsRoute.name,
-          args: CreatedOutfitsRouteArgs(key: key),
           initialChildren: children,
         );
 
   static const String name = 'CreatedOutfitsRoute';
 
-  static const PageInfo<CreatedOutfitsRouteArgs> page =
-      PageInfo<CreatedOutfitsRouteArgs>(name);
-}
-
-class CreatedOutfitsRouteArgs {
-  const CreatedOutfitsRouteArgs({this.key});
-
-  final Key? key;
-
-  @override
-  String toString() {
-    return 'CreatedOutfitsRouteArgs{key: $key}';
-  }
+  static const PageInfo<void> page = PageInfo<void>(name);
 }
 
 /// generated route for
@@ -847,32 +828,16 @@ class SettingDeleteAccountRoute extends PageRouteInfo<void> {
 
 /// generated route for
 /// [SettingNotificationsScreen]
-class SettingNotificationsRoute
-    extends PageRouteInfo<SettingNotificationsRouteArgs> {
-  SettingNotificationsRoute({
-    Key? key,
-    List<PageRouteInfo>? children,
-  }) : super(
+class SettingNotificationsRoute extends PageRouteInfo<void> {
+  const SettingNotificationsRoute({List<PageRouteInfo>? children})
+      : super(
           SettingNotificationsRoute.name,
-          args: SettingNotificationsRouteArgs(key: key),
           initialChildren: children,
         );
 
   static const String name = 'SettingNotificationsRoute';
 
-  static const PageInfo<SettingNotificationsRouteArgs> page =
-      PageInfo<SettingNotificationsRouteArgs>(name);
-}
-
-class SettingNotificationsRouteArgs {
-  const SettingNotificationsRouteArgs({this.key});
-
-  final Key? key;
-
-  @override
-  String toString() {
-    return 'SettingNotificationsRouteArgs{key: $key}';
-  }
+  static const PageInfo<void> page = PageInfo<void>(name);
 }
 
 /// generated route for

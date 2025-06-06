@@ -68,16 +68,13 @@ class _OutfitOverviewScreenState extends ConsumerState<OutfitOverviewScreen> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                //Image.network(data.imageUrl),
                 CachedNetworkImage(
                   imageUrl: data!.imageUrl,
-                  progressIndicatorBuilder: (context, url, downloadProgress) =>
-                      CircularProgressIndicator(value: downloadProgress.progress),
+                  progressIndicatorBuilder: (context, url, downloadProgress) => CircularProgressIndicator(value: downloadProgress.progress),
                   errorWidget: (context, url, error) => const Icon(Icons.error),
                 ),
                 Text('${context.loc.seasonHeader} : ${data.season}',style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),),
                 _buildTagsSection(context.loc.tagsHeader, data.userTags),
-                // Add more fields from your `Outfit` class
               ],
             ),
           );
@@ -123,8 +120,8 @@ class _OutfitOverviewScreenState extends ConsumerState<OutfitOverviewScreen> {
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: const Text('Do you want to delete?'),
-          content: const Text('This action will be permanent and cannot be undone.'),
+          title: Text(context.loc.doYouWantToDelete),
+          content: Text(context.loc.deleteConfirmation),
           actions: [
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceAround,
@@ -133,22 +130,19 @@ class _OutfitOverviewScreenState extends ConsumerState<OutfitOverviewScreen> {
                   onPressed: () {
                     context.router.maybePop();
                   },
-                  child: const Text('Cancel'),
+                  child: Text(context.loc.cancel),
                 ),
                 TextButton(
                   onPressed: () async {
-                    Navigator.of(context).pop();
                     ref.read(deleteOutfitProvider(outfitId: outfitId));
-                    ref.read(outfitListNotifierProvider.notifier).removeOutfit(outfitId);
+                    await ref.read(outfitListNotifierProvider.notifier).removeOutfit(outfitId);
+                    context.router.maybePop();
 
-                    if (mounted) {
-                      context.router.maybePop();
-                    }
                   },
-                  child: const Row(
+                  child: Row(
                     children: [
-                      Icon(Icons.restore_from_trash),
-                      Text('Delete'),
+                      const Icon(Icons.restore_from_trash),
+                      Text(context.loc.delete),
                     ],
                   ),
                 ),

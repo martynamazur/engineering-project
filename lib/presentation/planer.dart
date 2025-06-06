@@ -65,8 +65,10 @@ class MonthlyView extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final schedule = ref.watch(getScheduleForWeekProvider);
     final now = DateTime.now();
+    final year = now.year;
+    final month = now.month;
+    final schedule = ref.watch(getScheduleForMonthProvider(year: year, month: month));
     final daysInMonth = DateTime(now.year, now.month + 1, 0).day; // Liczba dni w miesiącu
 
     // Utworzenie mapy dni i zaplanowanych strojów (będziemy używać mapy, aby powiązać daty z zaplanowanymi strojami)
@@ -75,7 +77,6 @@ class MonthlyView extends ConsumerWidget {
     schedule.when(
       data: (data) {
         for (var scheduleItem in data) {
-          // Dodaj zaplanowany strój do odpowiedniego dnia
           DateTime date = DateTime(scheduleItem.scheduleDate.year,
               scheduleItem.scheduleDate.month, scheduleItem.scheduleDate.day);
           schedulesByDay.putIfAbsent(date, () => []).add(scheduleItem);
@@ -188,9 +189,8 @@ class WeeklyView extends ConsumerWidget {
           itemCount: WeekDay.values.length,
           itemBuilder: (context, index) {
             WeekDay currentDay = WeekDay.values[index];
-            List<Schedule>? schedulesForDay = scheduleByDay[currentDay] ??
-                []; // Pobierz stroje dla danego dnias
-            print("zaplanowane,$schedulesForDay");
+            List<Schedule>? schedulesForDay = scheduleByDay[currentDay] ?? [];
+
 
             return Padding(
               padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 16),

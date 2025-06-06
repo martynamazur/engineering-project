@@ -10,7 +10,7 @@ part 'schedule.g.dart';
 @freezed
 class Schedule with _$Schedule {
   const factory Schedule({
-    @JsonKey(name: 'schedule_id') String? id,
+    @JsonKey(name: 'id') String? id,
     @JsonKey(name: 'schedule_date') required DateTime scheduleDate,
     @JsonKey(name: 'schedule_time') required String scheduleTime,
 

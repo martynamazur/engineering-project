@@ -13,6 +13,7 @@ import 'package:ootd/domain/state_management/outfit_provider.dart';
 import 'package:ootd/domain/state_management/supabase_utils.dart';
 import 'package:ootd/extensions/localization_extension.dart';
 import 'package:ootd/navigation/app_router.dart';
+import 'package:ootd/presentation/styles/headline_text.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:screenshot/screenshot.dart';
 import '../domain/state_management/outfit_list_notifier.dart';
@@ -86,14 +87,16 @@ class _CreateOutfitScreenState extends ConsumerState<CreateOutfitScreen> {
         child: SingleChildScrollView(
           child: Screenshot(
             controller: _screenshotController,
-            child: Column(
-              children: [
-                if (selectedCategories.isEmpty)
-                  _buildEmptyGallery()
-                else
-                  for (var category in selectedCategories)
-                    _buildCarouselSlider(category, ref)
-              ],
+            child: Center(
+              child: Column(
+                children: [
+                  if (selectedCategories.isEmpty)
+                    _buildEmptyGallery()
+                  else
+                    for (var category in selectedCategories)
+                      _buildCarouselSlider(category, ref)
+                ],
+              ),
             ),
           ),
         ),
@@ -138,7 +141,7 @@ class _CreateOutfitScreenState extends ConsumerState<CreateOutfitScreen> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
-        Text(context.loc.addNewPieces)
+        Text(context.loc.addNewPieces, style: headline)
       ],
     );
   }

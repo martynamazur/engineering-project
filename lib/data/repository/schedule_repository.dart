@@ -2,6 +2,7 @@ import 'dart:developer' as developer;
 
 import 'package:ootd/main.dart';
 import 'package:ootd/model/schedule.dart';
+import 'package:ootd/utils/log.dart';
 
 import '../../model/result.dart';
 
@@ -24,9 +25,9 @@ class ScheduleRepository {
     try {
       final response = await supabase.rpc('get_scheduled_outfits_for_user',
           params: {
-            'user_uuid': _userId,
-            'selected_year': year,
-            'selected_month': month
+            'p_user_uuid': _userId,
+            'p_year': year,
+            'p_month': month
           });
 
       final data = response as List<dynamic>;
@@ -74,7 +75,7 @@ class ScheduleRepository {
   Future<Result>scheduleOutfit(Schedule schedule) async{
 
     try{
-      await supabase.rpc(
+      final response = await supabase.rpc(
           "add_scheduled_outfit",
           params: {
             "p_user_uuid" : _userId,
@@ -82,8 +83,13 @@ class ScheduleRepository {
             "p_schedule_time": schedule.scheduleTime,
             "p_outfit_id" : schedule.outfitId
           });
+      logger.i('Schedule $response');
 
-      return Result.success();
+      if(response != null){
+        return Result.success();
+      }else{
+        return Result.failure('message');
+      }
 
     }catch(e, stack){
       developer.log('Error while scheduling: $e\n$stack');

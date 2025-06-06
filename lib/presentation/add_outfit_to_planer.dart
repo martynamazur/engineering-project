@@ -12,6 +12,7 @@ import 'package:ootd/utils/image_loading_builder.dart';
 
 import '../domain/state_management/outfit_list_notifier.dart';
 import '../model/schedule.dart';
+import '../utils/log.dart';
 
 @RoutePage()
 class AddOutfitToCalendarScreen extends ConsumerStatefulWidget {
@@ -82,12 +83,14 @@ class _AddOutfitToCallendarScreenState extends ConsumerState<AddOutfitToCalendar
                 outfitId: _selectedOutfitId,
                 imageUrl: _outfitUrl,
               );
+              logger.i('Schedule object $updatedSchedule');
               final result = await ref.read(scheduleOutfitProvider(schedule: updatedSchedule).future);
 
+
               if(result.success){
-                messenger.showSnackBar(SnackBar(content: Text(context.loc.scheduleSuccessMessage)));
                 ref.invalidate(getScheduleForWeekProvider);
                 ref.invalidate(getScheduleForMonthProvider);
+                messenger.showSnackBar(SnackBar(content: Text(context.loc.scheduleSuccessMessage)));
               }else{
                 messenger.showSnackBar(SnackBar(content: Text(context.loc.scheduleErrorMessage)));
               }
