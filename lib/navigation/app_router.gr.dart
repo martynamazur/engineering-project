@@ -195,10 +195,12 @@ abstract class _$AppRouter extends RootStackRouter {
         child: const ResetPasswordScreen(),
       );
     },
-    SettingChangeEmailAdressRoute.name: (routeData) {
+    SettingChangeEmailAddressRoute.name: (routeData) {
+      final args = routeData.argsAs<SettingChangeEmailAddressRouteArgs>(
+          orElse: () => const SettingChangeEmailAddressRouteArgs());
       return AutoRoutePage<dynamic>(
         routeData: routeData,
-        child: const SettingChangeEmailAdressScreen(),
+        child: SettingChangeEmailAddressScreen(key: args.key),
       );
     },
     SettingChangePasswordRoute.name: (routeData) {
@@ -222,11 +224,9 @@ abstract class _$AppRouter extends RootStackRouter {
       );
     },
     SettingsRoute.name: (routeData) {
-      final args = routeData.argsAs<SettingsRouteArgs>(
-          orElse: () => const SettingsRouteArgs());
       return AutoRoutePage<dynamic>(
         routeData: routeData,
-        child: SettingsScreen(key: args.key),
+        child: const SettingsScreen(),
       );
     },
     SplashRoute.name: (routeData) {
@@ -788,17 +788,33 @@ class ResetPasswordRoute extends PageRouteInfo<void> {
 }
 
 /// generated route for
-/// [SettingChangeEmailAdressScreen]
-class SettingChangeEmailAdressRoute extends PageRouteInfo<void> {
-  const SettingChangeEmailAdressRoute({List<PageRouteInfo>? children})
-      : super(
-          SettingChangeEmailAdressRoute.name,
+/// [SettingChangeEmailAddressScreen]
+class SettingChangeEmailAddressRoute
+    extends PageRouteInfo<SettingChangeEmailAddressRouteArgs> {
+  SettingChangeEmailAddressRoute({
+    Key? key,
+    List<PageRouteInfo>? children,
+  }) : super(
+          SettingChangeEmailAddressRoute.name,
+          args: SettingChangeEmailAddressRouteArgs(key: key),
           initialChildren: children,
         );
 
-  static const String name = 'SettingChangeEmailAdressRoute';
+  static const String name = 'SettingChangeEmailAddressRoute';
 
-  static const PageInfo<void> page = PageInfo<void>(name);
+  static const PageInfo<SettingChangeEmailAddressRouteArgs> page =
+      PageInfo<SettingChangeEmailAddressRouteArgs>(name);
+}
+
+class SettingChangeEmailAddressRouteArgs {
+  const SettingChangeEmailAddressRouteArgs({this.key});
+
+  final Key? key;
+
+  @override
+  String toString() {
+    return 'SettingChangeEmailAddressRouteArgs{key: $key}';
+  }
 }
 
 /// generated route for
@@ -861,31 +877,16 @@ class SettingNotificationsRouteArgs {
 
 /// generated route for
 /// [SettingsScreen]
-class SettingsRoute extends PageRouteInfo<SettingsRouteArgs> {
-  SettingsRoute({
-    Key? key,
-    List<PageRouteInfo>? children,
-  }) : super(
+class SettingsRoute extends PageRouteInfo<void> {
+  const SettingsRoute({List<PageRouteInfo>? children})
+      : super(
           SettingsRoute.name,
-          args: SettingsRouteArgs(key: key),
           initialChildren: children,
         );
 
   static const String name = 'SettingsRoute';
 
-  static const PageInfo<SettingsRouteArgs> page =
-      PageInfo<SettingsRouteArgs>(name);
-}
-
-class SettingsRouteArgs {
-  const SettingsRouteArgs({this.key});
-
-  final Key? key;
-
-  @override
-  String toString() {
-    return 'SettingsRouteArgs{key: $key}';
-  }
+  static const PageInfo<void> page = PageInfo<void>(name);
 }
 
 /// generated route for

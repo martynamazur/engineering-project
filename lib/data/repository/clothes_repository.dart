@@ -1,6 +1,8 @@
 import 'package:ootd/main.dart';
 
 import '../../model/clothing_item.dart';
+import '../../model/result.dart';
+import '../../utils/log.dart';
 
 class ClothesRepository {
 
@@ -18,20 +20,16 @@ class ClothesRepository {
     _userId = user.id;
   }
 
-  Future<void> addClothingItem(ClothingItem clothingItem) async {
+  Future<Result> addClothingItem(ClothingItem clothingItem) async {
     try{
-
-
       final response = await supabase.from('clothingitem').insert({
         'item_photo' : clothingItem.itemPhoto,
         'item_category_id': clothingItem.itemCategoryId,
         'seasons' :  clothingItem.seasons?.map((season) => season.toString().split('.').last).toList(),
       }).select().maybeSingle();
 
-      print('response $response');
       if (response != null) {
         int clothingItemId = response['clothing_item_id'];
-        print('Dodano ubranie z ID: $clothingItemId');
         await supabase.rpc('add_clothing_to_user',
             params: {
               '_user_id': _userId,
@@ -42,22 +40,23 @@ class ClothesRepository {
           'p_user_id': _userId,
           'p_clothing_item_id': clothingItemId,
         });
-
       }
-    }catch (e) {
-      print('Caught an error: $e');
-      throw Exception('cannot add clothing item to databse');
+      return Result.success();
+
+    }catch (e,stack) {
+      logger.i('Error  addClothingItem: $e\n$stack');
+      return Result.failure('Akcja sie nie powiodla');
     }
 
   }
 
-  Future<void> deleteClothingItem(int clothingItemId) async{
+  Future<Result> deleteClothingItem(int clothingItemId) async{
     try{
       await supabase.from('clothingitem').delete().eq('clothing_item_id', clothingItemId);
-
-    }catch (e) {
-      print('Caught an error: $e');
-      throw Exception('Coundt');
+      return Result.success();
+    }catch (e,stack) {
+      logger.i('Error  deleteClothingItem: $e\n$stack');
+      return Result.failure('Somethign went wrong');
   }
 }
 
@@ -80,18 +79,19 @@ class ClothesRepository {
       print('Liczba elementów: $itemCount');
       return itemCount;
 
-    }catch (e) {
-      print('Caught an error: $e');
+    }catch (e,stack) {
+      logger.i('Error countClothes: $e\n$stack');
       throw Exception('Theres no clothes ');
     }
   }
   
-  Future<void> editClothingItemInformation(int clothingItemId, int newCategoryId, List<Season> newSeasons) async{
+  Future<Result> editClothingItemInformation(int clothingItemId, int newCategoryId, List<Season> newSeasons) async{
     try{
       await supabase.from('clothingitem').update({'item_category_id': newCategoryId, 'seasons':newSeasons}).eq('clothing_item_id', clothingItemId);
-      
-    }catch(e){
-      print(e);
+      return Result.success();
+    }catch(e,stack){
+      logger.i('Error editClothingItemInf: $e\n$stack');
+      return Result.failure('Something went wrong');
     }
   }
 }

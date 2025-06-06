@@ -33,24 +33,19 @@ class _FilterScreenState extends ConsumerState<FilterScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Filtry'),
+        title: Text(context.loc.filtr),
         leading: IconButton(
           icon: const Icon(Icons.close),
-          onPressed: () {
-            Navigator.of(context).pop();
-          },
+          onPressed: () => Navigator.of(context).pop(),
         ),
         actions: [
           IconButton(
-            onPressed: () {
-              // Obsługa czyszczenia filtrów
-              ref.read(outfitListNotifierProvider.notifier).clearFilters();
-            },
+            onPressed: () => ref.read(outfitListNotifierProvider.notifier).clearFilters(),
             icon: const Icon(Icons.format_clear),
           ),
-          const Padding(
-            padding: EdgeInsets.only(right: 16.0),
-            child: Center(child: Text('Clear')),
+          Padding(
+            padding: const EdgeInsets.only(right: 16.0),
+            child: Center(child: Text(context.loc.clear)),
           ),
         ],
       ),
@@ -97,7 +92,7 @@ BottomAppBar _buildBottomAppBar(BuildContext context) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text('${context.loc.seasonHeader}:', style: TextStyle(fontSize: 18)),
+        Text('${context.loc.seasonHeader}:', style: const TextStyle(fontSize: 18)),
         const SizedBox(height: 12.0),
         if (seasonList.isNotEmpty)
           GridView.builder(

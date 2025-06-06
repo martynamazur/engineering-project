@@ -36,6 +36,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get notificationSettingsHeader => 'Notification Settings';
 
   @override
+  String get notifications => 'Notifications';
+
+  @override
   String get privacySettingsHeader => 'Privacy Settings';
 
   @override
@@ -88,6 +91,9 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get signUp => 'Sign up';
+
+  @override
+  String get signUpFailed => 'Sign up failed';
 
   @override
   String get nameLabel => 'Name';
@@ -154,6 +160,9 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get seasonHeader => 'Season';
+
+  @override
+  String get seasonSubheader => 'Pick appropriate seasons';
 
   @override
   String get tagsHeader => 'Tags';
@@ -253,4 +262,241 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get failedToLoadImage => 'Failed to load image';
+
+  @override
+  String get loading => 'Loading...';
+
+  @override
+  String get error => 'Error';
+
+  @override
+  String get removeFromFolderTitle => 'Remove from the folder';
+
+  @override
+  String get removeFromFolderContent => 'This action will be permanent and cannot be undone.';
+
+  @override
+  String get areYouSure => 'Are you sure?';
+
+  @override
+  String get deleteConfirmation => 'This action will be permanent and cannot be undone.';
+
+  @override
+  String get changeFolderNameTitle => 'Change Folder Name';
+
+  @override
+  String get enterNewFolderName => 'Please enter the new folder name:';
+
+  @override
+  String get folderNameHint => 'Folder Name';
+
+  @override
+  String get change => 'Change';
+
+  @override
+  String get changeSuccess => 'Folder name changed successfully.';
+
+  @override
+  String get changeFailure => 'Failed to change folder name. Please try again.';
+
+  @override
+  String get exit => 'Exit';
+
+  @override
+  String get selectCategory => 'Select category';
+
+  @override
+  String get clear => 'Clear';
+
+  @override
+  String get remove => 'Remove';
+
+  @override
+  String get outerwear => 'Outerwear';
+
+  @override
+  String get topwear => 'Topwear';
+
+  @override
+  String get bottomwear => 'Bottomwear';
+
+  @override
+  String get dresses => 'Dresses & jumpsuits';
+
+  @override
+  String get doYouWantToDelete => 'Do you want to delete?';
+
+  @override
+  String get deleteFolderSuccess => 'Folder deleted successfully.';
+
+  @override
+  String get deleteFolderFailure => 'Failed to delete the folder. Please try again.';
+
+  @override
+  String get removeClothingSuccess => 'Item removed from folder.';
+
+  @override
+  String get removeClothingFailure => 'Failed to remove item. Please try again.';
+
+  @override
+  String get addClothingSuccess => 'Item successfully added to the folder.';
+
+  @override
+  String get addClothingFailure => 'Failed to add item to the folder. Please try again.';
+
+  @override
+  String get saveOutfitSuccess => 'Outfit saved successfully.';
+
+  @override
+  String get saveOutfitFailure => 'Failed to save outfit. Please try again.';
+
+  @override
+  String get deleteOutfitSuccess => 'Your outfit has been removed.';
+
+  @override
+  String get deleteOutfitFailure => 'Oops! Couldn’t delete the outfit. Try again.';
+
+  @override
+  String get logoutSuccess => 'You have been logged out successfully.';
+
+  @override
+  String get logoutFailure => 'Logout failed. Please try again.';
+
+  @override
+  String get areYouNewHere => 'Are you new here?';
+
+  @override
+  String get createAnAccount => 'Create an account';
+
+  @override
+  String get confirmationEmailDescription => 'Click the link in the email to verify your new email address. If you don’t see the email, check your spam folder.';
+
+  @override
+  String get resetPasswordInstruction => 'Enter the email address you used when you joined and we\'ll send you instructions to reset your password.';
+
+  @override
+  String get resetPasswordConfirmationMessage => 'If registered, you\'ll receive an email shortly with password reset instructions. Please check your inbox and spam folder.';
+
+  @override
+  String get addPhoto => 'Add photo';
+
+  @override
+  String get choosePhoto => 'Choose photo';
+
+  @override
+  String get noImageSelected => 'No image selected';
+
+  @override
+  String get pickCategoryHeadline => 'Pick category';
+
+  @override
+  String get summary => 'Summary';
+
+  @override
+  String get finish => 'Finish';
+
+  @override
+  String get goBack => 'Go back';
+
+  @override
+  String get findFasterLater => 'It’ll be easier to find what you’re looking for later.';
+
+  @override
+  String get addTagHint => 'Tap to add a tag';
+
+  @override
+  String get emptyTagField => 'This field can\'t be empty';
+
+  @override
+  String get invalidTag => 'Enter a valid tag';
+
+  @override
+  String get passwordRuleMinLength => 'Minimum of 6 characters';
+
+  @override
+  String get passwordRuleUppercase => 'At least one uppercase letter (A-Z)';
+
+  @override
+  String get passwordRuleLowercase => 'At least one lowercase letter (a-z)';
+
+  @override
+  String get passwordRuleSpecialChar => 'At least one special character (e.g., !, @, #, \\\$)';
+
+  @override
+  String get scheduleSuccessTitle => 'Outfit scheduled';
+
+  @override
+  String get scheduleSuccessMessage => 'Your outfit has been successfully scheduled.';
+
+  @override
+  String get scheduleErrorTitle => 'Something went wrong';
+
+  @override
+  String get scheduleErrorMessage => 'We couldn’t schedule your outfit. Please try again later.';
+
+  @override
+  String get outfits => 'Outfits';
+
+  @override
+  String get tryAgain => 'Try again';
+
+  @override
+  String get errorGeneralMessage => 'Something went wrong';
+
+  @override
+  String get addNewTag => 'Add new tag';
+
+  @override
+  String get enterNewTag => 'Enter new tag';
+
+  @override
+  String get updateOutfitSuccess => 'Outfit updated successfully.';
+
+  @override
+  String get updateOutfitFailure => 'Failed to update outfit. Please try again.';
+
+  @override
+  String get filtr => 'Filtr';
+
+  @override
+  String get create => 'Create';
+
+  @override
+  String get enterOldAndNewPassword => 'Enter your old and then new password';
+
+  @override
+  String get passwordRequirements => 'Password Requirements';
+
+  @override
+  String get consentRequiredTitle => 'Consent Required';
+
+  @override
+  String get consentRequiredMessage => 'You must accept the terms and conditions to register.';
+
+  @override
+  String get signupFailed => 'Sign up failed. Please try again later.';
+
+  @override
+  String get createNewFolderTitle => 'Create a new folder';
+
+  @override
+  String get emptyFolder => 'Empty folder';
+
+  @override
+  String get notificationDescription => 'Turn all app notifications on/off';
+
+  @override
+  String get removeFromScheduleSuccess => 'Successfully removed from schedule.';
+
+  @override
+  String get removeFromScheduleFailure => 'Failed to remove from schedule. Please try again.';
+
+  @override
+  String get emptyPassword => 'Password cannot be empty';
+
+  @override
+  String get accountExistsMessage => 'An account with this email already exists. Please use a different email or log in.\',\n';
+
+  @override
+  String get passwordResetEmailSent => 'Password reset link has been sent to your email.';
 }

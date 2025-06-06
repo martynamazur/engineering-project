@@ -2,6 +2,9 @@ import 'package:ootd/main.dart';
 import 'package:ootd/model/closet_folder.dart';
 import 'package:ootd/model/clothing_item.dart';
 
+import '../../model/result.dart';
+import '../../utils/log.dart';
+
 class ClothesFolderRepository {
   late final String _userId;
 
@@ -36,8 +39,8 @@ class ClothesFolderRepository {
       }
 
       return closetFolders;
-    } catch (e) {
-      print('Caught an error: $e');
+    } catch (e, stack) {
+      logger.i('Error egetAllClosetFolder: $e\n$stack');
       return [];
     }
   }
@@ -55,8 +58,8 @@ class ClothesFolderRepository {
 
       final List<dynamic> data = response as List<dynamic>;
       return data.map((json) => ClothingItem.fromJson(json)).toList();
-    } catch (e) {
-      print('Error: $e');
+    } catch (e, stack) {
+      logger.i('Error getClothingItemsForFolder: $e\n$stack');
       return [];
     }
   }
@@ -72,43 +75,42 @@ class ClothesFolderRepository {
           .single();
 
       ClosetFolder closetFolder = ClosetFolder.fromJson(response);
-      final clothingItems =
-          await _getClothingItemsForFolder(closetFolder.clothingItemIds);
+      final clothingItems = await _getClothingItemsForFolder(closetFolder.clothingItemIds);
       closetFolder = closetFolder.copyWith(clothingItems: clothingItems);
 
-      print(closetFolder);
-      print('udalo sie ${closetFolder.closetId}');
       return closetFolder;
-    } catch (e) {
-      print('Caught an error: $e');
+    } catch (e,stack) {
+      logger.i('Error get clsoet fodler : $e\n$stack');
       throw Exception('Failed to fetch the closet folder');
     }
   }
 
-  //Managing CRUD
-  Future<void> deleteFolder(int folderId) async {
+
+  Future<Result> deleteFolder(int folderId) async {
     try {
       await supabase
           .from('closetfolder')
           .delete()
           .eq('closet_id', folderId)
           .eq('user_id', _userId);
-    } catch (e) {
-      print('Caught an error: $e');
-      throw Exception('Coundt');
+      return Result.success();
+    } catch (e,stack) {
+      logger.i('Error delete folder: $e\n$stack');
+      return Result.failure('Something went wrong');
     }
   }
 
-  Future<void> changeFolderName(String newFolderName, int folderId) async {
+  Future<Result> changeFolderName(String newFolderName, int folderId) async {
     try {
       await supabase
           .from('closetfolder')
           .update({'closet_name': newFolderName})
           .eq('closet_id', folderId)
           .eq('user_id', _userId);
-    } catch (e) {
-      print('Caught an error: $e');
-      throw Exception('Coundt');
+      return Result.success();
+    } catch (e,stack) {
+      logger.i('Error changeFolderName: $e\n$stack');
+      return Result.failure('Somethign went wrong');
     }
   }
 
@@ -125,28 +127,25 @@ class ClothesFolderRepository {
           .select()
           .single();
       return ClosetFolder.fromJson(response);
-    } catch (e) {
-      print('Caught an error: $e');
+    } catch (e, stack) {
+      logger.i('Error createFolder: $e\n$stack');
       throw Exception('Coundt');
     }
   }
 
-  // na Backendzie scali dwie listy , tylko przekazuje parametry do funkcji
-  Future<void> addClothesToFolder(List<int> clothesId, int folderId) async {
+  Future<Result> addClothesToFolder(List<int> clothesId, int folderId) async {
     try {
       await supabase.rpc('add_items_to_closetfolder',
           params: {'new_items': clothesId, 'closet_id_input': folderId});
-      print('Clothes have been added');
-    } catch (e) {
-      print('Caught an error: $e');
-      throw Exception('Coundt');
+      return Result.success();
+    } catch (e, stack) {
+      logger.i('Error addClothesToFolder: $e\n$stack');
+      return Result.failure('Something went wrong');
     }
   }
 
-  //wszystkie ciuchy jakie kiedykowleik dodano
   Future<List<ClothingItem>> getAllOwnedClothes() async {
     try {
-      // Fetch the clothing item IDs from the database
       final response = await supabase
           .from('closetfolder')
           .select('clothing_item_ids')
@@ -154,46 +153,42 @@ class ClothesFolderRepository {
           .eq('user_id', _userId)
           .single();
 
-      // Extract the clothing_item_ids as a List<int>
       List<int> clothingItemIds =
           List<int>.from(response['clothing_item_ids'] ?? []);
       print("Ile jest id ${clothingItemIds.length}");
       return fetchClothingItems(clothingItemIds);
-    } catch (e) {
-      print('Caught an error: $e');
+    } catch (e, stack) {
+      logger.i('Error getAllOwnedClothes: $e\n$stack');
       return [];
     }
   }
 
-  Future<List<ClothingItem>> fetchClothingItems(
-      List<int> clothingItemIds) async {
+  Future<List<ClothingItem>> fetchClothingItems(List<int> clothingItemIds) async {
     try {
       if (clothingItemIds.isEmpty) return [];
 
-      // Pobranie danych z bazy
       final response = await supabase
           .from('clothingitem')
           .select()
           .inFilter('clothing_item_id', clothingItemIds);
 
-      // Logowanie pełnej odpowiedzi dla debugowania
-      print('Raw Response: $response');
 
       final List<dynamic> data = response as List<dynamic>;
       return data.map((json) => ClothingItem.fromJson(json)).toList();
-    } catch (e) {
-      print('Error fetching clothing items: $e');
+    } catch (e, stack) {
+      logger.i('Error fetching clothing item: $e\n$stack');
       return [];
     }
   }
 
-  Future<void> removeClothingItemFromFolder(int folderId,
-      int clothingItemId) async {
+  Future<Result> removeClothingItemFromFolder(int folderId, int clothingItemId) async {
     try {
       await supabase.rpc('remove_item_from_closetfolder_array',
           params: {'folder_id': folderId, 'item_id': clothingItemId});
-    } catch (e) {
-      print('error $e');
+      return Result.success();
+    } catch (e,stack) {
+      logger.i('Error removeClothingItemFromFolder: $e\n$stack');
+      return Result.failure('Something went wrong');
     }
   }
 }

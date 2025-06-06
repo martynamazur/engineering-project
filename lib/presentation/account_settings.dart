@@ -25,7 +25,7 @@ class AccountSettingsScreen extends StatelessWidget  {
       SettingOption(
         title: context.loc.changeEmailAddress,
         icon: const Icon(Icons.email),
-        navigateTo: (context) => context.router.push(SettingChangeEmailAdressRoute()),
+        navigateTo: (context) => context.router.push(SettingChangeEmailAddressRoute()),
       ),
       SettingOption(
         title: context.loc.deleteMyAccountTitle,

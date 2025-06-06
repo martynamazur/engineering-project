@@ -20,7 +20,7 @@ class RegistrationState extends ConsumerState<RegistrationScreen> {
   final TextEditingController _passwordController = TextEditingController();
   final TextEditingController _nameController = TextEditingController();
   final _formKey = GlobalKey<FormState>();
-  bool _checkbox = false;
+  bool _isLoading = false;
   bool _obscureText = true;
 
 
@@ -38,9 +38,7 @@ class RegistrationState extends ConsumerState<RegistrationScreen> {
       appBar: AppBar(
         leading: IconButton(
           icon: const Icon(Icons.arrow_back),
-          onPressed: () {
-            context.router.maybePop();
-          },
+          onPressed: () => context.router.maybePop(),
         ),
       ),
       body: SafeArea(
@@ -49,25 +47,26 @@ class RegistrationState extends ConsumerState<RegistrationScreen> {
           child: Form(
             key: _formKey,
             child: Column(
+              spacing: 24.0,
               children: [
                 Text(context.loc.createAccountHeader, style: headlineMedium),
                 Text(context.loc.fillInformationMessage),
-                const SizedBox(height: 32.0),
+                const SizedBox(height: 16.0),
                 _buildInputName(),
-                const SizedBox(height: 24.0),
                 _buildInputEmail(),
-                const SizedBox(height: 24.0),
                 _buildInputPassword(),
-                const SizedBox(height: 24.0),
                 _buildCheckboxTermsConditions(),
-                const SizedBox(height: 24.0),
+
                 OutlinedButton(
                   onPressed: () async {
-                    _signInValidator();
+                    _submitRegistrationForm();
                   },
-                  child: Text(
-                    context.loc.signUp,
-                  ),
+                  child: _isLoading
+                      ? const SizedBox(
+                      width: 16.0,
+                      height: 16.0,
+                      child: CircularProgressIndicator()
+                  ) : Text(context.loc.signUp)
                 )
               ],
             ),
@@ -94,7 +93,7 @@ class RegistrationState extends ConsumerState<RegistrationScreen> {
       validator: (value) {
         if (value == null || value.isEmpty) {
           showLoginFailedMessage();
-          return 'Email cannot be empty';
+          return context.loc.emptyEmail;
         }
         return null;
       },
@@ -112,8 +111,7 @@ class RegistrationState extends ConsumerState<RegistrationScreen> {
       obscureText: _obscureText,
       validator: (value){
         if(value!.isEmpty){
-          showLoginFailedMessage();
-          return 'Password cannot be empty';
+          return context.loc.emptyPassword;
         }
         return null;
       },
@@ -136,79 +134,97 @@ class RegistrationState extends ConsumerState<RegistrationScreen> {
     );
   }
 
-  Row _buildCheckboxTermsConditions(){
-    return Row(
-      children: [
-        SizedBox(
-          width: 24.0,
-          height: 24.0,
-          child: Checkbox(
-            value: _checkbox,
-            onChanged: (newValue) {
-              setState(() {
-                _checkbox = newValue!;
-              });
-            },
-          ),
-        ),
-        const SizedBox(width: 8.0),
-        GestureDetector(
-          onTap: () {
-            // redirect to the website
-          },
-          child: Text.rich(
-            TextSpan(
-              text: context.loc.agreeWith,
+  Widget _buildCheckboxTermsConditions(){
+    return FormField(
+      initialValue: false,
+      validator: (value){
+        if(value != true){
+          return context.loc.consentRequiredMessage;
+        }
+        return null;
+      },
+      builder: (field) {
+        return Column(
+          children: [
+            Row(
               children: [
-                TextSpan(
-                  text: context.loc.termsAndConditions,
-                  style: const TextStyle(
-                    decoration: TextDecoration.underline,
-                    color: Colors.blue,
+                SizedBox(
+                  width: 24.0,
+                  height: 24.0,
+                  child: Checkbox(
+                    value: field.value,
+                    onChanged: (newValue) {
+                      setState(() {
+                        field.didChange(newValue);
+                      });
+                    },
                   ),
                 ),
+                const SizedBox(width: 8.0),
+                GestureDetector(
+                  onTap: () {
+                    // redirect to the website
+                  },
+                  child: Text.rich(
+                    TextSpan(
+                      text: context.loc.agreeWith,
+                      children: [
+                        TextSpan(
+                          text: context.loc.termsAndConditions,
+                          style: const TextStyle(
+                            decoration: TextDecoration.underline,
+                            color: Colors.blue,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                )
               ],
             ),
-          ),
-        )
-      ],
-    );
+            if (field.hasError)
+              Padding(
+                padding: const EdgeInsets.only(top: 4.0, left: 8.0),
+                child: Text(
+                  field.errorText!,
+                  style: const TextStyle(color: Colors.red, fontSize: 12),
+                ),
+              ),
+          ],
+        );
+      }
+      );
+
   }
 
-  void _signInValidator() async{
+  void _submitRegistrationForm() async{
+    if (_isLoading) return;
     if(_formKey.currentState?.validate() ?? false){
-      try {
+      setState(() => _isLoading = true);
+      final messenger = ScaffoldMessenger.of(context);
 
-        if (!_checkbox) {
-          Flushbar(
-            title: 'Zgoda wymagana',
-            message: 'Musisz zaakceptować regulamin, aby się zarejestrować.',
-            duration: const Duration(seconds: 5),
-            backgroundColor: Colors.orangeAccent,
-            flushbarPosition: FlushbarPosition.TOP,
-          ).show(context);
-          return;
-        }
+      final result = await ref.read(userRepositoryProvider).signUp(
+        _passwordController.text,
+        _emailController.text,
+        _nameController.text,
+      );
 
-        await ref.read(userRepositoryProvider).signUp(
-          _passwordController.text,
-          _emailController.text,
-          _nameController.text,
-        );
+      setState(() => _isLoading = false);
 
-        if (context.mounted)  context.router.push(RegistrationSuccessfulRoute());
-      } catch (e) {
-        showEmailAlreadyExistsMessage();
+      if(result.success){
+        context.router.push(const RegistrationSuccessfulRoute());
+      }else{
+        messenger.showSnackBar(SnackBar(content: Text(result.errorMessage!)));
       }
     }
   }
-
+  //TODO: Ujednolicic wiadomosci zwrotne i sie zastanwoic co chce uzyc scaffoldmess czy flushbaru
   void showLoginFailedMessage() {
     _emailController.clear();
     _passwordController.clear();
     Flushbar(
-      title: 'Login failed',
-      message: 'Invalid email or password',
+      title: context.loc.loginFailedTitle,
+      message: context.loc.loginFailedMessage,
       duration: const Duration(seconds: 10),
       backgroundColor: Colors.redAccent,
       flushbarPosition: FlushbarPosition.TOP,
@@ -219,9 +235,9 @@ class RegistrationState extends ConsumerState<RegistrationScreen> {
     _emailController.clear();
     _passwordController.clear();
     Flushbar(
-      title: 'Sign Up Failed',
+      title: context.loc.signUpFailed,
       message:
-          'An account with this email already exists. Please use a different email or log in.',
+          context.loc.accountExistsMessage,
       duration: const Duration(seconds: 10),
       backgroundColor: Colors.redAccent,
       flushbarPosition: FlushbarPosition.TOP,

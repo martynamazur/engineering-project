@@ -1,6 +1,10 @@
+
 import 'package:ootd/main.dart';
 import 'package:ootd/model/outfit.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
+
+import '../../model/result.dart';
+import '../../utils/log.dart';
 
 class OutfitRepository {
 
@@ -31,82 +35,91 @@ class OutfitRepository {
     }
   }
 
-  Future<PostgrestResponse> saveOutfitToDatabase(String imageUrl, List<int> clothingItemId) async{
+  Future<Result> saveOutfitToDatabase(String imageUrl, List<int> clothingItemId) async{
 
     try{
       final season = 'all';
-      final response = await supabase.from('outfit').insert({
+      await supabase.from('outfit').insert({
         'useditemsids':clothingItemId,
         'image_url' : imageUrl,
         'season': season,
         'user_uuid' :_userId
       });
-
-      return response;
-
-    } catch (e) {
-      print(e);
-      throw Exception('Failed to save outfit');
+      return Result.success();
+    } catch (e, stack) {
+      logger.i('Error saving ootd to db: $e\n$stack');
+      return Result.failure('sth went wrong');
     }
   }
 
-  Future<void> removeOutfit(int outfitId) async{
+  Future<Result> removeOutfit(int outfitId) async{
     try{
-      await supabase.from('outfit').delete().eq('id', outfitId);
+      await supabase
+          .from('outfit')
+          .delete()
+          .eq('id', outfitId);
 
-    }catch (e) {
-      print(e);
-      throw Exception('Failed to save outfit');
+      return Result.success();
+    }catch (e, stack) {
+      logger.i('Error removing ootd db: $e\n$stack');
+      return Result.failure('sth went wrong');
     }
   }
   
-  Future<void> editOutfitInformation(List<String> tags, String season, int outfitId) async{
+  Future<Result> editOutfitInformation(List<String> tags, String season, int outfitId) async{
     try{
       supabase.from('outfit').update({'user_tags': tags}).eq('id', outfitId);
       supabase.from('outfit').update({'season': season}).eq('id', outfitId);
-    }catch(e){
-      print(e);
+      return Result.success();
+    }catch(e, stack){
+      logger.i('Error editing ootd inf to db: $e\n$stack');
+
+      return Result.failure('sth went wrong');
     }
   }
 
-  Future<void> editOutfitInformationTags(List<String> tags, int outfitId) async{
+  Future<Result> editOutfitInformationTags(List<String> tags, int outfitId) async{
     try{
-      await supabase.from('outfit').update({'user_tags': tags}).eq('id', outfitId);
+      await supabase
+          .from('outfit')
+          .update({'user_tags': tags})
+          .eq('id', outfitId);
 
-    }catch(e){
-      print(e);
+      return Result.success();
+    }catch(e,stack){
+      logger.i('Error editing ootd tags: $e\n$stack');
+      return Result.failure('sth went wrong');
     }
   }
 
-  Future<void> editOutfitInformationSeason(String season, int outfitId) async{
+  Future<Result> editOutfitInformationSeason(String season, int outfitId) async{
     try{
-      await supabase.from('outfit').update({'season': season}).eq('id', outfitId);
-    }catch(e){
-      print(e);
+      await supabase
+          .from('outfit')
+          .update({'season': season})
+          .eq('id', outfitId);
+
+      return Result.success();
+    }catch(e,stack){
+      logger.i('Error editing ootd season list: $e\n$stack');
+      return Result.failure('sth went wrong');
     }
   }
 
-  Future<Outfit> getOutfit(int outfitId) async {
+  Future<Outfit?> getOutfit(int outfitId) async {
     try {
-      print('Jakie id $outfitId');
-      // Fetch outfit data from Supabase
       final response = await supabase
           .from('outfit')
           .select()
           .eq('id', outfitId)
           .single() ;
 
-      print('Response from Supabase: $response');
-
-
       return Outfit.fromJson(response);
-    } catch (e) {
-      print(e);
-      throw Exception('Outfit not found');
+    } catch (e,stack) {
+      logger.i('Error get outfit : $e\n$stack');
+      return null;
     }
   }
-
-
 }
 
 

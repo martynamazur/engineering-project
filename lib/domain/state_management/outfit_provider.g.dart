@@ -37,7 +37,7 @@ final getOwnedOutfitsProvider =
 );
 
 typedef GetOwnedOutfitsRef = AutoDisposeFutureProviderRef<List<Outfit>>;
-String _$saveOutfitHash() => r'7db782a5cd048f31f5f908d06d101e6b59b55ed2';
+String _$saveOutfitHash() => r'98d7bcce95376be649c7f3fa37566795e05b6fe2';
 
 /// Copied from Dart SDK
 class _SystemHash {
@@ -65,18 +65,18 @@ class _SystemHash {
 const saveOutfitProvider = SaveOutfitFamily();
 
 /// See also [saveOutfit].
-class SaveOutfitFamily extends Family<AsyncValue<void>> {
+class SaveOutfitFamily extends Family<AsyncValue<Result>> {
   /// See also [saveOutfit].
   const SaveOutfitFamily();
 
   /// See also [saveOutfit].
-  SaveOutfitProvider call(
-    String imageUrl,
-    List<int> clothingItemId,
-  ) {
+  SaveOutfitProvider call({
+    required String imageUrl,
+    required List<int> clothingItemId,
+  }) {
     return SaveOutfitProvider(
-      imageUrl,
-      clothingItemId,
+      imageUrl: imageUrl,
+      clothingItemId: clothingItemId,
     );
   }
 
@@ -85,8 +85,8 @@ class SaveOutfitFamily extends Family<AsyncValue<void>> {
     covariant SaveOutfitProvider provider,
   ) {
     return call(
-      provider.imageUrl,
-      provider.clothingItemId,
+      imageUrl: provider.imageUrl,
+      clothingItemId: provider.clothingItemId,
     );
   }
 
@@ -106,16 +106,16 @@ class SaveOutfitFamily extends Family<AsyncValue<void>> {
 }
 
 /// See also [saveOutfit].
-class SaveOutfitProvider extends AutoDisposeFutureProvider<void> {
+class SaveOutfitProvider extends AutoDisposeFutureProvider<Result> {
   /// See also [saveOutfit].
-  SaveOutfitProvider(
-    String imageUrl,
-    List<int> clothingItemId,
-  ) : this._internal(
+  SaveOutfitProvider({
+    required String imageUrl,
+    required List<int> clothingItemId,
+  }) : this._internal(
           (ref) => saveOutfit(
             ref as SaveOutfitRef,
-            imageUrl,
-            clothingItemId,
+            imageUrl: imageUrl,
+            clothingItemId: clothingItemId,
           ),
           from: saveOutfitProvider,
           name: r'saveOutfitProvider',
@@ -146,7 +146,7 @@ class SaveOutfitProvider extends AutoDisposeFutureProvider<void> {
 
   @override
   Override overrideWith(
-    FutureOr<void> Function(SaveOutfitRef provider) create,
+    FutureOr<Result> Function(SaveOutfitRef provider) create,
   ) {
     return ProviderOverride(
       origin: this,
@@ -164,7 +164,7 @@ class SaveOutfitProvider extends AutoDisposeFutureProvider<void> {
   }
 
   @override
-  AutoDisposeFutureProviderElement<void> createElement() {
+  AutoDisposeFutureProviderElement<Result> createElement() {
     return _SaveOutfitProviderElement(this);
   }
 
@@ -185,7 +185,7 @@ class SaveOutfitProvider extends AutoDisposeFutureProvider<void> {
   }
 }
 
-mixin SaveOutfitRef on AutoDisposeFutureProviderRef<void> {
+mixin SaveOutfitRef on AutoDisposeFutureProviderRef<Result> {
   /// The parameter `imageUrl` of this provider.
   String get imageUrl;
 
@@ -193,8 +193,8 @@ mixin SaveOutfitRef on AutoDisposeFutureProviderRef<void> {
   List<int> get clothingItemId;
 }
 
-class _SaveOutfitProviderElement extends AutoDisposeFutureProviderElement<void>
-    with SaveOutfitRef {
+class _SaveOutfitProviderElement
+    extends AutoDisposeFutureProviderElement<Result> with SaveOutfitRef {
   _SaveOutfitProviderElement(super.provider);
 
   @override
@@ -203,23 +203,23 @@ class _SaveOutfitProviderElement extends AutoDisposeFutureProviderElement<void>
   List<int> get clothingItemId => (origin as SaveOutfitProvider).clothingItemId;
 }
 
-String _$deleteOutfitHash() => r'ffe07386a8d20732fe9e214c56ce5449b2a4b348';
+String _$deleteOutfitHash() => r'cc9eb754aed5d8803dc2fd683410300ea264e417';
 
 /// See also [deleteOutfit].
 @ProviderFor(deleteOutfit)
 const deleteOutfitProvider = DeleteOutfitFamily();
 
 /// See also [deleteOutfit].
-class DeleteOutfitFamily extends Family<AsyncValue<void>> {
+class DeleteOutfitFamily extends Family<AsyncValue<Result>> {
   /// See also [deleteOutfit].
   const DeleteOutfitFamily();
 
   /// See also [deleteOutfit].
-  DeleteOutfitProvider call(
-    int outfitId,
-  ) {
+  DeleteOutfitProvider call({
+    required int outfitId,
+  }) {
     return DeleteOutfitProvider(
-      outfitId,
+      outfitId: outfitId,
     );
   }
 
@@ -228,7 +228,7 @@ class DeleteOutfitFamily extends Family<AsyncValue<void>> {
     covariant DeleteOutfitProvider provider,
   ) {
     return call(
-      provider.outfitId,
+      outfitId: provider.outfitId,
     );
   }
 
@@ -248,14 +248,14 @@ class DeleteOutfitFamily extends Family<AsyncValue<void>> {
 }
 
 /// See also [deleteOutfit].
-class DeleteOutfitProvider extends AutoDisposeFutureProvider<void> {
+class DeleteOutfitProvider extends AutoDisposeFutureProvider<Result> {
   /// See also [deleteOutfit].
-  DeleteOutfitProvider(
-    int outfitId,
-  ) : this._internal(
+  DeleteOutfitProvider({
+    required int outfitId,
+  }) : this._internal(
           (ref) => deleteOutfit(
             ref as DeleteOutfitRef,
-            outfitId,
+            outfitId: outfitId,
           ),
           from: deleteOutfitProvider,
           name: r'deleteOutfitProvider',
@@ -283,7 +283,7 @@ class DeleteOutfitProvider extends AutoDisposeFutureProvider<void> {
 
   @override
   Override overrideWith(
-    FutureOr<void> Function(DeleteOutfitRef provider) create,
+    FutureOr<Result> Function(DeleteOutfitRef provider) create,
   ) {
     return ProviderOverride(
       origin: this,
@@ -300,7 +300,7 @@ class DeleteOutfitProvider extends AutoDisposeFutureProvider<void> {
   }
 
   @override
-  AutoDisposeFutureProviderElement<void> createElement() {
+  AutoDisposeFutureProviderElement<Result> createElement() {
     return _DeleteOutfitProviderElement(this);
   }
 
@@ -318,13 +318,13 @@ class DeleteOutfitProvider extends AutoDisposeFutureProvider<void> {
   }
 }
 
-mixin DeleteOutfitRef on AutoDisposeFutureProviderRef<void> {
+mixin DeleteOutfitRef on AutoDisposeFutureProviderRef<Result> {
   /// The parameter `outfitId` of this provider.
   int get outfitId;
 }
 
 class _DeleteOutfitProviderElement
-    extends AutoDisposeFutureProviderElement<void> with DeleteOutfitRef {
+    extends AutoDisposeFutureProviderElement<Result> with DeleteOutfitRef {
   _DeleteOutfitProviderElement(super.provider);
 
   @override
@@ -332,14 +332,14 @@ class _DeleteOutfitProviderElement
 }
 
 String _$editOutfitInformationTagsHash() =>
-    r'8745565d0af5988de2100605c291b92e3da0addb';
+    r'e282164d71cd3fb0b03f3f90b6f39a4b64c82aca';
 
 /// See also [editOutfitInformationTags].
 @ProviderFor(editOutfitInformationTags)
 const editOutfitInformationTagsProvider = EditOutfitInformationTagsFamily();
 
 /// See also [editOutfitInformationTags].
-class EditOutfitInformationTagsFamily extends Family<AsyncValue<void>> {
+class EditOutfitInformationTagsFamily extends Family<AsyncValue<Result>> {
   /// See also [editOutfitInformationTags].
   const EditOutfitInformationTagsFamily();
 
@@ -381,7 +381,7 @@ class EditOutfitInformationTagsFamily extends Family<AsyncValue<void>> {
 
 /// See also [editOutfitInformationTags].
 class EditOutfitInformationTagsProvider
-    extends AutoDisposeFutureProvider<void> {
+    extends AutoDisposeFutureProvider<Result> {
   /// See also [editOutfitInformationTags].
   EditOutfitInformationTagsProvider(
     List<String> updatedTags,
@@ -421,7 +421,7 @@ class EditOutfitInformationTagsProvider
 
   @override
   Override overrideWith(
-    FutureOr<void> Function(EditOutfitInformationTagsRef provider) create,
+    FutureOr<Result> Function(EditOutfitInformationTagsRef provider) create,
   ) {
     return ProviderOverride(
       origin: this,
@@ -439,7 +439,7 @@ class EditOutfitInformationTagsProvider
   }
 
   @override
-  AutoDisposeFutureProviderElement<void> createElement() {
+  AutoDisposeFutureProviderElement<Result> createElement() {
     return _EditOutfitInformationTagsProviderElement(this);
   }
 
@@ -460,7 +460,7 @@ class EditOutfitInformationTagsProvider
   }
 }
 
-mixin EditOutfitInformationTagsRef on AutoDisposeFutureProviderRef<void> {
+mixin EditOutfitInformationTagsRef on AutoDisposeFutureProviderRef<Result> {
   /// The parameter `updatedTags` of this provider.
   List<String> get updatedTags;
 
@@ -469,7 +469,7 @@ mixin EditOutfitInformationTagsRef on AutoDisposeFutureProviderRef<void> {
 }
 
 class _EditOutfitInformationTagsProviderElement
-    extends AutoDisposeFutureProviderElement<void>
+    extends AutoDisposeFutureProviderElement<Result>
     with EditOutfitInformationTagsRef {
   _EditOutfitInformationTagsProviderElement(super.provider);
 
@@ -481,14 +481,14 @@ class _EditOutfitInformationTagsProviderElement
 }
 
 String _$editOutfitInformationSeasonHash() =>
-    r'e4739c19b72eafa6d75131b7511b86f813f754f5';
+    r'a1e2aac5de91775d22c6a8b86d2dbc92c6b5636d';
 
 /// See also [editOutfitInformationSeason].
 @ProviderFor(editOutfitInformationSeason)
 const editOutfitInformationSeasonProvider = EditOutfitInformationSeasonFamily();
 
 /// See also [editOutfitInformationSeason].
-class EditOutfitInformationSeasonFamily extends Family<AsyncValue<void>> {
+class EditOutfitInformationSeasonFamily extends Family<AsyncValue<Result>> {
   /// See also [editOutfitInformationSeason].
   const EditOutfitInformationSeasonFamily();
 
@@ -530,7 +530,7 @@ class EditOutfitInformationSeasonFamily extends Family<AsyncValue<void>> {
 
 /// See also [editOutfitInformationSeason].
 class EditOutfitInformationSeasonProvider
-    extends AutoDisposeFutureProvider<void> {
+    extends AutoDisposeFutureProvider<Result> {
   /// See also [editOutfitInformationSeason].
   EditOutfitInformationSeasonProvider(
     String season,
@@ -570,7 +570,7 @@ class EditOutfitInformationSeasonProvider
 
   @override
   Override overrideWith(
-    FutureOr<void> Function(EditOutfitInformationSeasonRef provider) create,
+    FutureOr<Result> Function(EditOutfitInformationSeasonRef provider) create,
   ) {
     return ProviderOverride(
       origin: this,
@@ -588,7 +588,7 @@ class EditOutfitInformationSeasonProvider
   }
 
   @override
-  AutoDisposeFutureProviderElement<void> createElement() {
+  AutoDisposeFutureProviderElement<Result> createElement() {
     return _EditOutfitInformationSeasonProviderElement(this);
   }
 
@@ -609,7 +609,7 @@ class EditOutfitInformationSeasonProvider
   }
 }
 
-mixin EditOutfitInformationSeasonRef on AutoDisposeFutureProviderRef<void> {
+mixin EditOutfitInformationSeasonRef on AutoDisposeFutureProviderRef<Result> {
   /// The parameter `season` of this provider.
   String get season;
 
@@ -618,7 +618,7 @@ mixin EditOutfitInformationSeasonRef on AutoDisposeFutureProviderRef<void> {
 }
 
 class _EditOutfitInformationSeasonProviderElement
-    extends AutoDisposeFutureProviderElement<void>
+    extends AutoDisposeFutureProviderElement<Result>
     with EditOutfitInformationSeasonRef {
   _EditOutfitInformationSeasonProviderElement(super.provider);
 
@@ -628,14 +628,14 @@ class _EditOutfitInformationSeasonProviderElement
   int get outfitId => (origin as EditOutfitInformationSeasonProvider).outfitId;
 }
 
-String _$getOutfitHash() => r'ff75f8b17c173f67deccbe14746e82ccba8f723e';
+String _$getOutfitHash() => r'c9f35f1a38ad62e2743d3da3a54c1fc849490170';
 
 /// See also [getOutfit].
 @ProviderFor(getOutfit)
 const getOutfitProvider = GetOutfitFamily();
 
 /// See also [getOutfit].
-class GetOutfitFamily extends Family<AsyncValue<Outfit>> {
+class GetOutfitFamily extends Family<AsyncValue<Outfit?>> {
   /// See also [getOutfit].
   const GetOutfitFamily();
 
@@ -673,7 +673,7 @@ class GetOutfitFamily extends Family<AsyncValue<Outfit>> {
 }
 
 /// See also [getOutfit].
-class GetOutfitProvider extends AutoDisposeFutureProvider<Outfit> {
+class GetOutfitProvider extends AutoDisposeFutureProvider<Outfit?> {
   /// See also [getOutfit].
   GetOutfitProvider(
     dynamic outfitId,
@@ -707,7 +707,7 @@ class GetOutfitProvider extends AutoDisposeFutureProvider<Outfit> {
 
   @override
   Override overrideWith(
-    FutureOr<Outfit> Function(GetOutfitRef provider) create,
+    FutureOr<Outfit?> Function(GetOutfitRef provider) create,
   ) {
     return ProviderOverride(
       origin: this,
@@ -724,7 +724,7 @@ class GetOutfitProvider extends AutoDisposeFutureProvider<Outfit> {
   }
 
   @override
-  AutoDisposeFutureProviderElement<Outfit> createElement() {
+  AutoDisposeFutureProviderElement<Outfit?> createElement() {
     return _GetOutfitProviderElement(this);
   }
 
@@ -742,13 +742,13 @@ class GetOutfitProvider extends AutoDisposeFutureProvider<Outfit> {
   }
 }
 
-mixin GetOutfitRef on AutoDisposeFutureProviderRef<Outfit> {
+mixin GetOutfitRef on AutoDisposeFutureProviderRef<Outfit?> {
   /// The parameter `outfitId` of this provider.
   dynamic get outfitId;
 }
 
-class _GetOutfitProviderElement extends AutoDisposeFutureProviderElement<Outfit>
-    with GetOutfitRef {
+class _GetOutfitProviderElement
+    extends AutoDisposeFutureProviderElement<Outfit?> with GetOutfitRef {
   _GetOutfitProviderElement(super.provider);
 
   @override

@@ -2,6 +2,7 @@ import 'package:ootd/main.dart';
 import 'package:ootd/model/clothing_item.dart';
 
 import '../../model/clothes_category.dart';
+import '../../utils/log.dart';
 
 class ClothesCategoryRepository {
 
@@ -28,8 +29,8 @@ class ClothesCategoryRepository {
 
       print(clothesCategory);
       return clothesCategory;
-    } catch (e) {
-      print(e);
+    } catch (e, stack) {
+      logger.i('Error getClothesCategory: $e\n$stack');
       return [];
     }
   }
@@ -48,11 +49,9 @@ class ClothesCategoryRepository {
       final clothingItemList = data.map((json) => ClothingItem.fromJson(json)).toList();
 
       return clothingItemList;
-    } catch (e) {
-      print(e);
+    } catch (e, stack) {
+      logger.i('Error getAllClothingFromCategory: $e\n$stack');
       return [];
     }
   }
-
-
 }

@@ -1,12 +1,11 @@
-import 'package:auto_route/annotations.dart';
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:ootd/domain/state_management/clothes_provider.dart';
+import 'package:ootd/extensions/localization_extension.dart';
 import 'package:ootd/model/clothing_item.dart';
+import 'package:ootd/utils/image_loading_builder.dart';
 
-import '../domain/state_management/clothes_folder_provider.dart';
 import '../navigation/app_router.dart';
 
 @RoutePage()
@@ -26,11 +25,11 @@ class _ClothingItemOverviewScreenState extends ConsumerState<ClothingItemOvervie
       appBar: AppBar(
         actions: [
           DropdownButton(
-              icon: Icon(Icons.edit),
+              icon: const Icon(Icons.edit),
               value: selectedValue,
               items: [
-                DropdownMenuItem(value: 1, child: Text('Edit')),
-                DropdownMenuItem(value: 2, child: Text('Delete')),
+                DropdownMenuItem(value: 1, child: Text(context.loc.edit)),
+                DropdownMenuItem(value: 2, child: Text(context.loc.delete)),
               ],
               onChanged: (value) {
                 setState(() {
@@ -50,9 +49,15 @@ class _ClothingItemOverviewScreenState extends ConsumerState<ClothingItemOvervie
       ),
       body: SafeArea(
           child: Column(
-        children: [
-          Expanded(child: Image.network(widget.clothingItem.itemPhoto, fit: BoxFit.cover))
-        ],
+            children: [
+              Expanded(child:
+                  Image.network(
+                      widget.clothingItem.itemPhoto, fit: BoxFit.cover,
+                      loadingBuilder: imageLoadingBuilder,
+                      errorBuilder: imageErrorBuilder,
+                  )
+              )
+            ],
       )),
     );
   }
@@ -62,15 +67,15 @@ class _ClothingItemOverviewScreenState extends ConsumerState<ClothingItemOvervie
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: Text('Are you sure ?'),
-          content: Text('This action will be permanent and cannot be undone.'),
+          title: Text(context.loc.areYouSure),
+          content: Text(context.loc.deleteConfirmation),
           actions: [
             TextButton(
               onPressed: () async{
                 ref.read(deleteClothingItemProvider(clothingItemId :widget.clothingItem.clothingItemId!));
                 if(mounted) context.router.maybePop();
               },
-              child: Text('Delete'),
+              child: Text(context.loc.delete),
             ),
           ],
         );

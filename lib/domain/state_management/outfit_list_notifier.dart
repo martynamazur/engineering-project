@@ -5,11 +5,6 @@ import 'outfit_provider.dart';
 
 part 'outfit_list_notifier.g.dart';
 
-/*
-To dotyczy listy z outfitami jesli zajda tutaj zmiany
-w jakiejkolwiek zmiennej etc to Ui odswiezy ekran z lista !!!
-
- */
 @riverpod
 class OutfitListNotifier extends _$OutfitListNotifier {
   List<Outfit> _originalList = [];
@@ -29,7 +24,6 @@ class OutfitListNotifier extends _$OutfitListNotifier {
     applyFilters();
   }
 
-  // Obsługa dodawania i usuwania tagów przez ID
   void toggleTagFilter(int tagId) {
     if (selectedDefaultTagIds.contains(tagId)) {
       selectedDefaultTagIds.remove(tagId);
@@ -39,7 +33,7 @@ class OutfitListNotifier extends _$OutfitListNotifier {
     //applyFilters();
   }
 
-  // Zastosuj wszystkie filtry (sezon + tagi)
+
   void applyFilters() {
     List<Outfit> filteredList = _originalList;
 

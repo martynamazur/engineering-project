@@ -3,6 +3,7 @@ import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 import '../../data/repository/clothes_repository.dart';
 import '../../model/clothing_item.dart';
+import '../../model/result.dart';
 
 
 
@@ -14,12 +15,12 @@ ClothesRepository clothesRepository(Ref ref) {
 }
 
 @riverpod
-Future<void> deleteClothingItem(Ref ref, {required int clothingItemId}) async {
+Future<Result> deleteClothingItem(Ref ref, {required int clothingItemId}) async {
   return ref.read(clothesRepositoryProvider).deleteClothingItem(clothingItemId);
 }
 
 @riverpod
-Future<void> addNewClothingItem(Ref ref, {required ClothingItem newClothingItem}) async {
+Future<Result> addNewClothingItem(Ref ref, {required ClothingItem newClothingItem}) async {
   return  ref.read(clothesRepositoryProvider).addClothingItem(newClothingItem);
 }
 
@@ -29,7 +30,7 @@ Future<int> countClothes(Ref ref) async {
 }
 
 @riverpod
-Future<void> editClothingItem(Ref ref,
+Future<Result> editClothingItem(Ref ref,
     {required int clothingItemId,required int newCategoryId,required List<Season> newSeasons}) async {
   return ref.read(clothesRepositoryProvider).editClothingItemInformation(clothingItemId, newCategoryId, newSeasons);
 }

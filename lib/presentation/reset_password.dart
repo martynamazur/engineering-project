@@ -44,14 +44,13 @@ class ResetPasswordState extends ConsumerState<ResetPasswordScreen> {
           child: Form(
             key: _formKey,
             child: Column(
+              spacing: 32.0,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 _buildHeader(),
-                const SizedBox(height: 32.0),
                 _buildInputEmail(),
-                const SizedBox(height: 32.0),
-                _buildTimerButton(context),
-                const SizedBox(height: 32.0),
+                _buildTimerButton(),
+
                 OutlinedButton(
                   onPressed: () => context.router.maybePop(),
                   child: Text(context.loc.next),
@@ -66,26 +65,25 @@ class ResetPasswordState extends ConsumerState<ResetPasswordScreen> {
 
   Widget _buildHeader() {
     return Column(
+      spacing: 8.0,
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(context.loc.resetPasswordHeader, style: headlineMedium),
-        const SizedBox(height: 8),
-        const Text(
-          'Enter the email address you used when you joined and we\'ll send you instructions to reset your password.',
-        ),
+        Text(context.loc.resetPasswordInstruction),
       ],
     );
   }
 
 
-  TimerButton _buildTimerButton(BuildContext context) {
+  TimerButton _buildTimerButton() {
     return TimerButton(
-                text: 'Send',
+                text: context.loc.send,
                 cooldownDuration: const Duration(seconds: 30),
-                onPressed: () {
+                onPressed: () async {
+                  //TODO: dodac sprawdzenie czy sie powiodlo
                   if (_formKey.currentState?.validate() == true) {
-                    ref.read(userRepositoryProvider).resetPassword(_emailController.text);
-                    _showConfirmationMessage(context);
+                    await ref.read(userRepositoryProvider).resetPassword(_emailController.text);
+                    _showConfirmationMessage();
                   }
                 },
               );
@@ -97,9 +95,9 @@ class ResetPasswordState extends ConsumerState<ResetPasswordScreen> {
                 keyboardType: TextInputType.emailAddress,
                 validator: (value) {
                   if (value == null || value.isEmpty) {
-                    return 'Email cannot be empty';
+                    return context.loc.emptyEmail;
                   } else if (!EmailValidator.validate(value)) {
-                    return 'Please enter a valid email address';
+                    return  context.loc.invalidEmail;
                   }
                   return null;
                 },
@@ -107,10 +105,10 @@ class ResetPasswordState extends ConsumerState<ResetPasswordScreen> {
               );
   }
 
-  void _showConfirmationMessage(BuildContext context) {
+  void _showConfirmationMessage() {
     Flushbar(
       title: context.loc.success,
-      message: "If registered, you'll receive an email shortly with password reset instructions. Please check your inbox and spam folder.",
+      message: context.loc.resetPasswordConfirmationMessage,
       duration: const Duration(seconds: 10),
       backgroundColor: Colors.lightGreen,
       flushbarPosition: FlushbarPosition.BOTTOM,

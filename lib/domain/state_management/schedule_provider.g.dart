@@ -210,14 +210,14 @@ final getScheduleForWeekProvider =
 
 typedef GetScheduleForWeekRef = AutoDisposeFutureProviderRef<List<Schedule>>;
 String _$removeFromScheduleHash() =>
-    r'fc278f812e79fa4039805f2a50ec93368bb13cc0';
+    r'8bbd62806401311b37f819bc52a587d305a8dab1';
 
 /// See also [removeFromSchedule].
 @ProviderFor(removeFromSchedule)
 const removeFromScheduleProvider = RemoveFromScheduleFamily();
 
 /// See also [removeFromSchedule].
-class RemoveFromScheduleFamily extends Family<AsyncValue<void>> {
+class RemoveFromScheduleFamily extends Family<AsyncValue<Result>> {
   /// See also [removeFromSchedule].
   const RemoveFromScheduleFamily();
 
@@ -255,7 +255,7 @@ class RemoveFromScheduleFamily extends Family<AsyncValue<void>> {
 }
 
 /// See also [removeFromSchedule].
-class RemoveFromScheduleProvider extends AutoDisposeFutureProvider<void> {
+class RemoveFromScheduleProvider extends AutoDisposeFutureProvider<Result> {
   /// See also [removeFromSchedule].
   RemoveFromScheduleProvider({
     required String scheduleId,
@@ -290,7 +290,7 @@ class RemoveFromScheduleProvider extends AutoDisposeFutureProvider<void> {
 
   @override
   Override overrideWith(
-    FutureOr<void> Function(RemoveFromScheduleRef provider) create,
+    FutureOr<Result> Function(RemoveFromScheduleRef provider) create,
   ) {
     return ProviderOverride(
       origin: this,
@@ -307,7 +307,7 @@ class RemoveFromScheduleProvider extends AutoDisposeFutureProvider<void> {
   }
 
   @override
-  AutoDisposeFutureProviderElement<void> createElement() {
+  AutoDisposeFutureProviderElement<Result> createElement() {
     return _RemoveFromScheduleProviderElement(this);
   }
 
@@ -326,27 +326,28 @@ class RemoveFromScheduleProvider extends AutoDisposeFutureProvider<void> {
   }
 }
 
-mixin RemoveFromScheduleRef on AutoDisposeFutureProviderRef<void> {
+mixin RemoveFromScheduleRef on AutoDisposeFutureProviderRef<Result> {
   /// The parameter `scheduleId` of this provider.
   String get scheduleId;
 }
 
 class _RemoveFromScheduleProviderElement
-    extends AutoDisposeFutureProviderElement<void> with RemoveFromScheduleRef {
+    extends AutoDisposeFutureProviderElement<Result>
+    with RemoveFromScheduleRef {
   _RemoveFromScheduleProviderElement(super.provider);
 
   @override
   String get scheduleId => (origin as RemoveFromScheduleProvider).scheduleId;
 }
 
-String _$scheduleOutfitHash() => r'4f3fd78cc82f96af889bccc5205f802a52597fe5';
+String _$scheduleOutfitHash() => r'9d4ace378f84e44381b12defead5488bc779447f';
 
 /// See also [scheduleOutfit].
 @ProviderFor(scheduleOutfit)
 const scheduleOutfitProvider = ScheduleOutfitFamily();
 
 /// See also [scheduleOutfit].
-class ScheduleOutfitFamily extends Family<void> {
+class ScheduleOutfitFamily extends Family<AsyncValue<Result>> {
   /// See also [scheduleOutfit].
   const ScheduleOutfitFamily();
 
@@ -384,7 +385,7 @@ class ScheduleOutfitFamily extends Family<void> {
 }
 
 /// See also [scheduleOutfit].
-class ScheduleOutfitProvider extends AutoDisposeProvider<void> {
+class ScheduleOutfitProvider extends AutoDisposeFutureProvider<Result> {
   /// See also [scheduleOutfit].
   ScheduleOutfitProvider({
     required Schedule schedule,
@@ -419,7 +420,7 @@ class ScheduleOutfitProvider extends AutoDisposeProvider<void> {
 
   @override
   Override overrideWith(
-    void Function(ScheduleOutfitRef provider) create,
+    FutureOr<Result> Function(ScheduleOutfitRef provider) create,
   ) {
     return ProviderOverride(
       origin: this,
@@ -436,7 +437,7 @@ class ScheduleOutfitProvider extends AutoDisposeProvider<void> {
   }
 
   @override
-  AutoDisposeProviderElement<void> createElement() {
+  AutoDisposeFutureProviderElement<Result> createElement() {
     return _ScheduleOutfitProviderElement(this);
   }
 
@@ -454,13 +455,13 @@ class ScheduleOutfitProvider extends AutoDisposeProvider<void> {
   }
 }
 
-mixin ScheduleOutfitRef on AutoDisposeProviderRef<void> {
+mixin ScheduleOutfitRef on AutoDisposeFutureProviderRef<Result> {
   /// The parameter `schedule` of this provider.
   Schedule get schedule;
 }
 
-class _ScheduleOutfitProviderElement extends AutoDisposeProviderElement<void>
-    with ScheduleOutfitRef {
+class _ScheduleOutfitProviderElement
+    extends AutoDisposeFutureProviderElement<Result> with ScheduleOutfitRef {
   _ScheduleOutfitProviderElement(super.provider);
 
   @override

@@ -2,6 +2,7 @@ import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:ootd/domain/state_management/clothes_provider.dart';
+import 'package:ootd/extensions/localization_extension.dart';
 import 'package:ootd/l10n/app_localizations.dart';
 import 'package:ootd/model/clothing_item.dart';
 import 'package:ootd/navigation/app_router.dart';
@@ -121,7 +122,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                     ),
                     itemCount: 6,
                     itemBuilder: (context, index) {
-                      if(folder.clothingItems.isEmpty) _buildAddItemPlaceholder();
+                      if(folder.clothingItems.isEmpty) return _buildAddItemPlaceholder();
 
                       if(index < folder.clothingItems.length){
                         final clothingItem = folder.clothingItems[index];
@@ -158,17 +159,15 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
   }
 
   Widget _buildSmallFolderContent(ClosetFolder folderC, BuildContext context) {
-  final folder = folderC.clothingItems.take(4).toList();//biore 4 zdjecia do wsywietelnia folderu
+  final folder = folderC.clothingItems.take(4).toList();
 
   return Padding(
     padding: const EdgeInsets.all(8.0),
     child: GestureDetector(
       onTap: () => context.router.push(ClosetFolderOverviewRoute(folderId: folderC.closetId)),
       onLongPress: () => _showFolderDeletionDialog(folderId:folderC.closetId),
-      child: Column( // aby na dole umiesc tekst
+      child: Column(
         children: [
-          //tu buduje jak wewnatrz wyglada grid ze zdjeciami elementu
-
           if(folder.isEmpty)
             Container(
               padding: const EdgeInsets.all(16.0),
@@ -184,10 +183,10 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                   ),
                 ],
               ),
-              child: const Center(
+              child: Center(
                 child: Text(
-                  'Folder jest pusty',
-                  style: TextStyle(
+                  context.loc.emptyFolder,
+                  style: const TextStyle(
                     fontSize: 18,
                     fontWeight: FontWeight.bold,
                     color: Colors.black,
@@ -221,7 +220,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                 return _buildListItem(clothingItem: clothingItem);
               },
               shrinkWrap: true,
-              physics: NeverScrollableScrollPhysics(),
+              physics: const NeverScrollableScrollPhysics(),
             ),
           ),
             Text(
@@ -262,7 +261,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
             clothingItem.itemPhoto,
             fit: BoxFit.cover,
             errorBuilder: (context, error, stackTrace) {
-              return const Center(child: Text('Image not available'));
+              return Center(child: Text(context.loc.imageNotAvailable));
             },
           ),
 
@@ -280,14 +279,14 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
           child: Container(
             width: 100,
             height: 100,
-            decoration: BoxDecoration(
+            decoration: const BoxDecoration(
                 shape: BoxShape.circle,
                 color: Colors.lightGreenAccent
             ),
-            child: Icon(Icons.add),
+            child: const Icon(Icons.add),
           ),
         ),
-        Center(child: Text("Empty closet", style:  headline)),
+        Center(child: Text(context.loc.emptyCloset, style:  headline)),
       ],
     );
   }
@@ -299,7 +298,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
         border: Border.all(color: Colors.grey),
         color: Colors.white70,
       ),
-      child: Icon(Icons.add, color: Colors.green),
+      child: const Icon(Icons.add, color: Colors.green),
     );
 
   }
@@ -310,17 +309,15 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: Text('Do you want to delete ?'),
-          content: Text('This action will be permanent and cannot be undone.'),
+          title: Text(context.loc.doYouWantToDelete),
+          content: Text(context.loc.deleteConfirmation),
           actions: [
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: [
                 TextButton(
-                  onPressed: () {
-                    context.router.maybePop();
-                  },
-                  child: Text('Cancel'),
+                  onPressed: () => context.router.maybePop(),
+                  child: Text(context.loc.cancel),
                 ),
                 TextButton(
                   onPressed: () {
@@ -329,8 +326,8 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                   },
                   child: Row(
                     children: [
-                      Icon(Icons.restore_from_trash),
-                      Text('Delete'),
+                      const Icon(Icons.restore_from_trash),
+                      Text(context.loc.delete),
                     ],
                   ),
                 ),
@@ -350,24 +347,22 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: Text('Create a new folder'),
+          title: Text(context.loc.createNewFolderTitle),
           content: Column(
-            mainAxisSize: MainAxisSize.min, // Dostosowuje rozmiar kolumny do zawartości
+            mainAxisSize: MainAxisSize.min,
             children: [
-              Text('Please enter the new folder name:'),
-              SizedBox(height: 10),
+              Text(context.loc.enterNewFolderName),
+              const SizedBox(height: 12.0),
               TextField(
                 controller: controller,
-                decoration: InputDecoration(hintText: 'Folder Name'),
+                decoration: InputDecoration(hintText: context.loc.folderNameHint),
               ),
             ],
           ),
           actions: [
             TextButton(
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
-              child: Text('Cancel'),
+              onPressed: () => Navigator.of(context).pop(),
+              child: Text(context.loc.cancel),
             ),
             TextButton(
               onPressed: () async {
@@ -375,11 +370,10 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                   final newFolder = await ref.read(createNewFolderProvider(folderName:  controller.text).future);
                   await ref.read(folderList.folderListNotifierProvider.notifier).addFolder(newFolder);
                 }
-                if (mounted) {
-                  Navigator.of(context).pop();
-                }
+                Navigator.of(context).pop();
+
               },
-              child: Text('Create'),
+              child: Text(context.loc.create),
             ),
           ],
         );

@@ -10,10 +10,7 @@ import '../domain/state_management/user_provider.dart';
 
 @RoutePage()
 class SettingsScreen extends ConsumerWidget {
-  SettingsScreen({super.key});
-
-  //TODO add missing screens
-
+  const SettingsScreen({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -66,8 +63,16 @@ class SettingsScreen extends ConsumerWidget {
               ListTile(
                 leading: const Icon(Icons.exit_to_app_outlined, color: Colors.deepOrangeAccent),
                 title: Text(context.loc.logOutHeader, style: const TextStyle(color: Colors.deepOrangeAccent, fontWeight: FontWeight.w600)),
-                onTap: () {
-                  repository.signOut(context);
+                onTap: () async{
+                  final messenger = ScaffoldMessenger.of(context);
+                  final result = await repository.signOut();
+
+                 if(result.success){
+                   messenger.showSnackBar(SnackBar(content: Text(context.loc.logoutSuccess)));
+                   context.router.replaceAll([const LoginRoute()]);
+                 }else{
+                   messenger.showSnackBar(SnackBar(content: Text(context.loc.logoutFailure)));
+                 }
                 },
               )
             ],

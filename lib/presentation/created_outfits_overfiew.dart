@@ -1,7 +1,9 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:ootd/extensions/localization_extension.dart';
 import 'package:ootd/navigation/app_router.dart';
+import 'package:ootd/utils/image_loading_builder.dart';
 
 import '../domain/state_management/outfit_list_notifier.dart';
 import '../utils/show_confirm_deletion_dialog.dart';
@@ -10,7 +12,7 @@ import '../utils/show_confirm_deletion_dialog.dart';
 
 @RoutePage()
 class CreatedOutfitsScreen extends ConsumerStatefulWidget {
-  CreatedOutfitsScreen({super.key});
+  const CreatedOutfitsScreen({super.key});
 
   @override
   ConsumerState<CreatedOutfitsScreen> createState() =>
@@ -24,17 +26,14 @@ class _CreatedOutfitsScreenState extends ConsumerState<CreatedOutfitsScreen> {
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Outfits'),
+        title: Text(context.loc.outfits),
         actions: [
-          IconButton(onPressed: (){
-            context.router.push(ChooseTemplateRoute());
-          }, icon: const Icon(Icons.add_circle_outlined)
+          IconButton(onPressed: () => context.router.push(const ChooseTemplateRoute()),
+              icon: const Icon(Icons.add_circle_outlined)
           ),
 
           IconButton(
-            onPressed: () {
-              context.router.push(FilterRoute());
-            },
+            onPressed: () => context.router.push(const FilterRoute()),
             icon: const Icon(Icons.filter_list_alt),
           ),
 
@@ -44,10 +43,10 @@ class _CreatedOutfitsScreenState extends ConsumerState<CreatedOutfitsScreen> {
         child: outfitState.when(
           data: (data) {
             if (data.isEmpty) {
-              return const Center(
+              return Center(
                 child: Text(
-                  'Brak danych do wyświetlenia',
-                  style: TextStyle(fontSize: 16, color: Colors.grey),
+                  context.loc.noDataToDisplayMessage,
+                  style: const TextStyle(fontSize: 16, color: Colors.grey),
                 ),
               );
             }
@@ -63,9 +62,7 @@ class _CreatedOutfitsScreenState extends ConsumerState<CreatedOutfitsScreen> {
                 itemBuilder: (context, index) {
                   final outfit = data[index];
                   return GestureDetector(
-                    onTap: () {
-                      context.router.push(OutfitOverviewRoute(outfitId: outfit.id));
-                    },
+                    onTap: () => context.router.push(OutfitOverviewRoute(outfitId: outfit.id)),
                     onLongPress: () => showConfirmDeletionDialog(context: context, ref: ref, outfitId: outfit.id),
                     child: Container(
                       decoration: BoxDecoration(
@@ -75,6 +72,8 @@ class _CreatedOutfitsScreenState extends ConsumerState<CreatedOutfitsScreen> {
                       child: Image.network(
                         outfit.imageUrl,
                         fit: BoxFit.cover,
+                        loadingBuilder: imageLoadingBuilder,
+                        errorBuilder: imageErrorBuilder,
                       ),
                     ),
                   );
@@ -84,22 +83,21 @@ class _CreatedOutfitsScreenState extends ConsumerState<CreatedOutfitsScreen> {
           },
           error: (err, stack) {
             return Center(
-              child: Text(
-                'Wystąpił błąd: $err',
-                style: const TextStyle(fontSize: 16, color: Colors.red),
-              ),
+              child: Column(
+                children: [
+                  Text(context.loc.errorGeneralMessage),
+                  const SizedBox(height: 8),
+                  ElevatedButton(
+                    onPressed: () => ref.invalidate(outfitListNotifierProvider),
+                    child: Text(context.loc.tryAgain),
+                  ),
+                ],
+              )
             );
           },
-          loading: () {
-            return const Center(
-              child: CircularProgressIndicator(),
-            );
-          },
+          loading: () => const Center(child: CircularProgressIndicator()),
         ),
       ),
     );
   }
-
-
-
 }

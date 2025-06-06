@@ -4,15 +4,12 @@ import 'dart:typed_data';
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:hive/hive.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:ootd/domain/state_management/category_provider.dart';
+import 'package:ootd/extensions/localization_extension.dart';
 
 import 'package:ootd/model/clothing_item.dart';
-import 'package:ootd/navigation/app_router.dart';
 import 'package:ootd/presentation/styles/selectable_category_tile.dart';
 import 'package:ootd/presentation/styles/selectable_season_tile.dart';
-import 'package:path_provider/path_provider.dart';
 
 import '../domain/state_management/clothes_category_provider.dart';
 import '../domain/state_management/clothes_folder_provider.dart';
@@ -20,6 +17,7 @@ import '../domain/state_management/clothes_provider.dart';
 import '../domain/state_management/remove_bg_provider.dart';
 import '../domain/state_management/season_provider.dart';
 import '../domain/state_management/supabase_utils.dart';
+import '../utils/log.dart';
 import 'styles/headline_text.dart';
 
 import 'package:linear_progress_bar/linear_progress_bar.dart';
@@ -58,17 +56,14 @@ class _AddClothesState extends ConsumerState<AddClothesScreen> {
                   maxSteps: 3,
                   progressType: LinearProgressBar.progressTypeLinear,
                   currentStep: _currentPage,
-                  progressColor: Color(0xFFD1E64B),
+                  progressColor: const Color(0xFFD1E64B),
                   backgroundColor: Colors.grey,
                   borderRadius: BorderRadius.circular(10)),
               Expanded(
                   child: PageView(
-                onPageChanged: (int page) {
-                  setState(() {
-                    _currentPage = page;
-                  });
+                    onPageChanged: (int page) {
+                      setState(() => _currentPage = page);
                 },
-
                 controller: _pageController,
                 children: [
                   _buildPickClothesFromGallery(),
@@ -87,18 +82,18 @@ class _AddClothesState extends ConsumerState<AddClothesScreen> {
 
   Widget _buildPickClothesFromGallery() {
     return Column(
+      spacing: 20.0,
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text('Add photo', style: headline32),
-        SizedBox(height: 20),
+        Text(context.loc.addPhoto, style: headline32),
         _buildImageView(),
-        SizedBox(height: 20),
         SizedBox(
           width: double.infinity,
           child: OutlinedButton(
-              onPressed: _pickImageFromGallery, child: Text('Choose photo')),
+              onPressed: _pickImageFromGallery,
+              child: Text(context.loc.choosePhoto)
+          ),
         ),
-        SizedBox(height: 20),
       ],
     );
   }
@@ -128,7 +123,10 @@ class _AddClothesState extends ConsumerState<AddClothesScreen> {
                 child: Center(
                     child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
-                  children: [Text('No image selected'), Icon(Icons.add)],
+                  children: [
+                    Text(context.loc.noImageSelected),
+                    const Icon(Icons.add)
+                  ],
                 ))),
           );
   }
@@ -143,12 +141,12 @@ class _AddClothesState extends ConsumerState<AddClothesScreen> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text('Pick category', style: headline32),
-              SizedBox(height: 8.0),
+              Text(context.loc.pickCategoryHeadline, style: headline32),
+              const SizedBox(height: 8.0),
               categoryList.when(
                 data: (categories) {
                   return GridView.builder(
-                    physics: NeverScrollableScrollPhysics(),
+                    physics: const NeverScrollableScrollPhysics(),
                     shrinkWrap: true,
                     itemCount: categories.length,
                     gridDelegate:
@@ -168,7 +166,7 @@ class _AddClothesState extends ConsumerState<AddClothesScreen> {
                         onTap: () {
                           setState(() {
                             _pickedCategory = _pickedCategory == category.id ? null : category.id;
-                            print("Category : $_pickedCategory");
+                            logger.i("Category : $_pickedCategory");
                           });
                         },
                       );
@@ -190,20 +188,20 @@ class _AddClothesState extends ConsumerState<AddClothesScreen> {
     return Padding(
       padding: const EdgeInsets.all(16.0),
       child: Column(
+        spacing: 24.0,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text('Season', style: headline32),
-          Text('Pick appropriate seasons ', style: headline),
-          SizedBox(height: 24),
+          Text(context.loc.seasonHeader, style: headline32),
+          Text(context.loc.seasonSubheader, style: headline),
           GridView.builder(
-            gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+            gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
               crossAxisCount: 2,
               crossAxisSpacing: 6.0,
               mainAxisSpacing: 6.0,
             ),
             itemCount: seasonList.length,
             shrinkWrap: true,
-            physics: NeverScrollableScrollPhysics(),
+            physics: const NeverScrollableScrollPhysics(),
             itemBuilder: (context, index) {
               final season = seasonList[index];
               final seasonMap = {
@@ -219,7 +217,6 @@ class _AddClothesState extends ConsumerState<AddClothesScreen> {
                     final selectedSeason = seasonMap[season.id];
                     if (selectedSeason != null) {
                       setState(() {
-                        //dodaje/usuwam z tabelki
                         if (_pickedSeasons.contains(selectedSeason)) {
                           _pickedSeasons.remove(selectedSeason);
                           print(_pickedSeasons.contains(season));
@@ -239,10 +236,10 @@ class _AddClothesState extends ConsumerState<AddClothesScreen> {
 
   Widget _buildFinalize() {
     return Padding(
-      padding: EdgeInsets.all(16.0),
+      padding: const EdgeInsets.all(16.0),
       child: Column(
         children: [
-          Text('Summary', style: headline32),
+          Text(context.loc.summary, style: headline32),
           Expanded(
             child: _image != null
                 ? Image.file(
@@ -250,27 +247,23 @@ class _AddClothesState extends ConsumerState<AddClothesScreen> {
                     File(_image!.path),
                     fit: BoxFit.cover,
                   )
-                : Text('No image selected'),
+                : Text(context.loc.noImageSelected),
           ),
           SizedBox(
               width: double.infinity,
               child: OutlinedButton(
                   onPressed: () async{
-                    // jeszcze raz
                     await _submitClothingItemForm();
 
                     setState(() {
-
                       _image = null;
                       _pickedCategory = null;
                       _pickedSeasons.clear();
-
-                      print("-imahe $_image $_pickedCategory");
                       _pageController.jumpToPage(0);
                     });
-
-
-                  }, child: Text('Add another one'))),
+                  }, child: Text(context.loc.addAnother)
+              )
+          ),
           SizedBox(
               width: double.infinity,
               child: OutlinedButton(
@@ -278,7 +271,7 @@ class _AddClothesState extends ConsumerState<AddClothesScreen> {
                     await _submitClothingItemForm();
                     context.router.maybePop();
                   },
-                  child: Text('Finish')))
+                  child: Text(context.loc.finish)))
         ],
       ),
     );
@@ -291,20 +284,20 @@ class _AddClothesState extends ConsumerState<AddClothesScreen> {
           child: OutlinedButton(
               onPressed: () {
                 _pageController.previousPage(
-                    duration: Duration(milliseconds: 300),
+                    duration: const Duration(milliseconds: 300),
                     curve: Curves.easeInOut);
               },
-              child: Text('Cofnij')),
+              child: Text(context.loc.goBack)),
         ),
-        SizedBox(width: 12.0,),
+        const SizedBox(width: 12.0,),
         Expanded(
           child: OutlinedButton(
               onPressed: () {
                 _pageController.nextPage(
-                    duration: Duration(milliseconds: 300),
+                    duration: const Duration(milliseconds: 300),
                     curve: Curves.easeInOut);
               },
-              child: Text('Dalej')),
+              child: Text(context.loc.next)),
         )
       ],
     );
@@ -340,6 +333,4 @@ class _AddClothesState extends ConsumerState<AddClothesScreen> {
     ref.refresh(folderListNotifierProvider);
 
   }
-
-
 }

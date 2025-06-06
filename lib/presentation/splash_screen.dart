@@ -1,9 +1,7 @@
 
-import 'package:auto_route/annotations.dart';
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:ootd/navigation/app_router.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import '../../main.dart';
 
 @RoutePage()
@@ -30,7 +28,7 @@ class _SplashScreenState extends State<SplashScreen> {
     final session = supabase.auth.currentSession;
 
     if (session != null) {
-      context.router.replace(BottomNavWrapperRoute());
+      context.router.replace(const BottomNavWrapperRoute());
     } else {
       context.router.replace(const LoginRoute());
     }

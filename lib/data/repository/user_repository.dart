@@ -1,18 +1,20 @@
 
+import 'dart:developer' as develoepr;
+
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
-//import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 import '../../main.dart';
-import '../../navigation/app_router.dart';
+import '../../model/result.dart';
+import '../../utils/log.dart';
 
 class UserRepository{
 
   final FlutterSecureStorage _storage = const FlutterSecureStorage();
 
-  Future<void> signUp(String password, String email, String name) async {
+  Future<Result> signUp(String password, String email, String name) async {
     try {
       final response = await supabase.auth.signUp(
         password: password,
@@ -21,19 +23,21 @@ class UserRepository{
       );
 
       if (response.user == null) {
-        throw Exception('Sign up failed');
+        return Result.failure('Sign up failed. No user returned');
       }
+
+      return Result.success();
     } catch (error) {
 
       if (error is PostgrestException && error.message.contains('duplicate key value violates unique constraint')) {
-        throw Exception('An account with this email already exists');
+        return Result.failure('An account with this email already exists');
       } else {
-        throw Exception('Sign up failed: ${error.toString()}');
+        throw Result.failure('Unexpected error during sign up.');
       }
     }
   }
 
-  Future<bool> signIn(String email, String password, BuildContext context) async{
+  Future<Result> signIn(String email, String password) async{
     try{
       final AuthResponse response = await supabase.auth.signInWithPassword(
           password: password,
@@ -47,53 +51,82 @@ class UserRepository{
       if (user != null) {
         await _storage.write(key: 'authToken', value: session?.accessToken);
         await updateAccountStatus();
-        return true;
-      } else {
-        return false;
+        logger.i('Zalogowano użytkownika: ${user.id}');
+        return Result.success();
       }
 
-    } catch (e) {
-      print('Sign in error: $e');
-      return false;
+      logger.w('Sign in failed, no user returned');
+      return Result.failure('Something went wrong. Try again');
+
+    } catch (e, stack) {
+      logger.i('Sign in error: $e $stack');
+      return Result.failure('Something went wrong. Try again');
     }
     }
 
-  Future<void> signOut(BuildContext context) async{
-    supabase.auth.signOut();
-    await _storage.write(key: 'authToken', value: '');
-    context.router.replaceAll([LoginRoute()]);
+  Future<Result> signOut() async{
+    try{
+      await supabase.auth.signOut();
+      //await _storage.write(key: 'authToken', value: '');
+      await _storage.delete(key: 'authToken');
+      return Result.success();
 
-    //Navigator.pushNamedAndRemoveUntil(context, '/login', (route) => false);
+    }catch(e, stack){
+      logger.i('Error while signing out: $e, $stack');
+      return Result.failure('Something went wrong. Try again');
+    }
 
   }
 
-  Future<void> resetPassword(String email) async {
+  Future<Result> resetPassword(String email) async {
     try {
       await supabase.auth.resetPasswordForEmail(
         email,
-        redirectTo: 'http://yourdomain.com/reset-password',
+        //redirectTo: 'http://yourdomain.com/reset-password',
       );
-    } catch (e) {
-      print('Reset password error: $e');
-      rethrow;
+      return Result.success();
+    } catch (e, st) {
+      logger.i('Reset password error: $e, $st');
+      return Result.failure('Something went wrong. Try again');
     }
   }
 
 
-  Future<bool> changeEmailAdress(String newEmailAddress) async{
+  Future<Result> changeEmailAddress(String newEmailAddress) async{
     try{
       await supabase.auth.updateUser(UserAttributes(email: newEmailAddress));
-      return true;
-    }catch(e){
-      return false;
+      return Result.success();
+    }on AuthException catch(e,stack){
+      if (e.message.contains('already registered')) {
+        return Result.failure('This email address is already in use.');
+      }
+      logger.i('Auth error: $e, $stack');
+      return Result.failure('Something went wrong. Please try again.');
+    } catch(e, stack){
+      logger.i('Change email address - unexpected error: $e, $stack');
+      return Result.failure('Something went wrong');
     }
   }
 
 
-  Future<void> requestAccountDeletion() async {
-    final userId = supabase.auth.currentUser?.id;
-    if (userId == null) return;
-    await supabase.from('users').update({'is_deletable': true}).eq('id', userId);
+  Future<Result> requestAccountDeletion() async {
+    try{
+      final userId = supabase.auth.currentUser?.id;
+
+      if (userId == null) {
+        return Result.failure('User is not logged in');
+      }
+      await supabase
+          .from('users')
+          .update({'is_deletable': true})
+          .eq('id', userId);
+
+      return Result.success();
+    }catch(e,stack){
+      logger.e('Error during account deletion request: $e\n$stack');
+      return Result.failure('Failed to request account deletion. Please try again.');
+    }
+
 
   }
   Future<void> updateAccountStatus() async{

@@ -5,6 +5,7 @@ import 'package:riverpod_annotation/riverpod_annotation.dart';
 import '../../data/repository/clothes_folder_repository.dart';
 import '../../model/closet_folder.dart';
 import '../../model/clothing_item.dart';
+import '../../model/result.dart';
 import 'clothes_list_provider.dart';
 
 part 'clothes_folder_provider.g.dart';
@@ -44,12 +45,12 @@ final picketClosetFolderProvider = StateProvider((ref) => 0);
 
 
 @riverpod
-Future<void> deleteFolder(Ref ref, {required int folderId}) async {
+Future<Result> deleteFolder(Ref ref, {required int folderId}) async {
   return ref.read(clothesFolderRepositoryProvider).deleteFolder(folderId);
 }
 
 @riverpod
-Future<void> changeFolderName(Ref ref,
+Future<Result> changeFolderName(Ref ref,
     {required String newFolderName, required int folderId}) async {
   return ref.read(clothesFolderRepositoryProvider).changeFolderName(newFolderName, folderId);
 }
@@ -62,7 +63,7 @@ Future<ClosetFolder> createNewFolder(Ref ref, {required String folderName}) asyn
 }
 
 @riverpod
-Future<void> addClothesToFolder(Ref ref, {required List<int> clothesId,required int folderId}) async {
+Future<Result> addClothesToFolder(Ref ref, {required List<int> clothesId,required int folderId}) async {
   return ref.read(clothesFolderRepositoryProvider).addClothesToFolder(clothesId, folderId);
 }
 
@@ -72,7 +73,7 @@ Future<List<ClothingItem>> getAllClothes(Ref ref) async {
 }
 
 @riverpod
-Future<void> removeClothingItemFromFolder(Ref ref,
+Future<Result> removeClothingItemFromFolder(Ref ref,
     {required int folderId, required int clothingItemId}) async {
   return ref.read(clothesFolderRepositoryProvider).removeClothingItemFromFolder(folderId,clothingItemId,);
 }

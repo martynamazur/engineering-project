@@ -35,16 +35,18 @@ class _EditClothingitemState extends ConsumerState<EditClothingitemScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Edit'),
+        title: Text(context.loc.edit),
         actions: [
           TextButton(
             onPressed: () async{
-              ref.read(editClothingItemProvider(clothingItemId: widget.clothingItem.clothingItemId! ,newCategoryId:  _selectedCategoryId!,newSeasons:  _editSeasons));
+              final result = await ref.read(editClothingItemProvider(clothingItemId: widget.clothingItem.clothingItemId! ,newCategoryId:  _selectedCategoryId!,newSeasons:  _editSeasons).future);
+              if(result.success){
 
+              }
               },
             child: Row(
               children: [
-                Icon(Icons.save_as_sharp),
+                const Icon(Icons.save_as_sharp),
                 Text(context.loc.save)
               ],
             ),
@@ -69,15 +71,12 @@ class _EditClothingitemState extends ConsumerState<EditClothingitemScreen> {
                 ),
                 SeasonPicker(
                     _editSeasons,
-                        (newSeasons){
+                    (newSeasons){
                       setState(() {
-                        print(_editSeasons);
                         _editSeasons = (widget.clothingItem.seasons ?? []).whereType<Season>().toList();
-                        print(_editSeasons);
                       });
 
                 })
-
               ],
             ),
           )

@@ -36,6 +36,8 @@
   "@notificationSettingsHeader": {
     "description": "Translation for notificationSettingsHeader"
   },
+
+  "notifications": "Notifications",
   "privacySettingsHeader": "Privacy Settings",
   "@privacySettingsHeader": {
     "description": "Translation for privacySettingsHeader"
@@ -108,6 +110,7 @@
   "@signUp": {
     "description": "Translation for signUp"
   },
+  "signUpFailed": "Sign up failed",
   "nameLabel": "Name",
   "@nameLabel": {
     "description": "Translation for nameLabel"
@@ -196,6 +199,8 @@
   "@seasonHeader": {
     "description": "Translation for seasonHeader"
   },
+
+  "seasonSubheader": "Pick appropriate seasons",
   "tagsHeader": "Tags",
   "@tagsHeader": {
     "description": "Translation for tagsHeader"
@@ -316,6 +321,98 @@
   "closetHeader": "Closet",
   "addNewPieces": "Start adding new pieces of your outfit",
   "noItemsFound": "No items found for",
-  "failedToLoadImage": "Failed to load image"
+  "failedToLoadImage": "Failed to load image",
 
+  "loading": "Loading...",
+  "error": "Error",
+
+  "removeFromFolderTitle": "Remove from the folder",
+  "removeFromFolderContent": "This action will be permanent and cannot be undone.",
+
+  "areYouSure": "Are you sure?",
+  "deleteConfirmation": "This action will be permanent and cannot be undone.",
+
+
+  "changeFolderNameTitle": "Change Folder Name",
+  "enterNewFolderName": "Please enter the new folder name:",
+  "folderNameHint": "Folder Name",
+  "change": "Change",
+  "changeSuccess": "Folder name changed successfully.",
+  "changeFailure": "Failed to change folder name. Please try again.",
+  "exit": "Exit",
+  "selectCategory": "Select category",
+  "clear": "Clear",
+  "remove": "Remove",
+  "outerwear": "Outerwear",
+  "topwear": "Topwear",
+  "bottomwear": "Bottomwear",
+  "dresses": "Dresses & jumpsuits",
+
+  "doYouWantToDelete": "Do you want to delete?",
+
+  "deleteFolderSuccess": "Folder deleted successfully.",
+  "deleteFolderFailure": "Failed to delete the folder. Please try again.",
+  "removeClothingSuccess": "Item removed from folder.",
+  "removeClothingFailure": "Failed to remove item. Please try again.",
+
+  "addClothingSuccess": "Item successfully added to the folder.",
+  "addClothingFailure": "Failed to add item to the folder. Please try again.",
+
+  "saveOutfitSuccess": "Outfit saved successfully.",
+  "saveOutfitFailure": "Failed to save outfit. Please try again.",
+
+  "deleteOutfitSuccess": "Your outfit has been removed.",
+  "deleteOutfitFailure": "Oops! Couldn’t delete the outfit. Try again.",
+
+  "logoutSuccess": "You have been logged out successfully.",
+  "logoutFailure": "Logout failed. Please try again.",
+
+  "areYouNewHere": "Are you new here?",
+  "createAnAccount": "Create an account",
+
+  "confirmationEmailDescription": "Click the link in the email to verify your new email address. If you don’t see the email, check your spam folder.",
+
+  "resetPasswordInstruction": "Enter the email address you used when you joined and we'll send you instructions to reset your password.",
+  "resetPasswordConfirmationMessage": "If registered, you'll receive an email shortly with password reset instructions. Please check your inbox and spam folder.",
+  "addPhoto": "Add photo",
+  "choosePhoto": "Choose photo",
+  "noImageSelected": "No image selected",
+  "pickCategoryHeadline": "Pick category",
+  "summary": "Summary",
+  "finish": "Finish",
+  "goBack": "Go back",
+  "findFasterLater": "It’ll be easier to find what you’re looking for later.",
+  "addTagHint": "Tap to add a tag",
+  "emptyTagField": "This field can't be empty",
+  "invalidTag": "Enter a valid tag",
+  "passwordRuleMinLength": "Minimum of 6 characters",
+  "passwordRuleUppercase": "At least one uppercase letter (A-Z)",
+  "passwordRuleLowercase": "At least one lowercase letter (a-z)",
+  "passwordRuleSpecialChar": "At least one special character (e.g., !, @, #, \\$)",
+  "scheduleSuccessTitle": "Outfit scheduled",
+  "scheduleSuccessMessage": "Your outfit has been successfully scheduled.",
+  "scheduleErrorTitle": "Something went wrong",
+  "scheduleErrorMessage": "We couldn’t schedule your outfit. Please try again later.",
+  "outfits": "Outfits",
+  "tryAgain": "Try again",
+  "errorGeneralMessage": "Something went wrong",
+  "addNewTag": "Add new tag",
+  "enterNewTag": "Enter new tag",
+  "updateOutfitSuccess": "Outfit updated successfully.",
+  "updateOutfitFailure": "Failed to update outfit. Please try again.",
+  "filtr": "Filtr",
+  "create": "Create",
+  "enterOldAndNewPassword": "Enter your old and then new password",
+  "passwordRequirements": "Password Requirements",
+  "consentRequiredTitle": "Consent Required",
+  "consentRequiredMessage": "You must accept the terms and conditions to register.",
+  "signupFailed": "Sign up failed. Please try again later.",
+  "createNewFolderTitle": "Create a new folder",
+  "emptyFolder": "Empty folder",
+  "notificationDescription": "Turn all app notifications on/off",
+  "removeFromScheduleSuccess": "Successfully removed from schedule.",
+  "removeFromScheduleFailure": "Failed to remove from schedule. Please try again.",
+  "emptyPassword": "Password cannot be empty",
+  "accountExistsMessage": "An account with this email already exists. Please use a different email or log in.',\n",
+  "passwordResetEmailSent": "Password reset link has been sent to your email."
 }

@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:ootd/extensions/localization_extension.dart';
 import 'package:ootd/presentation/styles/headline_text.dart';
 import 'package:ootd/presentation/styles/selectable_season_tile.dart';
 
@@ -11,7 +12,7 @@ class SeasonPicker extends ConsumerStatefulWidget {
   final ValueChanged<List<Season?>> onSeasonChanged;
 
 
-  SeasonPicker(this.clothingItemSeason, this.onSeasonChanged);
+  const SeasonPicker(this.clothingItemSeason, this.onSeasonChanged, {super.key});
 
   @override
   ConsumerState<SeasonPicker> createState() => _SeasonPickerState();
@@ -20,32 +21,26 @@ class SeasonPicker extends ConsumerStatefulWidget {
 class _SeasonPickerState extends ConsumerState<SeasonPicker> {
 
   @override
-  void initState() {
-    super.initState();
-
-  }
-
-  @override
   Widget build(BuildContext context) {
-    final seasonList = ref.watch(seasonRepositoryProvider).getSeason();
+    final seasonList= ref.watch(getSeasonListProvider);
 
     return Padding(
       padding: const EdgeInsets.all(16.0),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text('Season', style: headline32),
-          Text('Pick appropriate seasons ', style: headline),
-          SizedBox(height: 24),
+          Text(context.loc.seasonHeader, style: headline32),
+          Text(context.loc.seasonSubheader, style: headline),
+          const SizedBox(height: 24),
           GridView.builder(
-            gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+            gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
               crossAxisCount: 2,
               crossAxisSpacing: 6.0,
               mainAxisSpacing: 6.0,
             ),
             itemCount: seasonList.length,
             shrinkWrap: true,
-            physics: NeverScrollableScrollPhysics(),
+            physics: const NeverScrollableScrollPhysics(),
             itemBuilder: (context, index) {
               final season = seasonList[index];
               final seasonMap = {
@@ -59,13 +54,16 @@ class _SeasonPickerState extends ConsumerState<SeasonPicker> {
                 isSelected: widget.clothingItemSeason.contains(seasonMap[season.id]),
                 onTap: () {
                   final selectedSeason = seasonMap[season.id];
+                  final updatedList = [...widget.clothingItemSeason];
                   if (selectedSeason != null) {
+                    if (widget.clothingItemSeason.contains(selectedSeason)) {
+                      updatedList.remove(selectedSeason);
+                    } else {
+                      updatedList.add(selectedSeason);
+                    }
+
                     setState(() {
-                      if (widget.clothingItemSeason.contains(selectedSeason)) {
-                        widget.clothingItemSeason.remove(selectedSeason);
-                      } else {
-                        widget.clothingItemSeason.add(selectedSeason);
-                      }
+                      widget.onSeasonChanged(updatedList);
                     });
                   }
                   widget.onSeasonChanged(widget.clothingItemSeason);
@@ -75,6 +73,6 @@ class _SeasonPickerState extends ConsumerState<SeasonPicker> {
           ),
         ],
       ),
-    );;
+    );
   }
 }

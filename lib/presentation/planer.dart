@@ -9,8 +9,9 @@ import 'package:ootd/domain/state_management/schedule_provider.dart';
 import 'package:ootd/navigation/app_router.dart';
 
 import '../model/schedule.dart';
+import '../utils/image_loading_builder.dart';
 
-enum WeekDay { Monday, Tuesday, Wednesday, Thursday, Friday, Saturday, Sunday }
+enum WeekDay { monday, tuesday, wednesday, thursday, friday, saturday, sunday }
 
 @RoutePage()
 class PlannerScreen extends StatefulWidget {
@@ -50,7 +51,7 @@ class _PlannerScreenState extends State<PlannerScreen> with SingleTickerProvider
       ),
       body: TabBarView(
         controller: _tabController,
-        children: [
+        children: const [
           MonthlyView(),
           WeeklyView(),
         ],
@@ -85,7 +86,7 @@ class MonthlyView extends ConsumerWidget {
     );
 
     return GridView.builder(
-      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+      gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
         crossAxisCount: 5,
         mainAxisSpacing: 4.0,
         crossAxisSpacing: 4.0,
@@ -146,6 +147,8 @@ class MonthlyView extends ConsumerWidget {
                               child: Image.network(
                                 schedule.imageUrl,
                                 fit: BoxFit.cover,
+                                loadingBuilder: imageLoadingBuilder,
+                                errorBuilder: imageErrorBuilder,
                               ),
                             ),
                           );
@@ -218,9 +221,7 @@ class WeeklyView extends ConsumerWidget {
                               crossAxisAlignment: CrossAxisAlignment.center,
                               children: schedulesForDay.map((scheduleForDay) {
                                 return GestureDetector(
-                                  onTap: (){
-                                    _showScheduleOptionsDialog(context, scheduleForDay.scheduleDate, schedulesForDay, ref);
-                                  },
+                                  onTap: () =>_showScheduleOptionsDialog(context, scheduleForDay.scheduleDate, schedulesForDay, ref),
                                   child: Container(
                                     decoration: BoxDecoration(
                                       borderRadius: BorderRadius.circular(8.0),
@@ -242,6 +243,8 @@ class WeeklyView extends ConsumerWidget {
                                       child: Image.network(
                                         scheduleForDay.imageUrl,
                                         fit: BoxFit.cover,
+                                        loadingBuilder: imageLoadingBuilder,
+                                        errorBuilder: imageErrorBuilder,
                                       ),
                                     ),
                                   ),
@@ -294,10 +297,7 @@ class WeeklyView extends ConsumerWidget {
       ),
       child: IconButton(
         icon: const Icon(Icons.add),
-        onPressed: () {
-          context.router.push(AddOutfitToCalendarRoute(
-              selectedDate: scheduleFullDate.toString()));
-        },
+        onPressed: () => context.router.push(AddOutfitToCalendarRoute(selectedDate: scheduleFullDate.toString())),
       ),
     );
   }
@@ -337,11 +337,9 @@ void _showScheduleOptionsDialog(BuildContext context, DateTime date, List<Schedu
             ),
           ],
         ),
-        actions: <Widget>[
+        actions: [
           TextButton(
-            onPressed: () {
-              Navigator.of(context).pop();
-            },
+            onPressed: () => Navigator.of(context).pop(),
             child: Text(context.loc.close),
           ),
         ],
@@ -391,7 +389,7 @@ class _ScheduleGalleryState extends ConsumerState<ScheduleGallery> {
   @override
   Widget build(BuildContext context) {
 
-  print(_localSchedules);
+
     return Column(
       children: [
         SizedBox(
@@ -415,6 +413,8 @@ class _ScheduleGalleryState extends ConsumerState<ScheduleGallery> {
                         schedule.imageUrl,
                         fit: BoxFit.cover,
                         scale: 0.3,
+                        loadingBuilder: imageLoadingBuilder,
+                        errorBuilder: imageErrorBuilder,
                       ),
                     ),
                   ),
@@ -425,10 +425,17 @@ class _ScheduleGalleryState extends ConsumerState<ScheduleGallery> {
                       color: Colors.amber,
                       child: IconButton (
                         onPressed: ()async{
-                          ref.read(removeFromScheduleProvider(scheduleId:  schedule.id!));
-                          setState(() {
-                            _localSchedules.removeAt(index);
-                          });
+                          final messenger = ScaffoldMessenger.of(context);
+                          final result = await ref.read(removeFromScheduleProvider(scheduleId:  schedule.id!).future);
+                          if(result.success){
+                            messenger.showSnackBar(SnackBar(content: Text(context.loc.removeFromScheduleSuccess)));
+                            setState(() {
+                              _localSchedules.removeAt(index);
+                            });
+                          }else{
+                            messenger.showSnackBar(SnackBar(content: Text(context.loc.removeFromScheduleFailure)));
+                          }
+
                         },
                         icon: const Icon(Icons.delete),
                       ),

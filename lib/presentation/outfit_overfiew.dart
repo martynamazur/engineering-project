@@ -70,10 +70,10 @@ class _OutfitOverviewScreenState extends ConsumerState<OutfitOverviewScreen> {
               children: [
                 //Image.network(data.imageUrl),
                 CachedNetworkImage(
-                  imageUrl: data.imageUrl,
+                  imageUrl: data!.imageUrl,
                   progressIndicatorBuilder: (context, url, downloadProgress) =>
                       CircularProgressIndicator(value: downloadProgress.progress),
-                  errorWidget: (context, url, error) => Icon(Icons.error),
+                  errorWidget: (context, url, error) => const Icon(Icons.error),
                 ),
                 Text('${context.loc.seasonHeader} : ${data.season}',style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),),
                 _buildTagsSection(context.loc.tagsHeader, data.userTags),
@@ -138,7 +138,7 @@ class _OutfitOverviewScreenState extends ConsumerState<OutfitOverviewScreen> {
                 TextButton(
                   onPressed: () async {
                     Navigator.of(context).pop();
-                    ref.read(deleteOutfitProvider(outfitId));
+                    ref.read(deleteOutfitProvider(outfitId: outfitId));
                     ref.read(outfitListNotifierProvider.notifier).removeOutfit(outfitId);
 
                     if (mounted) {

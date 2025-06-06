@@ -23,7 +23,7 @@ final clothesRepositoryProvider =
 
 typedef ClothesRepositoryRef = AutoDisposeProviderRef<ClothesRepository>;
 String _$deleteClothingItemHash() =>
-    r'7912b8a1469cf8db4bbea2bc756be3dd8e293165';
+    r'6c33c798dfc242e2633beffb1c8946677a44b6cb';
 
 /// Copied from Dart SDK
 class _SystemHash {
@@ -51,7 +51,7 @@ class _SystemHash {
 const deleteClothingItemProvider = DeleteClothingItemFamily();
 
 /// See also [deleteClothingItem].
-class DeleteClothingItemFamily extends Family<AsyncValue<void>> {
+class DeleteClothingItemFamily extends Family<AsyncValue<Result>> {
   /// See also [deleteClothingItem].
   const DeleteClothingItemFamily();
 
@@ -89,7 +89,7 @@ class DeleteClothingItemFamily extends Family<AsyncValue<void>> {
 }
 
 /// See also [deleteClothingItem].
-class DeleteClothingItemProvider extends AutoDisposeFutureProvider<void> {
+class DeleteClothingItemProvider extends AutoDisposeFutureProvider<Result> {
   /// See also [deleteClothingItem].
   DeleteClothingItemProvider({
     required int clothingItemId,
@@ -124,7 +124,7 @@ class DeleteClothingItemProvider extends AutoDisposeFutureProvider<void> {
 
   @override
   Override overrideWith(
-    FutureOr<void> Function(DeleteClothingItemRef provider) create,
+    FutureOr<Result> Function(DeleteClothingItemRef provider) create,
   ) {
     return ProviderOverride(
       origin: this,
@@ -141,7 +141,7 @@ class DeleteClothingItemProvider extends AutoDisposeFutureProvider<void> {
   }
 
   @override
-  AutoDisposeFutureProviderElement<void> createElement() {
+  AutoDisposeFutureProviderElement<Result> createElement() {
     return _DeleteClothingItemProviderElement(this);
   }
 
@@ -160,13 +160,14 @@ class DeleteClothingItemProvider extends AutoDisposeFutureProvider<void> {
   }
 }
 
-mixin DeleteClothingItemRef on AutoDisposeFutureProviderRef<void> {
+mixin DeleteClothingItemRef on AutoDisposeFutureProviderRef<Result> {
   /// The parameter `clothingItemId` of this provider.
   int get clothingItemId;
 }
 
 class _DeleteClothingItemProviderElement
-    extends AutoDisposeFutureProviderElement<void> with DeleteClothingItemRef {
+    extends AutoDisposeFutureProviderElement<Result>
+    with DeleteClothingItemRef {
   _DeleteClothingItemProviderElement(super.provider);
 
   @override
@@ -175,14 +176,14 @@ class _DeleteClothingItemProviderElement
 }
 
 String _$addNewClothingItemHash() =>
-    r'eecd045d17026137466a3fd12912583b6f495b3d';
+    r'b18079da5c1295d4164a7cd231a2dcc52e4dc6f0';
 
 /// See also [addNewClothingItem].
 @ProviderFor(addNewClothingItem)
 const addNewClothingItemProvider = AddNewClothingItemFamily();
 
 /// See also [addNewClothingItem].
-class AddNewClothingItemFamily extends Family<AsyncValue<void>> {
+class AddNewClothingItemFamily extends Family<AsyncValue<Result>> {
   /// See also [addNewClothingItem].
   const AddNewClothingItemFamily();
 
@@ -220,7 +221,7 @@ class AddNewClothingItemFamily extends Family<AsyncValue<void>> {
 }
 
 /// See also [addNewClothingItem].
-class AddNewClothingItemProvider extends AutoDisposeFutureProvider<void> {
+class AddNewClothingItemProvider extends AutoDisposeFutureProvider<Result> {
   /// See also [addNewClothingItem].
   AddNewClothingItemProvider({
     required ClothingItem newClothingItem,
@@ -255,7 +256,7 @@ class AddNewClothingItemProvider extends AutoDisposeFutureProvider<void> {
 
   @override
   Override overrideWith(
-    FutureOr<void> Function(AddNewClothingItemRef provider) create,
+    FutureOr<Result> Function(AddNewClothingItemRef provider) create,
   ) {
     return ProviderOverride(
       origin: this,
@@ -272,7 +273,7 @@ class AddNewClothingItemProvider extends AutoDisposeFutureProvider<void> {
   }
 
   @override
-  AutoDisposeFutureProviderElement<void> createElement() {
+  AutoDisposeFutureProviderElement<Result> createElement() {
     return _AddNewClothingItemProviderElement(this);
   }
 
@@ -291,13 +292,14 @@ class AddNewClothingItemProvider extends AutoDisposeFutureProvider<void> {
   }
 }
 
-mixin AddNewClothingItemRef on AutoDisposeFutureProviderRef<void> {
+mixin AddNewClothingItemRef on AutoDisposeFutureProviderRef<Result> {
   /// The parameter `newClothingItem` of this provider.
   ClothingItem get newClothingItem;
 }
 
 class _AddNewClothingItemProviderElement
-    extends AutoDisposeFutureProviderElement<void> with AddNewClothingItemRef {
+    extends AutoDisposeFutureProviderElement<Result>
+    with AddNewClothingItemRef {
   _AddNewClothingItemProviderElement(super.provider);
 
   @override
@@ -319,14 +321,14 @@ final countClothesProvider = AutoDisposeFutureProvider<int>.internal(
 );
 
 typedef CountClothesRef = AutoDisposeFutureProviderRef<int>;
-String _$editClothingItemHash() => r'3847976471439d1970064971baf8c4a0510cc8db';
+String _$editClothingItemHash() => r'a71b53e2d95bdbbf124bb76672c3d024371f8085';
 
 /// See also [editClothingItem].
 @ProviderFor(editClothingItem)
 const editClothingItemProvider = EditClothingItemFamily();
 
 /// See also [editClothingItem].
-class EditClothingItemFamily extends Family<AsyncValue<void>> {
+class EditClothingItemFamily extends Family<AsyncValue<Result>> {
   /// See also [editClothingItem].
   const EditClothingItemFamily();
 
@@ -370,7 +372,7 @@ class EditClothingItemFamily extends Family<AsyncValue<void>> {
 }
 
 /// See also [editClothingItem].
-class EditClothingItemProvider extends AutoDisposeFutureProvider<void> {
+class EditClothingItemProvider extends AutoDisposeFutureProvider<Result> {
   /// See also [editClothingItem].
   EditClothingItemProvider({
     required int clothingItemId,
@@ -415,7 +417,7 @@ class EditClothingItemProvider extends AutoDisposeFutureProvider<void> {
 
   @override
   Override overrideWith(
-    FutureOr<void> Function(EditClothingItemRef provider) create,
+    FutureOr<Result> Function(EditClothingItemRef provider) create,
   ) {
     return ProviderOverride(
       origin: this,
@@ -434,7 +436,7 @@ class EditClothingItemProvider extends AutoDisposeFutureProvider<void> {
   }
 
   @override
-  AutoDisposeFutureProviderElement<void> createElement() {
+  AutoDisposeFutureProviderElement<Result> createElement() {
     return _EditClothingItemProviderElement(this);
   }
 
@@ -457,7 +459,7 @@ class EditClothingItemProvider extends AutoDisposeFutureProvider<void> {
   }
 }
 
-mixin EditClothingItemRef on AutoDisposeFutureProviderRef<void> {
+mixin EditClothingItemRef on AutoDisposeFutureProviderRef<Result> {
   /// The parameter `clothingItemId` of this provider.
   int get clothingItemId;
 
@@ -469,7 +471,7 @@ mixin EditClothingItemRef on AutoDisposeFutureProviderRef<void> {
 }
 
 class _EditClothingItemProviderElement
-    extends AutoDisposeFutureProviderElement<void> with EditClothingItemRef {
+    extends AutoDisposeFutureProviderElement<Result> with EditClothingItemRef {
   _EditClothingItemProviderElement(super.provider);
 
   @override

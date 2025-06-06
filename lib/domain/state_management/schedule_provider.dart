@@ -1,4 +1,5 @@
 import 'package:ootd/data/repository/schedule_repository.dart';
+import 'package:ootd/model/result.dart';
 import 'package:riverpod/riverpod.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
@@ -23,11 +24,11 @@ Future<List<Schedule>> getScheduleForWeek(Ref ref) async {
 }
 
 @riverpod
-Future<void> removeFromSchedule(Ref ref, {required String scheduleId}) async {
+Future<Result> removeFromSchedule(Ref ref, {required String scheduleId}) async {
   return ref.read(scheduleRepositoryProvider).removeFromSchedule(scheduleId);
 }
 
 @riverpod
-void scheduleOutfit(Ref ref, {required Schedule schedule}) async {
+Future<Result> scheduleOutfit(Ref ref, {required Schedule schedule}) async {
 return ref.read(scheduleRepositoryProvider).scheduleOutfit(schedule);
 }

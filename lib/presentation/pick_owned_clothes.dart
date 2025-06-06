@@ -7,6 +7,8 @@ import 'package:ootd/domain/state_management/clothes_folder_provider.dart';
 import 'package:ootd/domain/state_management/folder_list_notifier.dart' as folderList;
 import 'package:ootd/model/clothing_item.dart';
 
+import '../model/result.dart';
+
 @RoutePage()
 class PickOwnedClothesScreen extends ConsumerStatefulWidget {
   final int _folderId;
@@ -50,11 +52,16 @@ class _PickOwnedClothesScreenState extends ConsumerState<PickOwnedClothesScreen>
                 final outfit = data[index];
                 return GestureDetector(
                   onTap: () async{
-                    ref.read(addClothesToFolderProvider(clothesId: [outfit.clothingItemId!],folderId:  widget._folderId));
-                    ref.invalidate(getFolderProvider(widget._folderId));
-
-                    ref.invalidate(folderList.folderListNotifierProvider);
-                    context.router.maybePop();
+                    final messenger =  ScaffoldMessenger.of(context);
+                    final Result result = await ref.read(addClothesToFolderProvider(clothesId: [outfit.clothingItemId!],folderId:  widget._folderId).future);
+                    if(result.success){
+                      messenger.showSnackBar(SnackBar(content: Text(context.loc.addClothingSuccess)));
+                      ref.invalidate(getFolderProvider(widget._folderId));
+                      ref.invalidate(folderList.folderListNotifierProvider);
+                      context.router.maybePop();
+                    }else{
+                      messenger.showSnackBar(SnackBar(content: Text(context.loc.addClothingFailure)));
+                    }
                   },
                   child: Container(
                     decoration: BoxDecoration(

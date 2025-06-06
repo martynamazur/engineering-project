@@ -222,14 +222,14 @@ final clothesListNotifierProvider =
 );
 
 typedef ClothesListNotifierRef = AutoDisposeProviderRef<ClothesListNotifier>;
-String _$deleteFolderHash() => r'3dc8ace3f1a80df8dc7094d923a9ca946866288e';
+String _$deleteFolderHash() => r'14968095629cdd9cb77a0d2e9a18cdeb53718e77';
 
 /// See also [deleteFolder].
 @ProviderFor(deleteFolder)
 const deleteFolderProvider = DeleteFolderFamily();
 
 /// See also [deleteFolder].
-class DeleteFolderFamily extends Family<AsyncValue<void>> {
+class DeleteFolderFamily extends Family<AsyncValue<Result>> {
   /// See also [deleteFolder].
   const DeleteFolderFamily();
 
@@ -267,7 +267,7 @@ class DeleteFolderFamily extends Family<AsyncValue<void>> {
 }
 
 /// See also [deleteFolder].
-class DeleteFolderProvider extends AutoDisposeFutureProvider<void> {
+class DeleteFolderProvider extends AutoDisposeFutureProvider<Result> {
   /// See also [deleteFolder].
   DeleteFolderProvider({
     required int folderId,
@@ -302,7 +302,7 @@ class DeleteFolderProvider extends AutoDisposeFutureProvider<void> {
 
   @override
   Override overrideWith(
-    FutureOr<void> Function(DeleteFolderRef provider) create,
+    FutureOr<Result> Function(DeleteFolderRef provider) create,
   ) {
     return ProviderOverride(
       origin: this,
@@ -319,7 +319,7 @@ class DeleteFolderProvider extends AutoDisposeFutureProvider<void> {
   }
 
   @override
-  AutoDisposeFutureProviderElement<void> createElement() {
+  AutoDisposeFutureProviderElement<Result> createElement() {
     return _DeleteFolderProviderElement(this);
   }
 
@@ -337,27 +337,27 @@ class DeleteFolderProvider extends AutoDisposeFutureProvider<void> {
   }
 }
 
-mixin DeleteFolderRef on AutoDisposeFutureProviderRef<void> {
+mixin DeleteFolderRef on AutoDisposeFutureProviderRef<Result> {
   /// The parameter `folderId` of this provider.
   int get folderId;
 }
 
 class _DeleteFolderProviderElement
-    extends AutoDisposeFutureProviderElement<void> with DeleteFolderRef {
+    extends AutoDisposeFutureProviderElement<Result> with DeleteFolderRef {
   _DeleteFolderProviderElement(super.provider);
 
   @override
   int get folderId => (origin as DeleteFolderProvider).folderId;
 }
 
-String _$changeFolderNameHash() => r'f2f1b9f8337d510865870534997d40d9f7baf82b';
+String _$changeFolderNameHash() => r'580b6804086e96bfab5b830e97ba2ee97c45c999';
 
 /// See also [changeFolderName].
 @ProviderFor(changeFolderName)
 const changeFolderNameProvider = ChangeFolderNameFamily();
 
 /// See also [changeFolderName].
-class ChangeFolderNameFamily extends Family<AsyncValue<void>> {
+class ChangeFolderNameFamily extends Family<AsyncValue<Result>> {
   /// See also [changeFolderName].
   const ChangeFolderNameFamily();
 
@@ -398,7 +398,7 @@ class ChangeFolderNameFamily extends Family<AsyncValue<void>> {
 }
 
 /// See also [changeFolderName].
-class ChangeFolderNameProvider extends AutoDisposeFutureProvider<void> {
+class ChangeFolderNameProvider extends AutoDisposeFutureProvider<Result> {
   /// See also [changeFolderName].
   ChangeFolderNameProvider({
     required String newFolderName,
@@ -438,7 +438,7 @@ class ChangeFolderNameProvider extends AutoDisposeFutureProvider<void> {
 
   @override
   Override overrideWith(
-    FutureOr<void> Function(ChangeFolderNameRef provider) create,
+    FutureOr<Result> Function(ChangeFolderNameRef provider) create,
   ) {
     return ProviderOverride(
       origin: this,
@@ -456,7 +456,7 @@ class ChangeFolderNameProvider extends AutoDisposeFutureProvider<void> {
   }
 
   @override
-  AutoDisposeFutureProviderElement<void> createElement() {
+  AutoDisposeFutureProviderElement<Result> createElement() {
     return _ChangeFolderNameProviderElement(this);
   }
 
@@ -477,7 +477,7 @@ class ChangeFolderNameProvider extends AutoDisposeFutureProvider<void> {
   }
 }
 
-mixin ChangeFolderNameRef on AutoDisposeFutureProviderRef<void> {
+mixin ChangeFolderNameRef on AutoDisposeFutureProviderRef<Result> {
   /// The parameter `newFolderName` of this provider.
   String get newFolderName;
 
@@ -486,7 +486,7 @@ mixin ChangeFolderNameRef on AutoDisposeFutureProviderRef<void> {
 }
 
 class _ChangeFolderNameProviderElement
-    extends AutoDisposeFutureProviderElement<void> with ChangeFolderNameRef {
+    extends AutoDisposeFutureProviderElement<Result> with ChangeFolderNameRef {
   _ChangeFolderNameProviderElement(super.provider);
 
   @override
@@ -626,14 +626,14 @@ class _CreateNewFolderProviderElement
 }
 
 String _$addClothesToFolderHash() =>
-    r'fe7408364fa0ed9f0b447d453f37833c0385473c';
+    r'2a26b4b5a46f291a6b5b429aea778afcef400007';
 
 /// See also [addClothesToFolder].
 @ProviderFor(addClothesToFolder)
 const addClothesToFolderProvider = AddClothesToFolderFamily();
 
 /// See also [addClothesToFolder].
-class AddClothesToFolderFamily extends Family<AsyncValue<void>> {
+class AddClothesToFolderFamily extends Family<AsyncValue<Result>> {
   /// See also [addClothesToFolder].
   const AddClothesToFolderFamily();
 
@@ -674,7 +674,7 @@ class AddClothesToFolderFamily extends Family<AsyncValue<void>> {
 }
 
 /// See also [addClothesToFolder].
-class AddClothesToFolderProvider extends AutoDisposeFutureProvider<void> {
+class AddClothesToFolderProvider extends AutoDisposeFutureProvider<Result> {
   /// See also [addClothesToFolder].
   AddClothesToFolderProvider({
     required List<int> clothesId,
@@ -714,7 +714,7 @@ class AddClothesToFolderProvider extends AutoDisposeFutureProvider<void> {
 
   @override
   Override overrideWith(
-    FutureOr<void> Function(AddClothesToFolderRef provider) create,
+    FutureOr<Result> Function(AddClothesToFolderRef provider) create,
   ) {
     return ProviderOverride(
       origin: this,
@@ -732,7 +732,7 @@ class AddClothesToFolderProvider extends AutoDisposeFutureProvider<void> {
   }
 
   @override
-  AutoDisposeFutureProviderElement<void> createElement() {
+  AutoDisposeFutureProviderElement<Result> createElement() {
     return _AddClothesToFolderProviderElement(this);
   }
 
@@ -753,7 +753,7 @@ class AddClothesToFolderProvider extends AutoDisposeFutureProvider<void> {
   }
 }
 
-mixin AddClothesToFolderRef on AutoDisposeFutureProviderRef<void> {
+mixin AddClothesToFolderRef on AutoDisposeFutureProviderRef<Result> {
   /// The parameter `clothesId` of this provider.
   List<int> get clothesId;
 
@@ -762,7 +762,8 @@ mixin AddClothesToFolderRef on AutoDisposeFutureProviderRef<void> {
 }
 
 class _AddClothesToFolderProviderElement
-    extends AutoDisposeFutureProviderElement<void> with AddClothesToFolderRef {
+    extends AutoDisposeFutureProviderElement<Result>
+    with AddClothesToFolderRef {
   _AddClothesToFolderProviderElement(super.provider);
 
   @override
@@ -788,7 +789,7 @@ final getAllClothesProvider =
 
 typedef GetAllClothesRef = AutoDisposeFutureProviderRef<List<ClothingItem>>;
 String _$removeClothingItemFromFolderHash() =>
-    r'1912938a4b770a90a8e636958a40ea1309ea3ff2';
+    r'deece50eb839cb9c3cc236c4a0b62c97eddfc14e';
 
 /// See also [removeClothingItemFromFolder].
 @ProviderFor(removeClothingItemFromFolder)
@@ -796,7 +797,7 @@ const removeClothingItemFromFolderProvider =
     RemoveClothingItemFromFolderFamily();
 
 /// See also [removeClothingItemFromFolder].
-class RemoveClothingItemFromFolderFamily extends Family<AsyncValue<void>> {
+class RemoveClothingItemFromFolderFamily extends Family<AsyncValue<Result>> {
   /// See also [removeClothingItemFromFolder].
   const RemoveClothingItemFromFolderFamily();
 
@@ -838,7 +839,7 @@ class RemoveClothingItemFromFolderFamily extends Family<AsyncValue<void>> {
 
 /// See also [removeClothingItemFromFolder].
 class RemoveClothingItemFromFolderProvider
-    extends AutoDisposeFutureProvider<void> {
+    extends AutoDisposeFutureProvider<Result> {
   /// See also [removeClothingItemFromFolder].
   RemoveClothingItemFromFolderProvider({
     required int folderId,
@@ -878,7 +879,7 @@ class RemoveClothingItemFromFolderProvider
 
   @override
   Override overrideWith(
-    FutureOr<void> Function(RemoveClothingItemFromFolderRef provider) create,
+    FutureOr<Result> Function(RemoveClothingItemFromFolderRef provider) create,
   ) {
     return ProviderOverride(
       origin: this,
@@ -896,7 +897,7 @@ class RemoveClothingItemFromFolderProvider
   }
 
   @override
-  AutoDisposeFutureProviderElement<void> createElement() {
+  AutoDisposeFutureProviderElement<Result> createElement() {
     return _RemoveClothingItemFromFolderProviderElement(this);
   }
 
@@ -917,7 +918,7 @@ class RemoveClothingItemFromFolderProvider
   }
 }
 
-mixin RemoveClothingItemFromFolderRef on AutoDisposeFutureProviderRef<void> {
+mixin RemoveClothingItemFromFolderRef on AutoDisposeFutureProviderRef<Result> {
   /// The parameter `folderId` of this provider.
   int get folderId;
 
@@ -926,7 +927,7 @@ mixin RemoveClothingItemFromFolderRef on AutoDisposeFutureProviderRef<void> {
 }
 
 class _RemoveClothingItemFromFolderProviderElement
-    extends AutoDisposeFutureProviderElement<void>
+    extends AutoDisposeFutureProviderElement<Result>
     with RemoveClothingItemFromFolderRef {
   _RemoveClothingItemFromFolderProviderElement(super.provider);
 

@@ -6,7 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:ootd/navigation/app_router.dart';
 import 'package:ootd/presentation/styles/password_input.dart';
-import 'package:ootd/presentation/password_validator.dart';
+import 'package:ootd/utils/password_validator.dart';
 import 'package:ootd/extensions/localization_extension.dart';
 
 
@@ -51,9 +51,9 @@ class _LoginState extends ConsumerState<LoginScreen> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 _buildInputEmail(),
-                SizedBox(height: 16.0),
+                const SizedBox(height: 16.0),
                 PasswordInput(passwordController: _passwordController, passwordValidator: _passwordValidator),
-                SizedBox(height: 16.0),
+                const SizedBox(height: 16.0),
                 _buildResetPasswordLink(),
                 _buildRegistration(),
                 _buildSignInButton()
@@ -70,9 +70,9 @@ class _LoginState extends ConsumerState<LoginScreen> {
         keyboardType: TextInputType.emailAddress,
         validator: (value) {
           if (value == null || value.isEmpty) {
-            return 'Email cannot be empty';
+            return context.loc.emptyEmail;
           } else if (!EmailValidator.validate(value)) {
-            return 'Please enter a valid email address';
+            return context.loc.invalidEmail;
           }
           return null;
         },
@@ -82,24 +82,20 @@ class _LoginState extends ConsumerState<LoginScreen> {
 
   Widget _buildResetPasswordLink() {
     return GestureDetector(
-      onTap: () {
-        context.router.push(ResetPasswordRoute());
-      },
+      onTap: () =>context.router.push(const ResetPasswordRoute()),
       child: Text(context.loc.resetPasswordHeader),
     );
   }
 
   Widget _buildRegistration(){
     return GestureDetector(
-      onTap: () {
-        context.router.push(RegistrationRoute());
-      },
-      child: const Text.rich(
+      onTap: () => context.router.push(const RegistrationRoute()),
+      child: Text.rich(
         TextSpan(
-          text: 'Are you new here? ',
+          text: context.loc.areYouNewHere,
           children: [
             TextSpan(
-              text: 'Create an account',
+              text: context.loc.createAnAccount,
               style: TextStyle(
                 decoration: TextDecoration.underline,
                 color: Colors.blue,
@@ -119,15 +115,10 @@ class _LoginState extends ConsumerState<LoginScreen> {
   }
 
   void _signInValidator() async{
-
+    final messenger = ScaffoldMessenger.of(context);
     if (_formKey.currentState?.validate() == true) {
-      final response = await ref.read(userRepositoryProvider).signIn(
-          _emailController.text,
-          _passwordController.text,
-          context
-      );
-
-      if (response) {
+      final response = await ref.read(userRepositoryProvider).signIn(_emailController.text, _passwordController.text);
+      if (response.success) {
         context.router.replace(const HomeRoute());
       } else {
         showLoginFailedMessage();

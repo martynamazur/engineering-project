@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:ootd/presentation/password_validator.dart';
+import 'package:ootd/extensions/localization_extension.dart';
+import 'package:ootd/utils/password_validator.dart';
 
 import 'input_style.dart';
 
@@ -21,9 +22,9 @@ class PasswordInput extends StatelessWidget {
         keyboardType: TextInputType.visiblePassword,
         validator: (value) {
           if (value == null || value.isEmpty) {
-            return 'Password cannot be empty';
+            return context.loc.emptyPassword;
           } else if (!_passwordValidator.validate(value)) {
-            return 'Incorrect Email or Password';
+            return context.loc.loginFailedMessage;
           }
           return null;
         },

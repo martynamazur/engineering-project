@@ -30,9 +30,7 @@ class RemoveBgRepository{
       if (response.statusCode == 200) {
         final appDir = await getTemporaryDirectory();
 
-
         final outputPath = '${appDir.path}/no-bg-${DateTime.now().millisecondsSinceEpoch}.png';
-
         final outputFile = File(outputPath);
         await outputFile.writeAsBytes(response.data);
 

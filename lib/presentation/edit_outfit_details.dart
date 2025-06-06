@@ -11,7 +11,7 @@ import '../domain/state_management/season_provider.dart';
 class EditOutfitDetailsScreen extends ConsumerStatefulWidget {
   final Outfit outfit;
 
-  EditOutfitDetailsScreen(this.outfit, {super.key});
+  const EditOutfitDetailsScreen(this.outfit, {super.key});
 
   @override
   ConsumerState<EditOutfitDetailsScreen> createState() =>
@@ -28,7 +28,6 @@ class _EditOutfitDetailsState extends ConsumerState<EditOutfitDetailsScreen> {
   void initState() {
     super.initState();
     _selectedSeason = widget.outfit.season;
-    print(widget.outfit.userTags);
     _allTags = widget.outfit.userTags!;
 
   }
@@ -63,13 +62,26 @@ class _EditOutfitDetailsState extends ConsumerState<EditOutfitDetailsScreen> {
             //odswiezenie sekcji Tagi
             //odswiezenie sekcji Season
 
+            final messenger = ScaffoldMessenger.of(context);
             if(_newTags.isNotEmpty) ref.read(editOutfitInformationTagsProvider([..._newTags,..._allTags], widget.outfit.id));
-            if(_selectedSeason != widget.outfit.season) ref.read(editOutfitInformationSeasonProvider(_selectedSeason, widget.outfit.id));
-            ref.invalidate(getOutfitProvider(widget.outfit.id));//to pobierze od nowa cala liste strojów
-            //problem bo przekazuje obiekt bez pobierania danych ponownie wiec po odswiezeniu nic sie nie dzieje
+            if(_selectedSeason != widget.outfit.season)
+              {
+                final result = await ref.read(editOutfitInformationSeasonProvider(_selectedSeason, widget.outfit.id).future);
+                if(result.success){
+                  messenger.showSnackBar(
+                    SnackBar(content: Text(context.loc.updateOutfitSuccess)),
+                  );
 
-            print('tags: $_newTags, season: $_selectedSeason');
-            if(mounted)context.router.maybePop();
+                  ref.invalidate(getOutfitProvider(widget.outfit.id));
+                  //to pobierze od nowa cala liste strojów
+                  //problem bo przekazuje obiekt bez pobierania danych ponownie wiec po odswiezeniu nic sie nie dzieje
+                }else{
+                  messenger.showSnackBar(
+                    SnackBar(content: Text(context.loc.updateOutfitFailure)),
+                  );
+                }
+              }
+            context.router.maybePop();
 
           },
           child: Text(context.loc.save),
@@ -114,7 +126,8 @@ class _EditOutfitDetailsState extends ConsumerState<EditOutfitDetailsScreen> {
       crossAxisAlignment: CrossAxisAlignment.start,
         children: [
       Text(context.loc.tagsHeader,
-          style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 32.0)),
+          style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 32.0)
+      ),
       Wrap(
         spacing: 8.0,
         runSpacing: 4.0,
@@ -132,20 +145,16 @@ class _EditOutfitDetailsState extends ConsumerState<EditOutfitDetailsScreen> {
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: const Text('Dodaj nowy tag'),
+          title: Text(context.loc.addNewTag),
           content: TextField(
             autofocus: true,
-            decoration: const InputDecoration(hintText: 'Wpisz nowy tag'),
-            onChanged: (value) {
-              newTag = value.trim();
-            },
+            decoration: InputDecoration(hintText: context.loc.enterNewTag),
+            onChanged: (value) => newTag = value.trim(),
           ),
           actions: [
             TextButton(
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
-              child: const Text('Anuluj'),
+              onPressed: () => Navigator.of(context).pop(),
+              child: Text(context.loc.cancel),
             ),
             ElevatedButton(
               onPressed: () {
@@ -154,15 +163,13 @@ class _EditOutfitDetailsState extends ConsumerState<EditOutfitDetailsScreen> {
                     _newTags.add(newTag);
                   });
                 }
-                Navigator.of(context).pop();
+                context.router.maybePop();
               },
-              child: const Text('Dodaj'),
+              child: Text(context.loc.add),
             ),
           ],
         );
       },
     );
   }
-
-
 }

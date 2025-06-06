@@ -1,108 +1,415 @@
 {
   "@@locale": "pl",
-
-  "loginHeader": "Logowanie",
+  "loginHeader": "Zaloguj się",
+  "@loginHeader": {
+    "description": "Translation for loginHeader"
+  },
   "loginFailedTitle": "Logowanie nieudane",
+  "@loginFailedTitle": {
+    "description": "Translation for loginFailedTitle"
+  },
   "loginFailedMessage": "Nieprawidłowy e-mail lub hasło",
-  "emptyEmail": "Pole e-mail nie może być puste",
+  "@loginFailedMessage": {
+    "description": "Translation for loginFailedMessage"
+  },
+  "emptyEmail": "E-mail nie może być pusty",
+  "@emptyEmail": {
+    "description": "Translation for emptyEmail"
+  },
   "invalidEmail": "Wprowadź poprawny adres e-mail",
+  "@invalidEmail": {
+    "description": "Translation for invalidEmail"
+  },
   "resetPasswordHeader": "Resetowanie hasła",
+  "@resetPasswordHeader": {
+    "description": "Translation for resetPasswordHeader"
+  },
   "signIn": "Zaloguj się",
-
+  "@signIn": {
+    "description": "Translation for signIn"
+  },
   "settingsHeader": "Ustawienia",
+  "@settingsHeader": {
+    "description": "Translation for settingsHeader"
+  },
   "notificationSettingsHeader": "Ustawienia powiadomień",
+  "@notificationSettingsHeader": {
+    "description": "Translation for notificationSettingsHeader"
+  },
+  "notifications": "Powiadomienia",
   "privacySettingsHeader": "Ustawienia prywatności",
+  "@privacySettingsHeader": {
+    "description": "Translation for privacySettingsHeader"
+  },
   "helpAndSupportHeader": "Pomoc i wsparcie",
-
+  "@helpAndSupportHeader": {
+    "description": "Translation for helpAndSupportHeader"
+  },
   "accountSettingsHeader": "Ustawienia konta",
+  "@accountSettingsHeader": {
+    "description": "Translation for accountSettingsHeader"
+  },
   "changePasswordTitle": "Zmień hasło",
+  "@changePasswordTitle": {
+    "description": "Translation for changePasswordTitle"
+  },
   "changeEmailAddress": "Zmień adres e-mail",
+  "@changeEmailAddress": {
+    "description": "Translation for changeEmailAddress"
+  },
   "deleteMyAccountTitle": "Usuń moje konto",
-
+  "@deleteMyAccountTitle": {
+    "description": "Translation for deleteMyAccountTitle"
+  },
   "logOutHeader": "Wyloguj się",
-
+  "@logOutHeader": {
+    "description": "Translation for logOutHeader"
+  },
   "deleteAccountHeader": "Usuń konto",
-  "deleteAccountWarningText": "Twoje konto zostanie usunięte 30 dni po wylogowaniu. Jeśli w tym czasie zalogujesz się ponownie, dostęp do konta zostanie przywrócony, a konto nie zostanie usunięte.",
-
-  "invalidEmailAddress": "Nieprawidłowy e-mail",
+  "@deleteAccountHeader": {
+    "description": "Translation for deleteAccountHeader"
+  },
+  "deleteAccountWarningText": "Twoje konto zostanie usunięte po 30 dniach od wylogowania. Jeśli zalogujesz się ponownie w tym czasie, dostęp zostanie przywrócony, a konto nie zostanie usunięte.",
+  "@deleteAccountWarningText": {
+    "description": "Translation for deleteAccountWarningText"
+  },
+  "invalidEmailAddress": "Nieprawidłowy adres e-mail",
+  "@invalidEmailAddress": {
+    "description": "Translation for invalidEmailAddress"
+  },
   "newEmailAddressLabel": "Nowy adres e-mail",
+  "@newEmailAddressLabel": {
+    "description": "Translation for newEmailAddressLabel"
+  },
   "changeLabel": "Zmień",
-
+  "@changeLabel": {
+    "description": "Translation for changeLabel"
+  },
   "registrationSuccessful": "Rejestracja zakończona sukcesem!",
-  "accountCreationConfirmationMessage": "Twoje konto zostało utworzone. Sprawdź swój e-mail, aby potwierdzić konto przed zalogowaniem.",
+  "@registrationSuccessful": {
+    "description": "Translation for registrationSuccessful"
+  },
+  "accountCreationConfirmationMessage": "Twoje konto zostało pomyślnie utworzone. Sprawdź swoją skrzynkę e-mail, aby potwierdzić konto przed zalogowaniem.",
+  "@accountCreationConfirmationMessage": {
+    "description": "Translation for accountCreationConfirmationMessage"
+  },
   "goToLogin": "Przejdź do logowania",
-
+  "@goToLogin": {
+    "description": "Translation for goToLogin"
+  },
   "createAccountHeader": "Utwórz konto",
-  "fillInformationMessage": "Uzupełnij swoje dane poniżej",
+  "@createAccountHeader": {
+    "description": "Translation for createAccountHeader"
+  },
+  "fillInformationMessage": "Wypełnij poniższe informacje",
+  "@fillInformationMessage": {
+    "description": "Translation for fillInformationMessage"
+  },
   "signUp": "Zarejestruj się",
+  "@signUp": {
+    "description": "Translation for signUp"
+  },
+  "signUpFailed": "Rejestracja nieudana",
   "nameLabel": "Imię",
+  "@nameLabel": {
+    "description": "Translation for nameLabel"
+  },
   "emailLabel": "E-mail",
+  "@emailLabel": {
+    "description": "Translation for emailLabel"
+  },
   "passwordLabel": "Hasło",
+  "@passwordLabel": {
+    "description": "Translation for passwordLabel"
+  },
   "agreeWith": "Zgadzam się z",
+  "@agreeWith": {
+    "description": "Translation for agreeWith"
+  },
   "termsAndConditions": "Regulaminem",
-
-  "monthlyHeader": "Miesięczny",
-  "weeklyHeader": "Tygodniowy",
-  "yourOutfitsHeader": "Twoje stroje",
-  "addAnother": "Dodaj kolejny",
-
+  "@termsAndConditions": {
+    "description": "Translation for termsAndConditions"
+  },
+  "monthlyHeader": "Miesięcznie",
+  "@monthlyHeader": {
+    "description": "Translation for monthlyHeader"
+  },
+  "weeklyHeader": "Tygodniowo",
+  "@weeklyHeader": {
+    "description": "Translation for weeklyHeader"
+  },
+  "yourOutfitsHeader": "Twoje stylizacje",
+  "@yourOutfitsHeader": {
+    "description": "Translation for yourOutfitsHeader"
+  },
+  "addAnother": "Dodaj kolejną",
+  "@addAnother": {
+    "description": "Translation for addAnother"
+  },
   "pickClothesHeader": "Wybierz ubrania",
+  "@pickClothesHeader": {
+    "description": "Translation for pickClothesHeader"
+  },
   "youDoNotOwnClothesMessages": "Nie posiadasz żadnych ubrań",
-
+  "@youDoNotOwnClothesMessages": {
+    "description": "Translation for youDoNotOwnClothesMessages"
+  },
   "close": "Zamknij",
+  "@close": {
+    "description": "Translation for close"
+  },
   "next": "Dalej",
+  "@next": {
+    "description": "Translation for next"
+  },
   "send": "Wyślij",
+  "@send": {
+    "description": "Translation for send"
+  },
   "success": "Sukces",
+  "@success": {
+    "description": "Translation for success"
+  },
   "delete": "Usuń",
+  "@delete": {
+    "description": "Translation for delete"
+  },
   "edit": "Edytuj",
+  "@edit": {
+    "description": "Translation for edit"
+  },
   "save": "Zapisz",
-  "previous": "Poprzedni",
+  "@save": {
+    "description": "Translation for save"
+  },
+  "previous": "Wstecz",
+  "@previous": {
+    "description": "Translation for previous"
+  },
   "cancel": "Anuluj",
+  "@cancel": {
+    "description": "Translation for cancel"
+  },
   "add": "Dodaj",
-
+  "@add": {
+    "description": "Translation for add"
+  },
   "seasonHeader": "Sezon",
+  "@seasonHeader": {
+    "description": "Translation for seasonHeader"
+  },
+  "seasonSubheader": "Wybierz odpowiednie pory roku",
   "tagsHeader": "Tagi",
+  "@tagsHeader": {
+    "description": "Translation for tagsHeader"
+  },
   "noTagsAvailableMessage": "Brak dostępnych tagów",
+  "@noTagsAvailableMessage": {
+    "description": "Translation for noTagsAvailableMessage"
+  },
   "addAnewTag": "Dodaj nowy tag",
-
+  "@addAnewTag": {
+    "description": "Translation for addAnewTag"
+  },
   "profileHeader": "Mój profil",
+  "@profileHeader": {
+    "description": "Translation for profileHeader"
+  },
   "unknownUserHeader": "Nieznany użytkownik",
-
+  "@unknownUserHeader": {
+    "description": "Translation for unknownUserHeader"
+  },
   "coat": "Płaszcz",
+  "@coat": {
+    "description": "Translation for coat"
+  },
   "top": "Góra",
+  "@top": {
+    "description": "Translation for top"
+  },
   "bottom": "Dół",
+  "@bottom": {
+    "description": "Translation for bottom"
+  },
   "dress": "Sukienka",
+  "@dress": {
+    "description": "Translation for dress"
+  },
   "underwear": "Bielizna",
+  "@underwear": {
+    "description": "Translation for underwear"
+  },
   "accessories": "Akcesoria",
+  "@accessories": {
+    "description": "Translation for accessories"
+  },
   "shoes": "Buty",
-
+  "@shoes": {
+    "description": "Translation for shoes"
+  },
   "newTag": "Nowy tag",
+  "@newTag": {
+    "description": "Translation for newTag"
+  },
   "addTag": "Dodaj tag",
-  "seasonInformationMessage": "Ten strój mogę nosić w...",
-  "noSeasonAvailableMessage": "Brak dostępnych sezonów",
+  "@addTag": {
+    "description": "Translation for addTag"
+  },
+  "seasonInformationMessage": "Ten strój mogę nosić w ...",
+  "@seasonInformationMessage": {
+    "description": "Translation for seasonInformationMessage"
+  },
+  "noSeasonAvailableMessage": "Brak dostępnych pór roku",
+  "@noSeasonAvailableMessage": {
+    "description": "Translation for noSeasonAvailableMessage"
+  },
   "applyFilters": "Zastosuj filtry",
-
+  "@applyFilters": {
+    "description": "Translation for applyFilters"
+  },
   "editInformationHeader": "Edytuj informacje",
-
+  "@editInformationHeader": {
+    "description": "Translation for editInformationHeader"
+  },
   "savedOutfitMessage": "Strój został zapisany!",
+  "@savedOutfitMessage": {
+    "description": "Translation for savedOutfitMessage"
+  },
   "createAnother": "Utwórz kolejny",
+  "@createAnother": {
+    "description": "Translation for createAnother"
+  },
   "redirectToOutfitGalleryMessage": "Przejdź do galerii strojów",
-
+  "@redirectToOutfitGalleryMessage": {
+    "description": "Translation for redirectToOutfitGalleryMessage"
+  },
   "templateHeader": "Szablon",
+  "@templateHeader": {
+    "description": "Translation for templateHeader"
+  },
   "createFromEmptyMessage": "Utwórz od zera",
-
+  "@createFromEmptyMessage": {
+    "description": "Translation for createFromEmptyMessage"
+  },
   "pickOutfitMessage": "Wybierz strój na dzień",
-
+  "@pickOutfitMessage": {
+    "description": "Translation for pickOutfitMessage"
+  },
   "noDataToDisplayMessage": "Brak danych do wyświetlenia",
-
+  "@noDataToDisplayMessage": {
+    "description": "Translation for noDataToDisplayMessage"
+  },
   "changeFolderName": "Zmień nazwę folderu",
+  "@changeFolderName": {
+    "description": "Translation for changeFolderName"
+  },
   "deleteFolder": "Usuń folder",
-  "emptyCloset": "Pusty szafa",
+  "@deleteFolder": {
+    "description": "Translation for deleteFolder"
+  },
+  "emptyCloset": "Pusta szafa",
+  "@emptyCloset": {
+    "description": "Translation for emptyCloset"
+  },
   "imageNotAvailable": "Obraz niedostępny",
-
+  "@imageNotAvailable": {
+    "description": "Translation for imageNotAvailable"
+  },
   "closetHeader": "Szafa",
+  "addNewPieces": "Zacznij dodawać nowe elementy swojego stroju",
+  "noItemsFound": "Nie znaleziono elementów dla",
+  "failedToLoadImage": "Nie udało się załadować obrazu",
 
-  "addNewPieces": "Zacznij dodawac poszczegolne częsci",
-  "noItemsFound": "Nie znaleziono żadnych części dla danej kategori",
-  "failedToLoadImage": "Nie powiodło sie wczytanie"
+  "loading": "Ładowanie...",
+  "error": "Błąd",
+
+  "removeFromFolderTitle": "Usuń z folderu",
+  "removeFromFolderContent": "Ta operacja będzie trwała i nie można jej cofnąć.",
+
+  "areYouSure": "Czy na pewno?",
+  "deleteConfirmation": "Ta operacja będzie trwała i nie można jej cofnąć.",
+
+  "changeFolderNameTitle": "Zmień nazwę folderu",
+  "enterNewFolderName": "Wprowadź nową nazwę folderu:",
+  "folderNameHint": "Nazwa folderu",
+  "change": "Zmień",
+  "changeSuccess": "Nazwa folderu została pomyślnie zmieniona.",
+  "changeFailure": "Nie udało się zmienić nazwy folderu. Spróbuj ponownie.",
+  "exit": "Wyjdź",
+  "selectCategory": "Wybierz kategorię",
+  "clear": "Wyczyść",
+  "remove": "Usuń",
+  "outerwear": "Odzież wierzchnia",
+  "topwear": "Górna część garderoby",
+  "bottomwear": "Dolna część garderoby",
+  "dresses": "Sukienki i kombinezony",
+
+  "doYouWantToDelete": "Czy chcesz usunąć?",
+
+  "deleteFolderSuccess": "Folder został pomyślnie usunięty.",
+  "deleteFolderFailure": "Nie udało się usunąć folderu. Spróbuj ponownie.",
+  "removeClothingSuccess": "Element został usunięty z folderu.",
+  "removeClothingFailure": "Nie udało się usunąć elementu. Spróbuj ponownie.",
+
+  "addClothingSuccess": "Element został pomyślnie dodany do folderu.",
+  "addClothingFailure": "Nie udało się dodać elementu do folderu. Spróbuj ponownie.",
+
+  "saveOutfitSuccess": "Strój został pomyślnie zapisany.",
+  "saveOutfitFailure": "Nie udało się zapisać stroju. Spróbuj ponownie.",
+
+  "deleteOutfitSuccess": "Twój strój został usunięty.",
+  "deleteOutfitFailure": "Ups! Nie udało się usunąć stroju. Spróbuj ponownie.",
+
+  "logoutSuccess": "Zostałeś pomyślnie wylogowany.",
+  "logoutFailure": "Wylogowanie nie powiodło się. Spróbuj ponownie.",
+
+  "areYouNewHere": "Jesteś tu nowy?",
+  "createAnAccount": "Załóż konto",
+
+  "confirmationEmailDescription": "Kliknij link w e-mailu, aby zweryfikować nowy adres. Jeśli nie widzisz wiadomości, sprawdź folder spam.",
+
+  "resetPasswordInstruction": "Wpisz adres e-mail użyty przy rejestracji, a wyślemy instrukcje do zresetowania hasła.",
+  "resetPasswordConfirmationMessage": "Jeśli adres jest zarejestrowany, otrzymasz wkrótce wiadomość z instrukcjami. Sprawdź skrzynkę odbiorczą oraz folder spam.",
+  "addPhoto": "Dodaj zdjęcie",
+  "choosePhoto": "Wybierz zdjęcie",
+  "noImageSelected": "Nie wybrano zdjęcia",
+  "pickCategoryHeadline": "Wybierz kategorię",
+  "summary": "Podsumowanie",
+  "finish": "Zakończ",
+  "goBack": "Wróć",
+  "findFasterLater": "Łatwiej znajdziesz to później.",
+  "addTagHint": "Stuknij, aby dodać tag",
+  "emptyTagField": "To pole nie może być puste",
+  "invalidTag": "Wprowadź prawidłowy tag",
+  "passwordRuleMinLength": "Minimum 6 znaków",
+  "passwordRuleUppercase": "Co najmniej jedna wielka litera (A-Z)",
+  "passwordRuleLowercase": "Co najmniej jedna mała litera (a-z)",
+  "passwordRuleSpecialChar": "Co najmniej jeden znak specjalny (np. !, @, #, \\$)",
+  "scheduleSuccessTitle": "Strój zaplanowany",
+  "scheduleSuccessMessage": "Twój strój został pomyślnie zaplanowany.",
+  "scheduleErrorTitle": "Coś poszło nie tak",
+  "scheduleErrorMessage": "Nie udało się zaplanować stroju. Spróbuj ponownie później.",
+  "outfits": "Stroje",
+  "tryAgain": "Spróbuj ponownie",
+  "errorGeneralMessage": "Coś poszło nie tak",
+  "addNewTag": "Dodaj nowy tag",
+  "enterNewTag": "Wprowadź nowy tag",
+  "updateOutfitSuccess": "Strój został zaktualizowany.",
+  "updateOutfitFailure": "Nie udało się zaktualizować stroju. Spróbuj ponownie.",
+  "filtr": "Filtr",
+  "create": "Utwórz",
+  "enterOldAndNewPassword": "Wprowadź stare, a następnie nowe hasło",
+  "passwordRequirements": "Wymagania dotyczące hasła",
+  "consentRequiredTitle": "Wymagana zgoda",
+  "consentRequiredMessage": "Musisz zaakceptować regulamin, aby się zarejestrować.",
+  "signupFailed": "Rejestracja nie powiodła się. Spróbuj ponownie później.",
+  "createNewFolderTitle": "Utwórz nowy folder",
+  "emptyFolder": "Pusty folder",
+  "notificationDescription": "Włącz/wyłącz wszystkie powiadomienia aplikacji",
+  "removeFromScheduleSuccess": "Pomyślnie usunięto z harmonogramu.",
+  "removeFromScheduleFailure": "Nie udało się usunąć z harmonogramu. Spróbuj ponownie.",
+  "emptyPassword": "Hasło nie może być puste",
+  "accountExistsMessage": "Konto z tym adresem e-mail już istnieje. Użyj innego adresu lub zaloguj się.",
+  "passwordResetEmailSent": "Link do zresetowania hasła został wysłany na Twój e-mail."
+
 }

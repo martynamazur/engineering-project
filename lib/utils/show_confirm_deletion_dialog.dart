@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:auto_route/auto_route.dart';
+import 'package:ootd/extensions/localization_extension.dart';
 
 import '../domain/state_management/outfit_list_notifier.dart';
 import '../domain/state_management/outfit_provider.dart';
@@ -14,8 +15,8 @@ void showConfirmDeletionDialog({
     context: context,
     builder: (BuildContext context) {
       return AlertDialog(
-        title: const Text('Do you want to delete?'),
-        content: const Text('This action will be permanent and cannot be undone.'),
+        title: Text(context.loc.doYouWantToDelete),
+        content: Text(context.loc.removeFromFolderContent),
         actions: [
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceAround,
@@ -24,20 +25,25 @@ void showConfirmDeletionDialog({
                 onPressed: () {
                   context.router.maybePop();
                 },
-                child: const Text('Cancel'),
+                child: Text(context.loc.cancel),
               ),
               TextButton(
                 onPressed: () async {
-                  ref.read(deleteOutfitProvider(outfitId));
-                  ref.read(outfitListNotifierProvider.notifier).removeOutfit(outfitId);
-                  context.router.maybePop();
+                  final messenger = ScaffoldMessenger.of(context);
+                  final result = await ref.read(deleteOutfitProvider(outfitId: outfitId).future);
 
-
+                  if(result.success){
+                    messenger.showSnackBar(SnackBar(content: Text(context.loc.deleteOutfitSuccess)));
+                    ref.read(outfitListNotifierProvider.notifier).removeOutfit(outfitId);
+                    context.router.maybePop();
+                  }else{
+                    messenger.showSnackBar(SnackBar(content: Text(context.loc.deleteOutfitSuccess)));
+                  }
                 },
                 child: Row(
-                  children: const [
-                    Icon(Icons.restore_from_trash),
-                    Text('Delete'),
+                  children: [
+                    const Icon(Icons.restore_from_trash),
+                    Text(context.loc.remove),
                   ],
                 ),
               ),

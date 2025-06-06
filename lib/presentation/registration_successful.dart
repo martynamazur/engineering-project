@@ -16,7 +16,10 @@ class RegistrationSuccessfulScreen extends StatelessWidget {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                const Icon(Icons.check_circle_outline, color: Colors.green, size: 100),
+                const Icon(
+                    Icons.check_circle_outline,
+                    color: Colors.green, size: 100
+                ),
                 const SizedBox(height: 24),
                 Text(
                   context.loc.registrationSuccessful,
@@ -35,9 +38,7 @@ class RegistrationSuccessfulScreen extends StatelessWidget {
                 ),
                 const SizedBox(height: 32),
                 ElevatedButton(
-                  onPressed: () {
-                    context.router.replaceAll([LoginRoute()]);
-                  },
+                  onPressed: () => context.router.replaceAll([LoginRoute()]),
                   style: ElevatedButton.styleFrom(
                     padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
                   ),

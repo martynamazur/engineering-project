@@ -1,7 +1,6 @@
 
-import 'package:flutter/cupertino.dart';
+import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:ootd/extensions/localization_extension.dart';
 
@@ -10,32 +9,30 @@ import 'package:step_progress_indicator/step_progress_indicator.dart';
 
 
 import '../domain/state_management/category_provider.dart';
-import '../domain/state_management/filter_provider.dart';
 import '../domain/state_management/season_provider.dart';
 import '../domain/state_management/tag_provider.dart';
 import '../model/tag.dart';
 class AddClothesInformation extends ConsumerStatefulWidget {
-  AddClothesInformation({super.key});
+  const AddClothesInformation({super.key});
 
   @override
   ConsumerState createState() => _AddClothesInformationState();
 }
 
 class _AddClothesInformationState extends ConsumerState<AddClothesInformation> {
-  late final GlobalKey<FormState> _formKey;
-  late final PageController _pageController;
-  late final TextEditingController _addNewTagController;
-  late final int _currentPage;
-  late final List<Tag> markedTags;
 
+  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+  final TextEditingController _addNewTagController = TextEditingController();
+
+  late final PageController _pageController;
+  late final List<Tag> markedTags;
+  late int _currentPage;
 
 
   @override
   void initState() {
     super.initState();
-    _formKey = GlobalKey<FormState>();
     _pageController = PageController();
-    _addNewTagController = TextEditingController();
     _currentPage = 0;
     markedTags = [];
   }
@@ -48,8 +45,6 @@ class _AddClothesInformationState extends ConsumerState<AddClothesInformation> {
 
   @override
   Widget build(BuildContext context) {
-    //final seasonList = ref.watch(seasonRepositoryProvider).getSeason();
-    final seasonList = ref.watch(seasonRepositoryProvider).getSeason();
     return Scaffold(
       body: SafeArea(
         child: SingleChildScrollView(
@@ -138,7 +133,7 @@ class _AddClothesInformationState extends ConsumerState<AddClothesInformation> {
 
     return Column(children: [
       Text(context.loc.addTag),
-      Text('Pozniej szybciej znajdziesz to czego szukasz'),
+      Text(context.loc.findFasterLater),
       tagList.when(
         data: (data) {
           return Wrap(
@@ -158,7 +153,7 @@ class _AddClothesInformationState extends ConsumerState<AddClothesInformation> {
             }).toList(),
           );
         },
-        error: (e, st) => Text('ups'),
+        error: (e, st) => const Text('Something went wrong'),
         loading: () => const CircularProgressIndicator(),
       ),
       OutlinedButton(
@@ -181,35 +176,32 @@ class _AddClothesInformationState extends ConsumerState<AddClothesInformation> {
               child: Column(
                 children: [
                   IconButton(
-                      onPressed: () {
-                        //Navigator.of(context).pop();
-                      },
+                      onPressed: () => context.router.maybePop(),
                       icon: const Icon(Icons.close)),
                   TextFormField(
                     controller: _addNewTagController,
                     decoration:
-                        InputDecoration(hintText: 'Kliknij aby dodac tag'),
+                        InputDecoration(hintText: context.loc.addTagHint),
                     validator: (value) {
                       if(value == null || value.isEmpty){
-                        return 'Pole nie moze byc puste';
+                        return context.loc.emptyTagField;
                       }else if(value.length == 1){
-                        return 'Wpisz poprawny tag';
+                        return context.loc.invalidTag;
                       }
+                      return null;
                     },
                   ),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: [
                       OutlinedButton(
-                          onPressed: () {
-                            //Navigator.of(context).pop();
-                          },
+                          onPressed: () => context.router.maybePop(),
                           child: Text(context.loc.cancel)),
                       OutlinedButton(
                           onPressed: () {
                             if(_formKey.currentState?.validate() ?? false){
-                              //add to the databse new tag
-                              //Navigator.of(context).pop();
+                              //TODO: not yet implemented. add to the databse new tag
+                              context.router.maybePop();
                             }
                           },
                           child: Text(context.loc.add))

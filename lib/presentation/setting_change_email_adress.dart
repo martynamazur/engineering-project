@@ -8,15 +8,15 @@ import 'package:ootd/navigation/app_router.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 @RoutePage()
-class SettingChangeEmailAdressScreen extends ConsumerStatefulWidget {
-  const SettingChangeEmailAdressScreen({super.key});
+class SettingChangeEmailAddressScreen extends ConsumerStatefulWidget {
+ SettingChangeEmailAddressScreen({super.key});
 
 
   @override
   ConsumerState createState() => _SettingChangeEmailAdressState();
 }
 
-class _SettingChangeEmailAdressState extends ConsumerState<SettingChangeEmailAdressScreen> {
+class _SettingChangeEmailAdressState extends ConsumerState<SettingChangeEmailAddressScreen> {
   final _formKey = GlobalKey<FormState>();
   final _emailController = TextEditingController();
 
@@ -48,7 +48,7 @@ class _SettingChangeEmailAdressState extends ConsumerState<SettingChangeEmailAdr
                     controller: _emailController,
                     validator: (value){
                       if( value == null || value.isEmpty ){
-                        _invalidInputMessage(); //before checking
+                        _invalidInputMessage();
                         return context.loc.invalidEmail;
                       }
                       return null;
@@ -59,9 +59,8 @@ class _SettingChangeEmailAdressState extends ConsumerState<SettingChangeEmailAdr
                     keyboardType: TextInputType.emailAddress,
                   ),
                 ),
-                OutlinedButton(onPressed: (){
-                  _validateEmailInput();
-                }, child: Text(context.loc.changeLabel))
+                OutlinedButton(onPressed: () => _validateEmailInput(),
+                    child: Text(context.loc.changeLabel))
               ],
             ),
           )),
@@ -79,24 +78,17 @@ class _SettingChangeEmailAdressState extends ConsumerState<SettingChangeEmailAdr
   }
 
   Future<void> _validateEmailInput() async {
+    final messenger = ScaffoldMessenger.of(context);
+
     if(_formKey.currentState?.validate() ?? false){
-      try{
-        await ref.read(userRepositoryProvider).changeEmailAdress(_emailController.text.trimRight());
-        context.router.push(EmailAddressSentConfirmationRoute());
-      }catch(e){
-        _showEmailAlreadyExistsMessage();
-      }
+        final result = await ref.read(userRepositoryProvider).changeEmailAddress(_emailController.text.trimRight());
+
+        if(result.success){
+          context.router.push(const EmailAddressSentConfirmationRoute());
+        }else{
+          messenger.showSnackBar(SnackBar(content: Text(result.errorMessage!)));
+          _emailController.clear();
+        }
     }
   }
-
-  void _showEmailAlreadyExistsMessage() {
-    Flushbar(
-      title: 'Błąd',
-      message: 'Podany adres e-mail już istnieje.',
-      duration: const Duration(seconds: 4),
-      backgroundColor: Colors.deepOrange,
-    ).show(context);
-  }
-
-
 }

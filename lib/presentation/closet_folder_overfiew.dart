@@ -1,17 +1,16 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:flutter_tags/flutter_tags.dart';
 import 'package:ootd/extensions/localization_extension.dart';
-import 'package:ootd/model/closet_folder.dart';
 import 'package:ootd/navigation/app_router.dart';
-import 'package:ootd/presentation/styles/empty_closet_widget.dart';
 import 'package:ootd/presentation/styles/headline_text.dart';
 import '../domain/state_management/clothes_folder_provider.dart';
 import '../domain/state_management/clothing_list_notifier.dart';
 import '../model/clothing_item.dart';
 import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
 import 'package:ootd/domain/state_management/folder_list_notifier.dart' as folderList;
+
+import '../model/result.dart';
 
 @RoutePage()
 class ClosetFolderOverviewScreen extends ConsumerStatefulWidget {
@@ -41,7 +40,7 @@ class _ClosetFolderOverviewScreenState
             return Text('${folder.closetName} (${ folder.totalAmountOfClothes})');
           },
           loading: () => const Text('Loading...'),
-          error: (error, stackTrace) => const Text('Error'),
+          error: (error, _) => const Text('Error'),
         ),
         actions: _buildActionBar(),
       ),
@@ -53,7 +52,7 @@ class _ClosetFolderOverviewScreenState
                 : _buildEmptyCloset();
           },
           loading: () => const Center(child: CircularProgressIndicator()),
-          error: (error, stackTrace) => Center(child: Text('Error: $error')),
+          error: (error, _) => Center(child: Text('Error: $error')),
         ),
       ),
     );
@@ -69,8 +68,7 @@ class _ClosetFolderOverviewScreenState
       ),
 
       IconButton(
-        onPressed: () => context.router
-            .push(PickOwnedClothesRoute(folderId: widget.folderId)),
+        onPressed: () => context.router.push(PickOwnedClothesRoute(folderId: widget.folderId)),
         icon: const Icon(Icons.add),
       ),
       SizedBox(
@@ -109,8 +107,7 @@ class _ClosetFolderOverviewScreenState
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
         GestureDetector(
-          onTap: () => context.router
-              .push(PickOwnedClothesRoute(folderId: widget.folderId)),
+          onTap: () => context.router.push(PickOwnedClothesRoute(folderId: widget.folderId)),
           child: Container(
             width: 100,
             height: 100,
@@ -128,7 +125,7 @@ class _ClosetFolderOverviewScreenState
     return SingleChildScrollView(
       child: clothingItemsList.when(
         data: (data) => _clothesGrid(data),
-        error: (Object error, StackTrace stackTrace) {  },
+        error: (Object error, StackTrace stackTrace) => Text('Error $error'),
         loading: () => const CircularProgressIndicator()
       )
     );
@@ -165,8 +162,7 @@ class _ClosetFolderOverviewScreenState
     );
   }
 
-  Widget _buildClothingItemTile(
-      ClothingItem clothingItem, BuildContext context) {
+  Widget _buildClothingItemTile(ClothingItem clothingItem, BuildContext context) {
     return GestureDetector(
       onTap: () => context.router.push(ClothingItemOverviewRoute(clothingItem: clothingItem)),
       onLongPress: () => _showRemoveFromFolderDialog(clothingItem.clothingItemId!),
@@ -209,23 +205,28 @@ class _ClosetFolderOverviewScreenState
         context: context,
         builder: (BuildContext context) {
           return AlertDialog(
-            title: Text('Remove from the folder'),
-            content:
-                Text('This action will be permanent and cannot be undone.'),
+            title: Text(context.loc.removeFromFolderTitle),
+            content: Text(context.loc.removeFromFolderContent),
             actions: [
-              TextButton(onPressed: () => context.router.maybePop(), child: Text('Cancel')),
+              TextButton(onPressed: () => context.router.maybePop(), child: Text(context.loc.cancel)),
               TextButton(
                   onPressed: () async {
-                    ref.read(removeClothingItemFromFolderProvider(folderId:  widget.folderId, clothingItemId:  clothingItemId));
-                    ref.invalidate(getFolderProvider(widget.folderId));
-                    await ref.read(folderList.folderListNotifierProvider.notifier).removeClothingItemFromFolder(widget.folderId, clothingItemId);
-                    ref.invalidate(folderList.folderListNotifierProvider);
-                    if(mounted){
-                      context.router.maybePop();
-                    }
+                    final messenger =  ScaffoldMessenger.of(context);
+                    final Result result = await ref.read(removeClothingItemFromFolderProvider(folderId:  widget.folderId, clothingItemId:  clothingItemId).future);
+                    if(result.success){
+                      messenger.showSnackBar(SnackBar(content: Text(context.loc.removeClothingSuccess)));
+                      ref.invalidate(getFolderProvider(widget.folderId));
+                      await ref.read(folderList.folderListNotifierProvider.notifier).removeClothingItemFromFolder(widget.folderId, clothingItemId);
+                      ref.invalidate(folderList.folderListNotifierProvider);
 
+                      if(mounted){
+                        context.router.maybePop();
+                      }
+                    }else{
+                      messenger.showSnackBar(SnackBar(content: Text(context.loc.removeClothingFailure)));
+                    }
                   },
-                  child: Text('Remove'))
+                  child: Text(context.loc.remove))
             ],
           );
         });
@@ -236,23 +237,28 @@ class _ClosetFolderOverviewScreenState
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: Text('Are you sure?'),
-          content: Text('This action will be permanent and cannot be undone.'),
+          title: Text(context.loc.areYouSure),
+          content: Text(context.loc.deleteConfirmation),
           actions: [
             TextButton(
               onPressed: () async {
+                final messenger =  ScaffoldMessenger.of(context);
+                final navigator = Navigator.of(context);
 
                 if (mounted) {
-                  ref.read(deleteFolderProvider(folderId:  widget.folderId));
-                  ref.invalidate(folderList.folderListNotifierProvider);
-                  Navigator.of(context).pop(); //zamkniecie dialogu
-
-                  if (mounted) {
-                    context.router.maybePop();//przejscie do poprzedniego ekranu
+                  final Result result = await ref.read(deleteFolderProvider(folderId:  widget.folderId).future);
+                  if(result.success){
+                    messenger.showSnackBar(SnackBar(content: Text(context.loc.deleteFolderSuccess)));
+                  }else{
+                    messenger.showSnackBar(SnackBar(content: Text(context.loc.deleteFolderFailure)));
                   }
+
+                  ref.invalidate(folderList.folderListNotifierProvider);
+                  navigator.pop();
+                  context.router.maybePop();
                 }
               },
-              child: Text('Delete'),
+              child: Text(context.loc.delete),
             ),
           ],
         );
@@ -267,42 +273,46 @@ class _ClosetFolderOverviewScreenState
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: Text('Change Folder Name'),
+          title: Text(context.loc.changeFolderNameTitle),
           content: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
-              Text('Please enter the new folder name:'),
-              SizedBox(height: 10),
+              Text(context.loc.enterNewFolderName),
+              const SizedBox(height: 10),
               TextField(
                 controller: _controller,
-                decoration: InputDecoration(hintText: 'Folder Name'),
+                decoration: InputDecoration(hintText:context.loc.folderNameHint),
               ),
             ],
           ),
           actions: [
             TextButton(
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
-              child: Text('Cancel'),
+              onPressed: () => Navigator.of(context).pop(),
+              child: Text(context.loc.cancel),
             ),
             TextButton(
               onPressed: () async {
+                final messenger =  ScaffoldMessenger.of(context);
+                final navigator = Navigator.of(context);
                 if (_controller.text.isNotEmpty) {
-                  ref.read(changeFolderNameProvider(
-                     newFolderName:  _controller.text, folderId:  widget.folderId));
-                  //ok zmienia sie w home screen
-                  await ref.read(folderList.folderListNotifierProvider.notifier).updateFolderName(widget.folderId,_controller.text);
 
-                  ref.invalidate(getFolderProvider(widget.folderId)); //odswiezac dane, pobieram cala liste ponownie
-                  ref.invalidate(folderListNotifierProvider);//odswiezam home
+                  final Result result = await ref.read(changeFolderNameProvider(newFolderName:  _controller.text, folderId:  widget.folderId).future);
 
+                  if(result.success){
+                    messenger.showSnackBar(SnackBar(content: Text(context.loc.changeSuccess)));
+                    await ref.read(folderList.folderListNotifierProvider.notifier).updateFolderName(widget.folderId,_controller.text);
+                    ref.invalidate(getFolderProvider(widget.folderId)); //odswiezac dane, pobieram cala liste ponownie
+                    ref.invalidate(folderListNotifierProvider);//odswiezam home
+
+                  }else{
+                    messenger.showSnackBar(SnackBar(content: Text(context.loc.changeFailure)));
+                  }
                 }
                 if (mounted) {
-                  Navigator.of(context).pop();
+                  navigator.pop();
                 }
               },
-              child: Text('Change'),
+              child: Text(context.loc.change),
             ),
           ],
         );
@@ -349,17 +359,17 @@ class _ClosetFolderOverviewScreenState
                     onPressed: () => context.router.maybePop(),
                     child:  Row(
                       children: [
-                        Text('Exit'),
-                        Icon(Icons.fullscreen_exit)
+                        Text(context.loc.exit),
+                        const Icon(Icons.fullscreen_exit)
                       ],
                     )
                 ),
-                Text('Wybierz kategorię'),
+                Text(context.loc.selectCategory),
                 TextButton(onPressed: () => ref.read(clothingListNotifierProvider(widget.folderId).notifier).resetFilters(),
                     child: Row(
                       children: [
-                        Text('Clear'),
-                        Icon(Icons.fullscreen_exit)
+                        Text(context.loc.clear),
+                        const Icon(Icons.fullscreen_exit)
                       ],
                     )),
               ],),
@@ -381,7 +391,7 @@ class _ClosetFolderOverviewScreenState
                     ),
                   ),
                 );
-              }).values.toList(),
+              }).values,
               // itd...
             ],
           ),

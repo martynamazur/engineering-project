@@ -12,6 +12,7 @@ class BottomNavWrapperScreen extends StatelessWidget {
       routes:  [
         HomeRoute(),
         CreatedOutfitsRoute(),
+        AddClothesRoute(),
         PlannerRoute(),
         MyProfileRoute()
       ],

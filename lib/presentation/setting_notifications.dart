@@ -3,13 +3,14 @@ import 'package:auto_route/annotations.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:ootd/extensions/localization_extension.dart';
 
 import '../data/service/notifications.dart';
 import '../data/service/sharedpreferency_service.dart';
 
 @RoutePage()
 class SettingNotificationsScreen extends ConsumerStatefulWidget {
- SettingNotificationsScreen({super.key});
+ const SettingNotificationsScreen({super.key});
 
   @override
   ConsumerState<SettingNotificationsScreen> createState() => _SettingNotificationsScreenState();
@@ -30,14 +31,14 @@ class _SettingNotificationsScreenState extends ConsumerState<SettingNotification
 
     return Scaffold(
       appBar: AppBar(
-        title: Text('Notifications'),
+        title: Text(context.loc.notifications),
       ),
       body: SingleChildScrollView(
-        padding: EdgeInsets.all(16.0),
+        padding: const EdgeInsets.all(16.0),
         child: Column(
           children: [
             CheckboxListTile(
-              title: Text('Turn all app notifications on/off'),
+              title: Text(context.loc.notificationDescription),
               activeColor: Colors.blue,
               checkColor: Colors.white,
                 value: _isNotificationsTurnOn,
@@ -67,8 +68,6 @@ class _SettingNotificationsScreenState extends ConsumerState<SettingNotification
       await NotificationService().cancel();
     }
   }
-
-
-  }
+}
 
 

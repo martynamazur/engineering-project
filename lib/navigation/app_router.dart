@@ -67,7 +67,7 @@ class AppRouter extends _$AppRouter {
         AutoRoute(page: PickOwnedClothesRoute.page),
 
         AutoRoute(page: AccountSettingsRoute.page),
-        AutoRoute(page: SettingChangeEmailAdressRoute.page),
+        AutoRoute(page: SettingChangeEmailAddressRoute.page),
         AutoRoute(page: SettingChangePasswordRoute.page),
         AutoRoute(page: EmailAddressSentConfirmationRoute.page),
         AutoRoute(page: SettingDeleteAccountRoute.page),

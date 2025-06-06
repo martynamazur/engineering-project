@@ -21,8 +21,7 @@ class MyProfileScreen extends ConsumerWidget {
         actions: [
           IconButton(
             icon: const Icon(Icons.settings),
-            onPressed: () => context.router.push(SettingsRoute())
-            ,
+            onPressed: () => context.router.push(const SettingsRoute()),
           ),
         ],
       ),

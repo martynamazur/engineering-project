@@ -8,6 +8,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:ootd/extensions/localization_extension.dart';
 import 'package:ootd/domain/state_management/schedule_provider.dart';
+import 'package:ootd/utils/image_loading_builder.dart';
 
 import '../domain/state_management/outfit_list_notifier.dart';
 import '../model/schedule.dart';
@@ -26,7 +27,6 @@ class AddOutfitToCalendarScreen extends ConsumerStatefulWidget {
 class _AddOutfitToCallendarScreenState extends ConsumerState<AddOutfitToCalendarScreen> {
 
   int? _selectedOutfitId;
-  bool _isChoosen = false;
   Schedule? _schedule;
   late String _outfitUrl;
   late DateTime parsedDate;
@@ -55,7 +55,7 @@ class _AddOutfitToCallendarScreenState extends ConsumerState<AddOutfitToCalendar
         child: Column(
           children: [
             Expanded(child: _buildOutfitList()),
-            if (_isChoosen) _buildNavigationBtn(),
+            if (_selectedOutfitId != null) _buildNavigationBtn(),
           ],
         ),
       ),
@@ -77,18 +77,23 @@ class _AddOutfitToCallendarScreenState extends ConsumerState<AddOutfitToCalendar
         Expanded(
           child: OutlinedButton(
             onPressed: () async {
+              final messenger = ScaffoldMessenger.of(context);
+              final updatedSchedule = _schedule!.copyWith(
+                outfitId: _selectedOutfitId,
+                imageUrl: _outfitUrl,
+              );
+              final result = await ref.read(scheduleOutfitProvider(schedule: updatedSchedule).future);
 
-                final updatedSchedule = _schedule!.copyWith(
-                  outfitId: _selectedOutfitId,
-                  imageUrl: _outfitUrl,
-                );
-                ref.read(scheduleOutfitProvider(schedule: updatedSchedule));
+              if(result.success){
+                messenger.showSnackBar(SnackBar(content: Text(context.loc.scheduleSuccessMessage)));
                 ref.invalidate(getScheduleForWeekProvider);
                 ref.invalidate(getScheduleForMonthProvider);
-
-                if(mounted){
-                  context.router.maybePop();
-                }
+              }else{
+                messenger.showSnackBar(SnackBar(content: Text(context.loc.scheduleErrorMessage)));
+              }
+              if(mounted){
+                context.router.maybePop();
+              }
 
             },
             child: Text(context.loc.save),
@@ -127,9 +132,8 @@ class _AddOutfitToCallendarScreenState extends ConsumerState<AddOutfitToCalendar
                   setState(() {
                     _selectedOutfitId = outfit.id;
                     _outfitUrl = outfit.imageUrl;
-                    _isChoosen = true;
 
-                    // Tworzenie nowego obiektu Schedule z wybranym strojem
+
                     _schedule = _schedule?.copyWith(
                       outfitId: _selectedOutfitId,
                       imageUrl: _outfitUrl,
@@ -147,6 +151,10 @@ class _AddOutfitToCallendarScreenState extends ConsumerState<AddOutfitToCalendar
                   child: Image.network(
                     outfit.imageUrl,
                     fit: BoxFit.cover,
+                    loadingBuilder: imageLoadingBuilder,
+                    errorBuilder: (context, error, stackTrace) {
+                      return const Icon(Icons.broken_image);
+                    },
                   ),
                 ),
               );

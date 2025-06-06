@@ -42,7 +42,6 @@ class _ChooseTemplateScreenState extends State<ChooseTemplateScreen> {
                       );
                     }),
               ),
-
             ],
           ),
         ),

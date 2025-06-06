@@ -14,3 +14,8 @@ SeasonRepository seasonRepository(Ref ref) {
   return SeasonRepository();
 }
 
+@riverpod
+List<Season> getSeasonList(Ref ref){
+  final repo = ref.watch(seasonRepositoryProvider);
+  return repo.getSeason();
+}

@@ -17,6 +17,7 @@ import 'package:path_provider/path_provider.dart';
 import 'package:screenshot/screenshot.dart';
 import '../domain/state_management/outfit_list_notifier.dart';
 import '../model/clothes_category.dart';
+import '../model/result.dart';
 import '../model/template.dart';
 import '../domain/state_management/gallery_notifier.dart';
 
@@ -33,32 +34,33 @@ class CreateOutfitScreen extends ConsumerStatefulWidget {
 class _CreateOutfitScreenState extends ConsumerState<CreateOutfitScreen> {
   final ScreenshotController _screenshotController = ScreenshotController();
   Map<int, int> _selectedClothingItems = {};
+
   @override
   void initState() {
     super.initState();
-
-    final categories = [
-      ClothesCategory(id: 1, categoryName: context.loc.coat, imagePath: 'assets/category_icon/category_icon_test.png'),
-      ClothesCategory(id: 2, categoryName: context.loc.top, imagePath: 'assets/category_icon/category_icon_test.png'),
-      ClothesCategory(id: 3, categoryName: context.loc.bottom, imagePath: 'assets/category_icon/category_icon_test.png'),
-      ClothesCategory(id: 4, categoryName: context.loc.dress, imagePath: 'assets/category_icon/category_icon_test.png'),
-      ClothesCategory(id: 5, categoryName: context.loc.underwear, imagePath: 'assets/category_icon/category_icon_test.png'),
-      ClothesCategory(id: 8, categoryName: context.loc.accessories, imagePath: 'assets/category_icon/category_icon_test.png'),
-      ClothesCategory(id: 9, categoryName: context.loc.shoes, imagePath: 'assets/category_icon/category_icon_test.png'),
-    ];
-
-    ref.read(galleryProvider.notifier).setCategories(categories);
-
     WidgetsBinding.instance.addPostFrameCallback((_) {
+
+      final categoryList = [
+        ClothesCategory(id: 1, categoryName: context.loc.coat, imagePath: 'assets/category_icon/category_icon_test.png'),
+        ClothesCategory(id: 2, categoryName: context.loc.top, imagePath: 'assets/category_icon/category_icon_test.png'),
+        ClothesCategory(id: 3, categoryName: context.loc.bottom, imagePath: 'assets/category_icon/category_icon_test.png'),
+        ClothesCategory(id: 4, categoryName: context.loc.dress, imagePath: 'assets/category_icon/category_icon_test.png'),
+        ClothesCategory(id: 5, categoryName: context.loc.underwear, imagePath: 'assets/category_icon/category_icon_test.png'),
+        ClothesCategory(id: 8, categoryName: context.loc.accessories, imagePath: 'assets/category_icon/category_icon_test.png'),
+        ClothesCategory(id: 9, categoryName: context.loc.shoes, imagePath: 'assets/category_icon/category_icon_test.png'),
+      ];
+
+      ref.read(galleryProvider.notifier).setCategories(categoryList);
       final templateType = TemplateType.values[widget._templateId - 1];
       final template = templates.firstWhere((t) => t.type == templateType);
       ref.read(galleryProvider.notifier).initializeFromTemplate(template);
     });
   }
 
+
+
   @override
   Widget build(BuildContext context) {
-
     final categories = ref.watch(galleryProvider);
     final selectedCategories = categories.where((category) => category.isSelected).toList();
     List<int> clothingItemId = [];
@@ -72,7 +74,7 @@ class _CreateOutfitScreenState extends ConsumerState<CreateOutfitScreen> {
               onTap: () => saveOutfit(clothingItemId),
               child: Row(
                 children: [
-                  Icon(Icons.save_as),
+                  const Icon(Icons.save_as),
                   Text(context.loc.save),
                 ],
               ),
@@ -111,17 +113,17 @@ class _CreateOutfitScreenState extends ConsumerState<CreateOutfitScreen> {
               onPressed: () {
                 ref.read(galleryProvider.notifier).toggleCategory(category.id);
               },
+              tooltip: category.categoryName,
               child: Icon(
                 category.isSelected ? Icons.check_box : Icons.check_box_outline_blank,
               ),
-              tooltip: category.categoryName,
             ),
-            SizedBox(width: 8),
+            const SizedBox(width: 8),
             Image.asset(category.imagePath, width: 18, height: 18),
-            SizedBox(width: 8),
+            const SizedBox(width: 8),
             Text(
               category.categoryName,
-              style: TextStyle(
+              style: const TextStyle(
                 fontSize: 16,
                 fontWeight: FontWeight.bold,
               ),
@@ -170,7 +172,7 @@ class _CreateOutfitScreenState extends ConsumerState<CreateOutfitScreen> {
                   child: Image.network(
                     item.itemPhoto,
                     fit: BoxFit.contain,
-                    errorBuilder: (BuildContext context, Object error, StackTrace? stackTrace) {
+                    errorBuilder: (BuildContext context,_, StackTrace? stackTrace) {
                       return Text(context.loc.failedToLoadImage);
                     },
                   ),
@@ -180,7 +182,7 @@ class _CreateOutfitScreenState extends ConsumerState<CreateOutfitScreen> {
           }).toList(),
         );
       },
-      loading: () => Center(child: CircularProgressIndicator()),
+      loading: () => const Center(child: CircularProgressIndicator()),
       error: (error, stackTrace) => Center(child: Text('Error: $error')),
     );
   }
@@ -195,27 +197,30 @@ class _CreateOutfitScreenState extends ConsumerState<CreateOutfitScreen> {
 
   void saveOutfit(List<int> clothingItemId) async {
     try {
+      final messenger = ScaffoldMessenger.of(context);
       final Uint8List? image = await _screenshotController.capture();
+
       if (image != null) {
-
         final List<int> clothingItemIds = _selectedClothingItems.values.toList();
+
         final response = await ref.read(supabaseUtilsProvider).uploadImageAndReturnUrl(image);
-        final result = ref.watch(saveOutfitProvider(response,clothingItemIds));
 
-        ref.invalidate(getOwnedOutfitsProvider);
-        ref.invalidate(outfitListNotifierProvider);
+        final Result result = await ref.watch(saveOutfitProvider(imageUrl:response,clothingItemId:clothingItemIds).future);
 
-        context.router.push(CreatedOutfitSuccessfulRoute());
+        if(result.success){
+          messenger.showSnackBar(SnackBar(content: Text(context.loc.saveOutfitSuccess)));
+
+          ref.invalidate(getOwnedOutfitsProvider);
+          ref.invalidate(outfitListNotifierProvider);
+
+          context.router.push(const CreatedOutfitSuccessfulRoute());
+        }else{
+          messenger.showSnackBar(SnackBar(content: Text(context.loc.saveOutfitFailure)));
+        }
       }
     } catch (e) {
       print("Error capturing image: $e");
     }
   }
-
-  Widget _errorDialog(){
-    return AlertDialog(title: Text('Try again'));
-  }
-
-
 }
 
